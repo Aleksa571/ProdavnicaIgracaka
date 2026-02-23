@@ -1,12 +1,14 @@
 import { Component, signal} from '@angular/core';
 import axios from 'axios';
 import {FlightModel} from '../../models/flight.model';
+import { RouterLink } from "@angular/router";
 
 @Component({
   selector: 'app-home',
-  imports: [],
+  standalone: true,
+  imports: [RouterLink],
   templateUrl: './home.html',
-  styleUrl: './home.css',
+  styleUrls: ['./home.css'],
 })
 export class Home {
   flights = signal<FlightModel[]>([])
