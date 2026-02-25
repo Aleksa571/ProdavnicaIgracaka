@@ -1,15 +1,21 @@
-:host{
-	display: flex;
-	justify-content: center;
-	padding: 32px 12px;
+.details-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+	margin-bottom: 10px;
 }
+
 .details-card{
-	background: var(--card);
-	border-radius: var(--radius);
-	padding: 20px;
-	box-shadow: 0 8px 24px rgba(15,23,42,0.06);
-	max-width: 720px;
-	width: 100%;
+    width: 560px;
 }
-.details-row{display:flex;gap:12px;align-items:center;margin-bottom:8px}
-.label{color:var(--muted);min-width:140px}
+
+.details-img {
+    max-width: 100%;
+}
+
+.map-card{
+	max-width: 1130px;
+	margin-left: auto;
+	margin-right: auto;
+}

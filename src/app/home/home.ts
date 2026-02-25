@@ -17,6 +17,7 @@ export class Home {
   flights = signal<FlightModel[]>([])
 
   constructor(public utils: Utils) {
+    localStorage.setItem('time', new Date().toISOString());
     axios.get<FlightModel[]>('https://flight.pequla.com/api/flight/list?type=departure')
       .then(rsp => {
         const sorted = rsp.data.sort((f1, f2) => new Date(f1.scheduledAt).getTime() - new Date(f2.scheduledAt).getTime())
