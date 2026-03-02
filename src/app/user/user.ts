@@ -6,8 +6,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import {MatSelectModule} from '@angular/material/select';
-import axios from 'axios';
+import { MatSelectModule } from '@angular/material/select';
+import { FlightService } from '../services/flight.service';
+import { Loading } from '../loading/loading';
 
 @Component({
   selector: 'app-user',
@@ -17,7 +18,8 @@ import axios from 'axios';
     MatButtonModule,
     MatIconModule,
     FormsModule,
-    MatSelectModule
+    MatSelectModule,
+    Loading
   ],
   templateUrl: './user.html',
   styleUrl: './user.css',
@@ -32,11 +34,12 @@ export class User {
       return
     }
 
-    axios.get('https://flight.pequla.com/api/flight/destination')
-    .then(rsp=>this.destinations.set(rsp.data))
+    FlightService.getDestinations()
+      .then(rsp => this.destinations.set(rsp.data))
   }
-  
-  updateUser(){
-      AuthService.updateActiveUser(this.activeUser!)
+
+  updateUser() {
+    AuthService.updateActiveUser(this.activeUser!)
+    alert('User updated successfully')
   }
 }

@@ -63,3 +63,17 @@
     margin-right: auto;
     width: 80px;
 }
+.flight-card {
+    width: 240px;
+}
+
+.card-wrapper {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.card-content {
+    margin-top: 10px;
+}

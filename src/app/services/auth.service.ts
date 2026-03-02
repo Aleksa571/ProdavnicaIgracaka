@@ -59,4 +59,8 @@ export class AuthService {
         }
         localStorage.setItem(USERS, JSON.stringify(users))
     }
+
+    static logout() {
+        localStorage.removeItem(ACTIVE)
+    }
 }
