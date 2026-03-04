@@ -60,6 +60,16 @@ export class AuthService {
         localStorage.setItem(USERS, JSON.stringify(users))
     }
 
+    static updateActiveUserPassword(newPassword: string) {
+        const users = this.getUsers()
+        for (let u of users) {
+            if (u.email === localStorage.getItem(ACTIVE)) {
+                u.password = newPassword
+            }
+        }
+        localStorage.setItem(USERS, JSON.stringify(users))
+    }
+
     static logout() {
         localStorage.removeItem(ACTIVE)
     }
