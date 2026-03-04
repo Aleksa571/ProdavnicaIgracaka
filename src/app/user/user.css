@@ -1,0 +1,25 @@
+.user-card {
+    width: 360px;
+}
+
+.user-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+}
+
+.user-details {
+    margin-bottom: 10px;
+}
+
+.user-info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: start;
+}
+
+.user-img {
+    border-radius: 16px;
+}

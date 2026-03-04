@@ -24,4 +24,8 @@ export class FlightService {
     static async getDestinations() {
         return await client.get<string[]>('/flight/destination')
     }
+
+    static async getFlightsToDestination(dest: string) {
+        return await client.get(`/flight/destination/${dest}?type=departure`)
+    }
 }

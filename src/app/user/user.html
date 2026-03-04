@@ -1,72 +1,100 @@
 @if(destinations().length > 0) {
-<mat-card class="small-card">
-    <mat-card-header>
-        <h1>User Details</h1>
-    </mat-card-header>
-    <mat-card-content>
-        <div>
-            <mat-form-field class="full-width">
-                <mat-label>Email</mat-label>
-                <input matInput type="email" [(ngModel)]="activeUser!.email" disabled>
-            </mat-form-field>
-            <mat-form-field class="full-width">
-                <mat-label>First Name</mat-label>
-                <input matInput type="text" [(ngModel)]="activeUser!.firstName">
-            </mat-form-field>
-            <mat-form-field class="full-width">
-                <mat-label>Last Name</mat-label>
-                <input matInput type="text" [(ngModel)]="activeUser!.lastName">
-            </mat-form-field>
-            <mat-form-field class="full-width">
-                <mat-label>Address</mat-label>
-                <input matInput type="text" [(ngModel)]="activeUser!.address">
-            </mat-form-field>
-            <mat-form-field class="full-width">
-                <mat-label>Phone Number</mat-label>
-                <input matInput type="text" [(ngModel)]="activeUser!.phone">
-            </mat-form-field>
-            <mat-form-field class="full-width">
-                <mat-label>Favorite Destination</mat-label>
-                <mat-select [(ngModel)]="activeUser!.destination">
-                    @for (dest of destinations(); track dest) {
-                    <mat-option [value]="dest">{{dest}}</mat-option>
-                    }
-                </mat-select>
-            </mat-form-field>
-        </div>
-    </mat-card-content>
-    <mat-card-actions>
-        <button type="button" matButton (click)="updateUser()">
-           <mat-icon fontIcon="save" /> Save Changes
-        </button>
-    </mat-card-actions>
-</mat-card>
-<mat-card class="small-card">
-    <mat-card-header>
-        <h1>Change Password</h1>
-    </mat-card-header>
-    <mat-card-content>
-        <div>
-            <mat-form-field class="full-width">
-                <mat-label>Old Password</mat-label>
-                <input matInput type="password" [(ngModel)]="oldPassword">
-            </mat-form-field>
-            <mat-form-field class="full-width">
-                <mat-label>New Password</mat-label>
-                <input matInput type="password" [(ngModel)]="newPassword">
-            </mat-form-field>
-            <mat-form-field class="full-width">
-                <mat-label>Repeat Password</mat-label>
-                <input matInput type="password" [(ngModel)]="passRepeat">
-            </mat-form-field>
-        </div>
-    </mat-card-content>
-    <mat-card-actions>
-        <button type="button" matButton (click)="updatePassword()">
-           <mat-icon fontIcon="password" /> Update Password
-        </button>
-    </mat-card-actions>
-</mat-card>
+<div class="user-wrapper">
+    <mat-card class="user-card">
+        <mat-card-header>
+            <h1>User Details</h1>
+        </mat-card-header>
+        <mat-card-content>
+            <div>
+                <mat-form-field class="full-width">
+                    <mat-label>First Name</mat-label>
+                    <input matInput type="text" [(ngModel)]="activeUser!.firstName">
+                </mat-form-field>
+                <mat-form-field class="full-width">
+                    <mat-label>Last Name</mat-label>
+                    <input matInput type="text" [(ngModel)]="activeUser!.lastName">
+                </mat-form-field>
+                <mat-form-field class="full-width">
+                    <mat-label>Address</mat-label>
+                    <input matInput type="text" [(ngModel)]="activeUser!.address">
+                </mat-form-field>
+                <mat-form-field class="full-width">
+                    <mat-label>Phone Number</mat-label>
+                    <input matInput type="text" [(ngModel)]="activeUser!.phone">
+                </mat-form-field>
+                <mat-form-field class="full-width">
+                    <mat-label>Favorite Destination</mat-label>
+                    <mat-select [(ngModel)]="activeUser!.destination">
+                        @for (dest of destinations(); track dest) {
+                        <mat-option [value]="dest">{{dest}}</mat-option>
+                        }
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </mat-card-content>
+        <mat-card-actions>
+            <button type="button" matButton (click)="updateUser()">
+                <mat-icon fontIcon="save" /> Save Changes
+            </button>
+        </mat-card-actions>
+    </mat-card>
+    <div>
+        <mat-card class="user-card user-details">
+            <mat-card-header>
+                <h1>General Information</h1>
+            </mat-card-header>
+            <mat-card-content>
+                <div class="user-info">
+                    <img [src]="getAvatarUrl()" class="user-img">
+                    <h3>{{activeUser!.email}}</h3>
+                </div>
+            </mat-card-content>
+        </mat-card>
+        <mat-card class="user-card">
+            <mat-card-header>
+                <h1>Change Password</h1>
+            </mat-card-header>
+            <mat-card-content>
+                <div>
+                    <mat-form-field class="full-width">
+                        <mat-label>Old Password</mat-label>
+                        <input matInput type="password" [(ngModel)]="oldPassword">
+                    </mat-form-field>
+                    <mat-form-field class="full-width">
+                        <mat-label>New Password</mat-label>
+                        <input matInput type="password" [(ngModel)]="newPassword">
+                    </mat-form-field>
+                    <mat-form-field class="full-width">
+                        <mat-label>Repeat Password</mat-label>
+                        <input matInput type="password" [(ngModel)]="passRepeat">
+                    </mat-form-field>
+                </div>
+            </mat-card-content>
+            <mat-card-actions>
+                <button type="button" matButton (click)="updatePassword()">
+                    <mat-icon fontIcon="password" /> Update Password
+                </button>
+            </mat-card-actions>
+        </mat-card>
+    </div>
+    <mat-card class="user-card">
+        <mat-card-header>
+            <h1>Recommended Flights</h1>
+        </mat-card-header>
+        <mat-card-content>
+            <mat-list>
+                @for(f of recommended(); track $index) {
+                <mat-list-item>
+                    <mat-icon matListItemIcon>flight</mat-icon>
+                    <div matListItemTitle>{{f.flightNumber}}</div>
+                    <div matListItemLine>{{utils.formatDate(f.scheduledAt)}}</div>
+                    <a [routerLink]="`/details/${f.id}`" matButton>Open Details</a>
+                </mat-list-item>
+                }
+            </mat-list>
+        </mat-card-content>
+    </mat-card>
+</div>
 } @else {
-    <app-loading />
+<app-loading />
 }
