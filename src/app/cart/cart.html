@@ -1,0 +1,14 @@
+<table class="cart-table">
+    <thead>
+        <tr>
+            <th>Destination</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (order of getOrders(); track $index) {
+            <tr>
+                <td>{{ order.destination }}</td>
+            </tr>
+        }
+    </tbody>
+</table>

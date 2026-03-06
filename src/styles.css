@@ -93,8 +93,9 @@ body {
 }
 
 .mat-swal-confirm{
-    background: var(--mat-sys-on-primary) !important;
-    color: var(--mat-sys-on-primary) !important;
+    background: #1976d2 !important;
+    color: #fff !important;
+    border: none !important;
 }
 
 .flex-wrapper {

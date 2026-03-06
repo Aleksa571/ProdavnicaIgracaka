@@ -1,7 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { FlightModel } from '../../models/flight.model';
 import { DataService } from '../services/data.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FlightService } from '../services/flight.service';
 import { MatCardModule } from '@angular/material/card';
 import { FormsModule } from '@angular/forms';
@@ -14,6 +14,7 @@ import { MatFormField, MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { OrderModel } from '../../models/order.model';
 import { AuthService } from '../services/auth.service';
+import { Alerts } from '../alerts';
 
 @Component({
   selector: 'app-order',
@@ -43,7 +44,16 @@ export class Order {
     count: 1
   }
 
-  constructor(private route: ActivatedRoute, public utils: Utils) {
+  constructor(
+    public router: Router,
+    private route: ActivatedRoute,
+    public utils: Utils
+  ) {
+    if (!AuthService.getActiveUser()) {
+      this.router.navigate(['/login'])
+      return
+    }
+
     this.route.params.subscribe(params => {
       const id = Number(params['id'])
       FlightService.getFlightById(id)
@@ -60,6 +70,9 @@ export class Order {
   }
 
   placeOrder() {
-    AuthService.createOrder(this.order, this.flight()!.id)
+    Alerts.confirm(`Are you sure you want to place the order for ${this.calculateTotal()} EUR?`, () => {
+      AuthService.createOrder(this.order, this.flight()!)
+      this.router.navigate(['/cart'])
+    })
   }
 }
