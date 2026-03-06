@@ -9,7 +9,7 @@
   <a routerLink="/about" matButton>
     <mat-icon fontIcon="info" /> About
   </a>
-  @if(activeUser) {
+  @if(authService.getActiveUser()) {
   <a routerLink="/user" matButton>
     <mat-icon fontIcon="admin_panel_settings" /> Account
   </a>
@@ -21,11 +21,6 @@
     <mat-icon fontIcon="login" /> Login
   </a>
   }
-  <!-- <button matButton [matMenuTriggerFor]="afterMenu">Korisnik</button>
-    <mat-menu #afterMenu="matMenu" xPosition="after">
-        <button mat-menu-item>Item 1</button>
-        <button mat-menu-item>Item 2</button>
-    </mat-menu> -->
 </mat-toolbar>
 <div class="wrapper">
   <router-outlet />
