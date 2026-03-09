@@ -1,8 +1,8 @@
+@if(getOrders().length > 0) {
 <mat-card class="mb-3">
     <mat-card-header>
         <h1>Tickets in Cart</h1>
     </mat-card-header>
-    @if(getOrders().length > 0) {
     <mat-card-content>
         <table mat-table [dataSource]="getOrders()" class="mat-elevation-z8">
             <ng-container matColumnDef="destination">
@@ -54,10 +54,61 @@
             <mat-icon fontIcon="payments" /> Pay All
         </button>
     </mat-card-actions>
-    } @else {
-    <mat-card-content>No orders in cart</mat-card-content>
-    }
 </mat-card>
+}
+
+@if(getPaidOrders().length > 0) {
+<mat-card class="mb-3">
+    <mat-card-header>
+        <h1>Paid Orders</h1>
+    </mat-card-header>
+    <mat-card-content>
+        <table mat-table [dataSource]="getPaidOrders()" class="mat-elevation-z8">
+            <ng-container matColumnDef="destination">
+                <th mat-header-cell *matHeaderCellDef>Destination</th>
+                <td mat-cell *matCellDef="let order">{{order.destination}}</td>
+            </ng-container>
+            <ng-container matColumnDef="flightNumber">
+                <th mat-header-cell *matHeaderCellDef>Flight Number</th>
+                <td mat-cell *matCellDef="let order">{{order.flightNumber}}</td>
+            </ng-container>
+            <ng-container matColumnDef="scheduledAt">
+                <th mat-header-cell *matHeaderCellDef>Scheduled At</th>
+                <td mat-cell *matCellDef="let order">{{utils.formatDate(order.scheduledAt)}}</td>
+            </ng-container>
+            <ng-container matColumnDef="airline">
+                <th mat-header-cell *matHeaderCellDef>Airline</th>
+                <td mat-cell *matCellDef="let order">{{getAirline(order)}}</td>
+            </ng-container>
+            <ng-container matColumnDef="seatingType">
+                <th mat-header-cell *matHeaderCellDef>Seating Type</th>
+                <td mat-cell *matCellDef="let order">{{getSeatingType(order)}}</td>
+            </ng-container>
+            <ng-container matColumnDef="ageGroup">
+                <th mat-header-cell *matHeaderCellDef>Age Group</th>
+                <td mat-cell *matCellDef="let order">{{getAgeGroup(order)}}</td>
+            </ng-container>
+            <ng-container matColumnDef="count">
+                <th mat-header-cell *matHeaderCellDef>Ticket Count</th>
+                <td mat-cell *matCellDef="let order">{{order.count}}</td>
+            </ng-container>
+            <ng-container matColumnDef="options">
+                <th mat-header-cell *matHeaderCellDef>Options</th>
+                <td mat-cell *matCellDef="let order">
+                    <button type="button" matButton (click)="showBarcode(order)">
+                        <mat-icon fontIcon="badge" /> Show Barcode
+                    </button>
+                    <a [routerLink]="`/details/${order.flightId}`" matButton>
+                        <mat-icon fontIcon="description" /> Details
+                    </a>
+                </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+    </mat-card-content>
+</mat-card>
+}
 
 @if(getCanceledOrders().length > 0) {
 <mat-card class="mb-3">

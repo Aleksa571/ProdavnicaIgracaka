@@ -1,6 +1,6 @@
 import Swal from "sweetalert2";
 
-const matCustomClass = {
+export const matCustomClass = {
     popup: 'mat-swal-popup',
     title: 'mat-swal-title',
     actions: 'mat-swal-actions',
