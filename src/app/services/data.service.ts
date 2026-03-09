@@ -19,6 +19,14 @@ export class DataService {
         ]
     }
 
+    static getAirlineById(id: number) {
+        for (let a of this.getAirlines()) {
+            if (a.id === id) return a
+        }
+
+        return this.getAirlines()[0]
+    }
+
     static getSeatingTypes() {
         return [
             {
@@ -37,5 +45,17 @@ export class DataService {
                 price: 190
             },
         ]
+    }
+
+    static getSeatingTypeById(id: number) {
+        for (let st of this.getSeatingTypes()) {
+            if (st.id === id) return st
+        }
+
+        return this.getSeatingTypes()[0]
+    }
+
+    static getFullAgeGroupText(ag: 'a' | 'c') {
+        return ag == 'a' ? 'Adult' : 'Child'
     }
 }

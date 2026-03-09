@@ -93,14 +93,44 @@ export class AuthService {
         localStorage.setItem(USERS, JSON.stringify(users))
     }
 
-    static getOrdersOnWaiting() {
+    static getOrdersByState(state: 'w' | 'p' | 'c') {
         const users = this.getUsers()
         for (let u of users) {
             if (u.email === localStorage.getItem(ACTIVE)) {
-                return u.orders.filter((o) => o.state === 'w')
+                return u.orders.filter((o) => o.state === state)
             }
         }
 
         return []
+    }
+
+    static cancelOrder(createdAt: string) {
+        const users = this.getUsers()
+        for (let u of users) {
+            if (u.email === localStorage.getItem(ACTIVE)) {
+                for (let o of u.orders) {
+                    if (o.state == 'w' && o.createdAt == createdAt) {
+                        o.state = 'c'
+                    }
+                }
+            }
+        }
+
+        localStorage.setItem(USERS, JSON.stringify(users))
+    }
+
+    static payOrders() {
+        const users = this.getUsers()
+        for (let u of users) {
+            if (u.email === localStorage.getItem(ACTIVE)) {
+                for (let o of u.orders) {
+                    if (o.state == 'w') {
+                        o.state = 'p'
+                    }
+                }
+            }
+        }
+
+        localStorage.setItem(USERS, JSON.stringify(users))
     }
 }
