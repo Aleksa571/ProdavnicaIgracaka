@@ -37,7 +37,7 @@
                     <ng-container matColumnDef="status">
                         <mat-header-cell *matHeaderCellDef>Status</mat-header-cell>
                         <mat-cell *matCellDef="let reservation" class="status-cell">
-                            <mat-chip [color]="getStatusColor(reservation.status)" class="status-chip">{{reservation.status}}</mat-chip>
+                            <span [class]="'status-chip status-' + getStatusColor(reservation.status)">{{reservation.status}}</span>
                         </mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="options">
@@ -90,7 +90,7 @@
                     <ng-container matColumnDef="status">
                         <mat-header-cell *matHeaderCellDef>Status</mat-header-cell>
                         <mat-cell *matCellDef="let reservation" class="status-cell">
-                            <mat-chip [color]="getStatusColor(reservation.status)" class="status-chip">{{reservation.status}}</mat-chip>
+                            <span [class]="'status-chip status-' + getStatusColor(reservation.status)">{{reservation.status}}</span>
                         </mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="ocena">
@@ -105,7 +105,6 @@
                                 </div>
                             } @else {
                                 <div class="rating-buttons">
-                                    <span class="rating-label">Oceni:</span>
                                     <button mat-raised-button color="accent" (click)="openRatingDialog(reservation)" title="Dodaj recenziju">
                                         <mat-icon>rate_review</mat-icon>
                                         Dodaj recenziju
@@ -115,7 +114,7 @@
                         </mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="options">
-                        <mat-header-cell *matHeaderCellDef>Akcije</mat-header-cell>
+                        <mat-header-cell *matHeaderCellDef></mat-header-cell>
                         <mat-cell *matCellDef="let reservation" class="actions-cell">
                             <div class="action-buttons">
                                 <button mat-icon-button color="warn" (click)="removeReservation(reservation)" title="Obriši" class="action-btn">
@@ -168,11 +167,11 @@
                     <ng-container matColumnDef="status">
                         <mat-header-cell *matHeaderCellDef>Status</mat-header-cell>
                         <mat-cell *matCellDef="let reservation" class="status-cell">
-                            <mat-chip [color]="getStatusColor(reservation.status)" class="status-chip">{{reservation.status}}</mat-chip>
+                            <span [class]="'status-chip status-' + getStatusColor(reservation.status)">{{reservation.status}}</span>
                         </mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="options">
-                        <mat-header-cell *matHeaderCellDef>Akcije</mat-header-cell>
+                        <mat-header-cell *matHeaderCellDef></mat-header-cell>
                         <mat-cell *matCellDef="let reservation" class="actions-cell">
                             <div class="action-buttons">
                                 <button mat-icon-button color="warn" (click)="deleteCancelledReservation(reservation)" title="Obriši trajno" class="action-btn">

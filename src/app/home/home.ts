@@ -135,12 +135,19 @@ export class Home implements OnInit, AfterViewInit {
       this.updatePaginatedToys()
       this.isLoading.set(false)
       
-      // Force change detection to ensure UI updates
+      // Force change detection multiple times to ensure UI updates
       this.cdr.detectChanges()
       
+      // Additional change detection after a short delay to ensure rendering
       setTimeout(() => {
+        this.cdr.detectChanges()
         this.animateCards()
       }, 100)
+      
+      // Final change detection to ensure everything is rendered
+      setTimeout(() => {
+        this.cdr.detectChanges()
+      }, 300)
     } catch (error: any) {
       console.error('Greška pri učitavanju igračaka:', error)
       if (error.response) {
@@ -156,6 +163,10 @@ export class Home implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     this.setupScrollAnimations()
+    // Additional change detection after view init
+    setTimeout(() => {
+      this.cdr.detectChanges()
+    }, 0)
   }
 
   animateCards() {
