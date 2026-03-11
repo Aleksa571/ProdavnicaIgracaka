@@ -1,4 +1,35 @@
 @if(flights().length > 0) {
+<div class="search-wrapper">
+    <mat-form-field>
+        <mat-label>Search</mat-label>
+        <input matInput type="text" [(ngModel)]="search">
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Destination</mat-label>
+        <mat-select [(ngModel)]="destination">
+            <mat-option value="">All Destinations</mat-option>
+            @for (dest of getDestinations(); track dest) {
+            <mat-option [value]="dest">{{dest}}</mat-option>
+            }
+        </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>From Date</mat-label>
+        <mat-select [(ngModel)]="fromDate">
+            @for (date of getAvilableDates(); track date) {
+            <mat-option [value]="date">{{date}}</mat-option>
+            }
+        </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>To Date</mat-label>
+        <mat-select [(ngModel)]="toDate">
+            @for (date of getAvilableDates(); track date) {
+            <mat-option [value]="date">{{date}}</mat-option>
+            }
+        </mat-select>
+    </mat-form-field>
+</div>
 <div class="card-wrapper">
     @for (f of flights(); track $index){
     <mat-card class="flight-card" appearance="outlined">
@@ -24,5 +55,5 @@
 </div>
 }
 @else {
-    <app-loading />
+<app-loading />
 }

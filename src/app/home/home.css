@@ -77,3 +77,13 @@
 .card-content {
     margin-top: 10px;
 }
+.search-wrapper {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+mat-form-field {
+    width: 300px;
+}
