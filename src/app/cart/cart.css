@@ -53,6 +53,7 @@
 .rating-buttons {
     display: flex;
     gap: 2px;
+    align-items: center;
 }
 
 .rating-buttons mat-icon {
@@ -62,9 +63,54 @@
     height: 18px;
 }
 
+.rating-label {
+    margin-right: 8px;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.opis-cell {
+    max-width: 200px !important;
+    min-width: 150px !important;
+    width: 200px !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding: 8px 12px !important;
+    box-sizing: border-box;
+}
+
+.description-text {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Ograniči header kolonu za opis */
+.reservations-table mat-header-cell:nth-child(2),
+.reservations-table mat-header-cell[ng-reflect-name="opis"] {
+    max-width: 200px !important;
+    min-width: 150px !important;
+    width: 200px !important;
+    overflow: hidden !important;
+}
+
 .no-actions {
     color: var(--muted);
     font-style: italic;
+}
+
+mat-cell {
+    word-wrap: break-word;
+}
+
+mat-cell textarea {
+    width: 100%;
+    min-width: 200px;
 }
 
 h1 {
@@ -78,4 +124,194 @@ h2 {
     color: #333;
     border-bottom: 2px solid var(--accent);
     padding-bottom: 8px;
+}
+
+.status-chip {
+    white-space: nowrap;
+    min-width: fit-content;
+    padding: 6px 16px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    border-radius: 16px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.status-cell {
+    padding: 12px 16px !important;
+    min-width: 150px;
+    max-width: 200px;
+    overflow: visible !important;
+}
+
+.status-cell mat-chip {
+    margin: 0;
+    width: 100%;
+    max-width: 100%;
+    overflow: visible;
+    box-sizing: border-box;
+}
+
+.actions-cell {
+    padding: 12px 16px !important;
+    min-width: 100px;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.action-btn {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.action-btn mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+}
+
+mat-cell {
+    word-wrap: break-word;
+    white-space: normal;
+    padding: 8px 16px;
+}
+
+mat-header-cell {
+    padding: 12px 16px;
+    font-weight: 600;
+    color: #333;
+}
+
+.reservations-table {
+    width: 100%;
+    margin: 20px 0;
+    overflow-x: auto;
+}
+
+.reservations-table mat-table {
+    min-width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    width: 100%;
+}
+
+/* Ograniči širinu opis kolone */
+.reservations-table mat-header-cell:has-text("Opis"),
+.reservations-table mat-header-cell[ng-reflect-name="opis"] {
+    max-width: 200px !important;
+    min-width: 150px !important;
+    width: 200px !important;
+}
+
+.reservations-table mat-row {
+    transition: background-color 0.2s ease;
+}
+
+.reservations-table mat-row:hover {
+    background-color: rgba(0, 0, 0, 0.02);
+}
+
+.reservations-table mat-header-row {
+    background-color: #f5f5f5;
+}
+
+.status-chip {
+    white-space: nowrap;
+    min-width: fit-content;
+    padding: 6px 16px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    border-radius: 16px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    overflow: visible;
+    text-overflow: clip;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+.status-cell {
+    padding: 12px 16px !important;
+    min-width: 130px;
+    white-space: nowrap;
+}
+
+.status-cell mat-chip {
+    margin: 0;
+}
+
+.actions-cell {
+    padding: 12px 16px !important;
+    min-width: 120px;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+}
+
+.action-btn {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.action-btn:hover {
+    transform: scale(1.1);
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.action-btn mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+}
+
+mat-cell {
+    word-wrap: break-word;
+    white-space: normal;
+    padding: 8px 16px;
+    vertical-align: middle;
+    overflow: visible !important;
+    box-sizing: border-box;
+}
+
+mat-cell.status-cell {
+    overflow: visible !important;
+    white-space: nowrap;
+}
+
+mat-cell.opis-cell {
+    overflow: hidden !important;
+    white-space: nowrap;
+    max-width: 200px !important;
+    min-width: 150px !important;
+    width: 200px !important;
+    flex: 0 0 200px !important;
+}
+
+mat-header-cell {
+    padding: 12px 16px;
+    font-weight: 600;
+    color: #333;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }

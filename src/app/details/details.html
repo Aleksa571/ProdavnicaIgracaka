@@ -51,15 +51,19 @@
                 <mat-list-item>
                     <mat-icon matListItemIcon>calendar_today</mat-icon>
                     <div matListItemTitle>Datum proizvodnje</div>
-                    <div matListItemLine>{{formatDate(toy()!.datumProizvodnje)}}</div>
+                    <div matListItemLine>{{toy()?.datumProizvodnje ? formatDate(toy()!.datumProizvodnje) : 'Nije dostupno'}}</div>
                 </mat-list-item>
             </mat-list>
         </mat-card-content>
         @if (authService.getActiveUser()) {
         <mat-card-actions>
-            <button mat-raised-button color="primary" (click)="reserveToy()">
+            <button mat-raised-button color="primary" type="button" (click)="reserveToy(); console.log('Button clicked!')">
                 <mat-icon fontIcon="shopping_cart" /> Rezerviši
             </button>
+        </mat-card-actions>
+        } @else {
+        <mat-card-actions>
+            <p>Morate se prijaviti da biste rezervisali igračku.</p>
         </mat-card-actions>
         }
     </mat-card>

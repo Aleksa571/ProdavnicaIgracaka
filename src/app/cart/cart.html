@@ -8,90 +8,19 @@
             </div>
 
             <h2>Rezervisano</h2>
-            @if(getReservationsByStatus('rezervisano').length > 0) {
-                <mat-table [dataSource]="getReservationsByStatus('rezervisano')" class="reservations-table">
-                    <ng-container matColumnDef="naziv">
-                        <mat-header-cell *matHeaderCellDef>Naziv</mat-header-cell>
-                        <mat-cell *matCellDef="let reservation">
-                            @if(editingReservation === reservation.createdAt) {
-                                <input matInput [(ngModel)]="editData.naziv" placeholder="Naziv">
-                            } @else {
-                                {{reservation.naziv}}
-                            }
-                        </mat-cell>
-                    </ng-container>
-                    <ng-container matColumnDef="tip">
-                        <mat-header-cell *matHeaderCellDef>Tip</mat-header-cell>
-                        <mat-cell *matCellDef="let reservation">
-                            @if(editingReservation === reservation.createdAt) {
-                                <input matInput [(ngModel)]="editData.tip" placeholder="Tip">
-                            } @else {
-                                {{reservation.tip}}
-                            }
-                        </mat-cell>
-                    </ng-container>
-                    <ng-container matColumnDef="uzrast">
-                        <mat-header-cell *matHeaderCellDef>Uzrast</mat-header-cell>
-                        <mat-cell *matCellDef="let reservation">
-                            @if(editingReservation === reservation.createdAt) {
-                                <input matInput [(ngModel)]="editData.uzrast" placeholder="Uzrast">
-                            } @else {
-                                {{reservation.uzrast}}
-                            }
-                        </mat-cell>
-                    </ng-container>
-                    <ng-container matColumnDef="cena">
-                        <mat-header-cell *matHeaderCellDef>Cena</mat-header-cell>
-                        <mat-cell *matCellDef="let reservation">
-                            @if(editingReservation === reservation.createdAt) {
-                                <input matInput type="number" [(ngModel)]="editData.cena" placeholder="Cena">
-                            } @else {
-                                {{formatPrice(reservation.cena)}}
-                            }
-                        </mat-cell>
-                    </ng-container>
-                    <ng-container matColumnDef="status">
-                        <mat-header-cell *matHeaderCellDef>Status</mat-header-cell>
-                        <mat-cell *matCellDef="let reservation">
-                            <mat-chip [color]="getStatusColor(reservation.status)">{{reservation.status}}</mat-chip>
-                        </mat-cell>
-                    </ng-container>
-                    <ng-container matColumnDef="options">
-                        <mat-header-cell *matHeaderCellDef>Akcije</mat-header-cell>
-                        <mat-cell *matCellDef="let reservation">
-                            @if(editingReservation === reservation.createdAt) {
-                                <button mat-icon-button color="primary" (click)="saveEdit()">
-                                    <mat-icon>save</mat-icon>
-                                </button>
-                                <button mat-icon-button (click)="cancelEdit()">
-                                    <mat-icon>cancel</mat-icon>
-                                </button>
-                            } @else {
-                                <button mat-icon-button color="primary" (click)="startEdit(reservation)" title="Izmeni">
-                                    <mat-icon>edit</mat-icon>
-                                </button>
-                                <button mat-icon-button color="warn" (click)="cancelReservation(reservation)" title="Otkaži">
-                                    <mat-icon>cancel</mat-icon>
-                                </button>
-                                <button mat-icon-button color="accent" (click)="updateReservationStatus(reservation, 'pristiglo')" title="Označi kao pristiglo">
-                                    <mat-icon>check_circle</mat-icon>
-                                </button>
-                            }
-                        </mat-cell>
-                    </ng-container>
-                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-                </mat-table>
-            } @else {
-                <p class="empty-message">Nema rezervisanih igračaka.</p>
-            }
-
-            <h2>Pristiglo</h2>
-            @if(getReservationsByStatus('pristiglo').length > 0) {
-                <mat-table [dataSource]="getReservationsByStatus('pristiglo')" class="reservations-table">
+            @if(rezervisano().length > 0) {
+                <mat-table [dataSource]="rezervisano()" class="reservations-table">
                     <ng-container matColumnDef="naziv">
                         <mat-header-cell *matHeaderCellDef>Naziv</mat-header-cell>
                         <mat-cell *matCellDef="let reservation">{{reservation.naziv}}</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="opis">
+                        <mat-header-cell *matHeaderCellDef>Opis</mat-header-cell>
+                        <mat-cell *matCellDef="let reservation" class="opis-cell">
+                            <span class="description-text" [title]="reservation.opis">
+                                {{reservation.opis}}
+                            </span>
+                        </mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="tip">
                         <mat-header-cell *matHeaderCellDef>Tip</mat-header-cell>
@@ -99,7 +28,15 @@
                     </ng-container>
                     <ng-container matColumnDef="uzrast">
                         <mat-header-cell *matHeaderCellDef>Uzrast</mat-header-cell>
-                        <mat-cell *matCellDef="let reservation">{{reservation.uzrast}}</mat-cell>
+                        <mat-cell *matCellDef="let reservation">{{reservation.uzrast}} godina</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="ciljnaGrupa">
+                        <mat-header-cell *matHeaderCellDef>Ciljna grupa</mat-header-cell>
+                        <mat-cell *matCellDef="let reservation">{{reservation.ciljnaGrupa}}</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="datumProizvodnje">
+                        <mat-header-cell *matHeaderCellDef>Datum proizvodnje</mat-header-cell>
+                        <mat-cell *matCellDef="let reservation">{{formatDate(reservation.datumProizvodnje)}}</mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="cena">
                         <mat-header-cell *matHeaderCellDef>Cena</mat-header-cell>
@@ -107,8 +44,69 @@
                     </ng-container>
                     <ng-container matColumnDef="status">
                         <mat-header-cell *matHeaderCellDef>Status</mat-header-cell>
-                        <mat-cell *matCellDef="let reservation">
-                            <mat-chip [color]="getStatusColor(reservation.status)">{{reservation.status}}</mat-chip>
+                        <mat-cell *matCellDef="let reservation" class="status-cell">
+                            <mat-chip [color]="getStatusColor(reservation.status)" class="status-chip">{{reservation.status}}</mat-chip>
+                        </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="options">
+                        <mat-header-cell *matHeaderCellDef>Akcije</mat-header-cell>
+                        <mat-cell *matCellDef="let reservation" class="actions-cell">
+                            <div class="action-buttons">
+                                <button mat-icon-button color="warn" (click)="cancelReservation(reservation)" title="Ukloni iz korpe" class="action-btn">
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+                                <button mat-icon-button color="accent" (click)="updateReservationStatus(reservation, 'pristiglo')" title="Označi kao pristiglo" class="action-btn">
+                                    <mat-icon>check_circle</mat-icon>
+                                </button>
+                            </div>
+                        </mat-cell>
+                    </ng-container>
+                    <mat-header-row *matHeaderRowDef="displayedColumnsRezervisano"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: displayedColumnsRezervisano;"></mat-row>
+                </mat-table>
+            } @else {
+                <p class="empty-message">Nema rezervisanih igračaka.</p>
+            }
+
+            <h2>Pristiglo</h2>
+            @if(pristiglo().length > 0) {
+                <mat-table [dataSource]="pristiglo()" class="reservations-table">
+                    <ng-container matColumnDef="naziv">
+                        <mat-header-cell *matHeaderCellDef>Naziv</mat-header-cell>
+                        <mat-cell *matCellDef="let reservation">{{reservation.naziv}}</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="opis">
+                        <mat-header-cell *matHeaderCellDef>Opis</mat-header-cell>
+                        <mat-cell *matCellDef="let reservation" class="opis-cell">
+                            <span class="description-text" [title]="reservation.opis">
+                                {{reservation.opis}}
+                            </span>
+                        </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="tip">
+                        <mat-header-cell *matHeaderCellDef>Tip</mat-header-cell>
+                        <mat-cell *matCellDef="let reservation">{{reservation.tip}}</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="uzrast">
+                        <mat-header-cell *matHeaderCellDef>Uzrast</mat-header-cell>
+                        <mat-cell *matCellDef="let reservation">{{reservation.uzrast}} godina</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="ciljnaGrupa">
+                        <mat-header-cell *matHeaderCellDef>Ciljna grupa</mat-header-cell>
+                        <mat-cell *matCellDef="let reservation">{{reservation.ciljnaGrupa}}</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="datumProizvodnje">
+                        <mat-header-cell *matHeaderCellDef>Datum proizvodnje</mat-header-cell>
+                        <mat-cell *matCellDef="let reservation">{{formatDate(reservation.datumProizvodnje)}}</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="cena">
+                        <mat-header-cell *matHeaderCellDef>Cena</mat-header-cell>
+                        <mat-cell *matCellDef="let reservation">{{formatPrice(reservation.cena)}}</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="status">
+                        <mat-header-cell *matHeaderCellDef>Status</mat-header-cell>
+                        <mat-cell *matCellDef="let reservation" class="status-cell">
+                            <mat-chip [color]="getStatusColor(reservation.status)" class="status-chip">{{reservation.status}}</mat-chip>
                         </mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="ocena">
@@ -119,9 +117,11 @@
                                     @for(star of getStars(reservation.ocena); track $index) {
                                         <mat-icon>{{star}}</mat-icon>
                                     }
+                                    <span>({{reservation.ocena}}/5)</span>
                                 </div>
                             } @else {
                                 <div class="rating-buttons">
+                                    <span class="rating-label">Oceni:</span>
                                     @for(rating of [1,2,3,4,5]; track rating) {
                                         <button mat-icon-button (click)="rateToy(reservation, rating)" title="Oceni sa {{rating}}">
                                             <mat-icon>star_border</mat-icon>
@@ -133,25 +133,35 @@
                     </ng-container>
                     <ng-container matColumnDef="options">
                         <mat-header-cell *matHeaderCellDef>Akcije</mat-header-cell>
-                        <mat-cell *matCellDef="let reservation">
-                            <button mat-icon-button color="warn" (click)="removeReservation(reservation)" title="Obriši">
-                                <mat-icon>delete</mat-icon>
-                            </button>
+                        <mat-cell *matCellDef="let reservation" class="actions-cell">
+                            <div class="action-buttons">
+                                <button mat-icon-button color="warn" (click)="removeReservation(reservation)" title="Obriši" class="action-btn">
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+                            </div>
                         </mat-cell>
                     </ng-container>
-                    <mat-header-row *matHeaderRowDef="['naziv', 'tip', 'uzrast', 'cena', 'status', 'ocena', 'options']"></mat-header-row>
-                    <mat-row *matRowDef="let row; columns: ['naziv', 'tip', 'uzrast', 'cena', 'status', 'ocena', 'options'];"></mat-row>
+                    <mat-header-row *matHeaderRowDef="displayedColumnsPristiglo"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: displayedColumnsPristiglo;"></mat-row>
                 </mat-table>
             } @else {
                 <p class="empty-message">Nema igračaka sa statusom "pristiglo".</p>
             }
 
             <h2>Otkazano</h2>
-            @if(getReservationsByStatus('otkazano').length > 0) {
-                <mat-table [dataSource]="getReservationsByStatus('otkazano')" class="reservations-table">
+            @if(otkazano().length > 0) {
+                <mat-table [dataSource]="otkazano()" class="reservations-table">
                     <ng-container matColumnDef="naziv">
                         <mat-header-cell *matHeaderCellDef>Naziv</mat-header-cell>
                         <mat-cell *matCellDef="let reservation">{{reservation.naziv}}</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="opis">
+                        <mat-header-cell *matHeaderCellDef>Opis</mat-header-cell>
+                        <mat-cell *matCellDef="let reservation" class="opis-cell">
+                            <span class="description-text" [title]="reservation.opis">
+                                {{reservation.opis}}
+                            </span>
+                        </mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="tip">
                         <mat-header-cell *matHeaderCellDef>Tip</mat-header-cell>
@@ -159,7 +169,15 @@
                     </ng-container>
                     <ng-container matColumnDef="uzrast">
                         <mat-header-cell *matHeaderCellDef>Uzrast</mat-header-cell>
-                        <mat-cell *matCellDef="let reservation">{{reservation.uzrast}}</mat-cell>
+                        <mat-cell *matCellDef="let reservation">{{reservation.uzrast}} godina</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="ciljnaGrupa">
+                        <mat-header-cell *matHeaderCellDef>Ciljna grupa</mat-header-cell>
+                        <mat-cell *matCellDef="let reservation">{{reservation.ciljnaGrupa}}</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="datumProizvodnje">
+                        <mat-header-cell *matHeaderCellDef>Datum proizvodnje</mat-header-cell>
+                        <mat-cell *matCellDef="let reservation">{{formatDate(reservation.datumProizvodnje)}}</mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="cena">
                         <mat-header-cell *matHeaderCellDef>Cena</mat-header-cell>
@@ -167,18 +185,12 @@
                     </ng-container>
                     <ng-container matColumnDef="status">
                         <mat-header-cell *matHeaderCellDef>Status</mat-header-cell>
-                        <mat-cell *matCellDef="let reservation">
-                            <mat-chip [color]="getStatusColor(reservation.status)">{{reservation.status}}</mat-chip>
+                        <mat-cell *matCellDef="let reservation" class="status-cell">
+                            <mat-chip [color]="getStatusColor(reservation.status)" class="status-chip">{{reservation.status}}</mat-chip>
                         </mat-cell>
                     </ng-container>
-                    <ng-container matColumnDef="options">
-                        <mat-header-cell *matHeaderCellDef>Akcije</mat-header-cell>
-                        <mat-cell *matCellDef="let reservation">
-                            <span class="no-actions">-</span>
-                        </mat-cell>
-                    </ng-container>
-                    <mat-header-row *matHeaderRowDef="['naziv', 'tip', 'uzrast', 'cena', 'status', 'options']"></mat-header-row>
-                    <mat-row *matRowDef="let row; columns: ['naziv', 'tip', 'uzrast', 'cena', 'status', 'options'];"></mat-row>
+                    <mat-header-row *matHeaderRowDef="displayedColumnsOtkazano"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: displayedColumnsOtkazano;"></mat-row>
                 </mat-table>
             } @else {
                 <p class="empty-message">Nema otkazanih rezervacija.</p>

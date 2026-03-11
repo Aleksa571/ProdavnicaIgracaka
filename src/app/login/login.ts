@@ -22,8 +22,8 @@ import { Alerts } from '../alerts';
   styleUrl: './login.css',
 })
 export class Login {
-  email: string = 'user@example.com'
-  password: string = 'user123'
+  email: string = 'aleksa.milosevic.23@singimail.rs'
+  password: string = 'aleksa123'
 
   constructor(private router: Router) {
     if (AuthService.getActiveUser()) {

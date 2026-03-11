@@ -1,5 +1,5 @@
 import { Component, signal } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ToyModel } from '../../models/toy.model';
 import { MatCardModule } from '@angular/material/card';
 import { MatListModule } from '@angular/material/list';
@@ -28,18 +28,30 @@ import { Alerts } from '../alerts';
 })
 export class DetaljiIgracke {
   public authService = AuthService
+  public console = console // Dodajemo console u template
   toy = signal<ToyModel | null>(null)
   isLoading = signal(true)
 
-  constructor(route: ActivatedRoute) {
+  constructor(route: ActivatedRoute, private router: Router) {
     route.params.subscribe(async params => {
       const id = parseInt(params['id'])
+      console.log('Details page - ID:', id, 'params:', params)
+      
+      if (isNaN(id)) {
+        console.error('Invalid ID:', params['id'])
+        Alerts.error('Neispravan ID igračke!')
+        this.isLoading.set(false)
+        return
+      }
+      
       try {
         const toy = await ToyService.getToyById(id)
+        console.log('Loaded toy:', toy)
         this.toy.set(toy)
         this.isLoading.set(false)
       } catch (error) {
         console.error('Greška pri učitavanju igračke:', error)
+        Alerts.error('Greška pri učitavanju igračke. Pokušajte ponovo.')
         this.isLoading.set(false)
       }
     })
@@ -50,7 +62,19 @@ export class DetaljiIgracke {
   }
 
   formatDate(date: string): string {
-    return new Date(date).toLocaleDateString('sr-RS')
+    if (!date || date === '' || date === 'Invalid Date') {
+      return 'Nije dostupno'
+    }
+    try {
+      const dateObj = new Date(date)
+      if (isNaN(dateObj.getTime())) {
+        return 'Nije dostupno'
+      }
+      return dateObj.toLocaleDateString('sr-RS')
+    } catch (error) {
+      console.error('Error formatting date:', date, error)
+      return 'Nije dostupno'
+    }
   }
 
   getAverageRating(): number {
@@ -61,16 +85,64 @@ export class DetaljiIgracke {
   }
 
   reserveToy() {
+    console.log('reserveToy() called')
     const toy = this.toy()
-    if (!toy) return
+    console.log('Current toy:', toy)
     
-    if (!AuthService.getActiveUser()) {
+    if (!toy) {
+      console.error('No toy data available')
+      Alerts.error('Podaci o igrački nisu dostupni. Pokušajte ponovo.')
+      return
+    }
+    
+    if (!toy.id) {
+      console.error('Toy missing ID:', toy)
+      Alerts.error('Igračka nema validan ID. Ne možete je rezervisati.')
+      return
+    }
+    
+    const activeUser = AuthService.getActiveUser()
+    console.log('Active user:', activeUser)
+    
+    if (!activeUser) {
       Alerts.error('Morate se prijaviti da biste rezervisali igračku!')
+      this.router.navigate(['/login'])
       return
     }
 
-    AuthService.createReservation(toy)
-    Alerts.success(`Igračka "${toy.naziv}" je dodata u korpu rezervacija!`)
+    // Proveri da li igračka već postoji u korpi
+    const existingReservations = AuthService.getAllReservations()
+    console.log('Existing reservations:', existingReservations)
+    const alreadyReserved = existingReservations.some(
+      r => r.toyId === toy.id && r.status !== 'otkazano'
+    )
+    console.log('Already reserved?', alreadyReserved)
+    
+    if (alreadyReserved) {
+      Alerts.error('Ova igračka je već u vašoj korpi!')
+      this.router.navigate(['/korpa'])
+      return
+    }
+
+    try {
+      console.log('Calling createReservation...')
+      AuthService.createReservation(toy)
+      console.log('createReservation completed successfully')
+      
+      // Proveri da li je stvarno dodato
+      const afterReservations = AuthService.getAllReservations()
+      console.log('Reservations after adding:', afterReservations)
+      
+      Alerts.success(`Igračka "${toy.naziv}" je dodata u korpu rezervacija!`)
+      // Preusmeri na korpu nakon kratke pauze
+      setTimeout(() => {
+        console.log('Navigating to cart...')
+        this.router.navigate(['/korpa'])
+      }, 500)
+    } catch (error: any) {
+      console.error('Error creating reservation:', error)
+      Alerts.error(`Greška pri rezervaciji igračke: ${error.message || error}`)
+    }
   }
 
   getStars(): string[] {

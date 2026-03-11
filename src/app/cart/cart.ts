@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, signal, computed, OnInit, OnDestroy } from '@angular/core';
+import { Router, NavigationEnd } from '@angular/router';
 import { AuthService } from '../services/auth.service';
+import { filter, Subscription } from 'rxjs';
 import { MatCardModule } from '@angular/material/card';
 import { MatTableModule } from '@angular/material/table';
 import { ReservationModel } from '../../models/reservation.model';
@@ -31,38 +32,86 @@ import { MatChipsModule } from '@angular/material/chips';
   templateUrl: './cart.html',
   styleUrl: './cart.css',
 })
-export class Korpa {
-  displayedColumns = ['naziv', 'tip', 'uzrast', 'cena', 'status', 'ocena', 'options']
-  editingReservation: string | null = null;
-  editData: Partial<ReservationModel> = {};
+export class Korpa implements OnInit, OnDestroy {
+  // Kolone za rezervisano - samo pregled i uklanjanje
+  displayedColumnsRezervisano = ['naziv', 'opis', 'tip', 'uzrast', 'ciljnaGrupa', 'datumProizvodnje', 'cena', 'status', 'options']
+  // Kolone za pristiglo - sa ocenjivanjem
+  displayedColumnsPristiglo = ['naziv', 'opis', 'tip', 'uzrast', 'ciljnaGrupa', 'datumProizvodnje', 'cena', 'status', 'ocena', 'options']
+  // Kolone za otkazano - samo pregled
+  displayedColumnsOtkazano = ['naziv', 'opis', 'tip', 'uzrast', 'ciljnaGrupa', 'datumProizvodnje', 'cena', 'status']
+  private routerSubscription?: Subscription;
+  
+  // Signal za sve rezervacije
+  private reservationsSignal = signal<ReservationModel[]>([])
+  
+  // Computed signale za različite statuse
+  rezervisano = computed(() => 
+    this.reservationsSignal().filter(r => r.status === 'rezervisano')
+  )
+  pristiglo = computed(() => 
+    this.reservationsSignal().filter(r => r.status === 'pristiglo')
+  )
+  otkazano = computed(() => 
+    this.reservationsSignal().filter(r => r.status === 'otkazano')
+  )
 
   constructor(public router: Router) {
     if (!AuthService.getActiveUser()) {
       router.navigate(['/login'])
       return
     }
-  }
-
-  reloadComponent() {
-    this.router.navigateByUrl('/', { skipLocationChange: true })
-      .then(() => {
-        this.router.navigate(['/korpa'])
+    
+    // Osveži podatke kada se navigira na ovu stranicu
+    this.routerSubscription = this.router.events
+      .pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe((event: any) => {
+        if (event.url === '/korpa') {
+          console.log('Navigated to korpa, refreshing reservations')
+          this.loadReservations()
+        }
       })
   }
 
+  ngOnInit() {
+    this.loadReservations()
+  }
+
+  ngOnDestroy() {
+    if (this.routerSubscription) {
+      this.routerSubscription.unsubscribe()
+    }
+  }
+
+  loadReservations() {
+    const reservations = AuthService.getAllReservations()
+    console.log('Loading reservations:', reservations)
+    console.log('Rezervisano count:', reservations.filter(r => r.status === 'rezervisano').length)
+    this.reservationsSignal.set(reservations)
+    console.log('Signal updated. Rezervisano signal:', this.rezervisano().length)
+  }
+
+  reloadComponent() {
+    this.loadReservations()
+    // Alternativno, možemo koristiti router reload
+    // this.router.navigateByUrl('/', { skipLocationChange: true })
+    //   .then(() => {
+    //     this.router.navigate(['/korpa'])
+    //   })
+  }
+
   getReservations(): ReservationModel[] {
-    return AuthService.getAllReservations();
+    return this.reservationsSignal()
   }
 
   getReservationsByStatus(status: 'rezervisano' | 'pristiglo' | 'otkazano'): ReservationModel[] {
-    return AuthService.getReservationsByStatus(status);
+    return this.reservationsSignal().filter(r => r.status === status)
   }
 
   removeReservation(reservation: ReservationModel) {
     if (reservation.status === 'pristiglo') {
       Alerts.confirm(`Da li ste sigurni da želite da obrišete "${reservation.naziv}" iz korpe?`, () => {
         AuthService.deleteReservation(reservation.createdAt);
-        this.reloadComponent();
+        this.loadReservations();
       });
     } else {
       Alerts.error('Možete obrisati samo igračke sa statusom "pristiglo"!');
@@ -71,56 +120,32 @@ export class Korpa {
 
   cancelReservation(reservation: ReservationModel) {
     if (reservation.status === 'rezervisano') {
-      Alerts.confirm(`Da li ste sigurni da želite da otkažete rezervaciju za "${reservation.naziv}"?`, () => {
+      Alerts.confirm(`Da li ste sigurni da želite da uklonite "${reservation.naziv}" iz korpe?`, () => {
         AuthService.cancelReservation(reservation.createdAt);
-        this.reloadComponent();
+        this.loadReservations();
       });
     }
   }
 
   updateReservationStatus(reservation: ReservationModel, newStatus: 'rezervisano' | 'pristiglo' | 'otkazano') {
     AuthService.updateReservationStatus(reservation.createdAt, newStatus);
-    this.reloadComponent();
-  }
-
-  startEdit(reservation: ReservationModel) {
-    if (reservation.status === 'rezervisano') {
-      this.editingReservation = reservation.createdAt;
-      this.editData = { ...reservation };
-    } else {
-      Alerts.error('Možete menjati samo igračke sa statusom "rezervisano"!');
-    }
-  }
-
-  saveEdit() {
-    if (this.editingReservation) {
-      AuthService.updateReservation(this.editingReservation, this.editData);
-      this.editingReservation = null;
-      this.editData = {};
-      this.reloadComponent();
-    }
-  }
-
-  cancelEdit() {
-    this.editingReservation = null;
-    this.editData = {};
+    this.loadReservations();
   }
 
   rateToy(reservation: ReservationModel, rating: number) {
     if (reservation.status === 'pristiglo') {
       AuthService.rateToy(reservation.createdAt, rating);
-      this.reloadComponent();
+      this.loadReservations();
     } else {
       Alerts.error('Možete ocenjivati samo igračke sa statusom "pristiglo"!');
     }
   }
 
   calculateTotal(): number {
+    // Računaj samo rezervisane igračke
     let total = 0;
-    for (let reservation of this.getReservations()) {
-      if (reservation.status !== 'otkazano') {
-        total += reservation.cena;
-      }
+    for (let reservation of this.rezervisano()) {
+      total += reservation.cena;
     }
     return total;
   }

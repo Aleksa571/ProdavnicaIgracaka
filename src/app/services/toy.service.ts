@@ -50,8 +50,21 @@ export class ToyService {
         }
         const ciljnaGrupa = String(ciljnaGrupaValue)
         
+        // Ekstraktuj ID - može biti pod različitim nazivima
+        let idValue: any = item.id || item.toyId || item._id
+        if (idValue === undefined || idValue === null) {
+            console.warn('Toy item missing ID:', item)
+            throw new Error('Toy item must have an ID field')
+        }
+        const id = typeof idValue === 'number' ? idValue : parseInt(String(idValue))
+        
+        if (isNaN(id)) {
+            console.error('Invalid toy ID:', idValue, 'from item:', item)
+            throw new Error(`Invalid toy ID: ${idValue}`)
+        }
+        
         return {
-            id: item.id,
+            id: id,
             naziv: item.naziv || item.name || item.title || '',
             opis: item.opis || item.description || '',
             tip: tip as any,

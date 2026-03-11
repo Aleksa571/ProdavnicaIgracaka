@@ -8,10 +8,10 @@ const ACTIVE = 'active'
 export class AuthService {
     static getUsers(): UserModel[] {
         const baseUser: UserModel = {
-            email: 'user@example.com',
-            password: 'user123',
-            firstName: 'Example',
-            lastName: 'User',
+            email: 'aleksa.milosevic.23@singimail.rs',
+            password: 'aleksa123',
+            firstName: 'Aleksa',
+            lastName: 'Milosevic',
             phone: '0653093267',
             address: 'Danijelova 32',
             omiljeneVrsteIgračaka: ['konstruktor', 'slagalica'],
@@ -20,20 +20,49 @@ export class AuthService {
 
         if (localStorage.getItem(USERS) == null) {
             localStorage.setItem(USERS, JSON.stringify([baseUser]))
+            return [baseUser]
         }
 
-        return JSON.parse(localStorage.getItem(USERS)!)
+        const users = JSON.parse(localStorage.getItem(USERS)!)
+        
+        // Osiguraj da svi korisnici imaju reservations array
+        for (let u of users) {
+            if (!u.reservations) {
+                u.reservations = []
+            }
+        }
+        
+        // Proveri da li default korisnik postoji, ako ne - dodaj ga
+        const defaultUserExists = users.some((u: UserModel) => u.email === baseUser.email)
+        if (!defaultUserExists) {
+            users.push(baseUser)
+            localStorage.setItem(USERS, JSON.stringify(users))
+        } else {
+            // Ako već postoji, osiguraj da ima reservations array
+            const defaultUser = users.find((u: UserModel) => u.email === baseUser.email)
+            if (defaultUser && !defaultUser.reservations) {
+                defaultUser.reservations = []
+                localStorage.setItem(USERS, JSON.stringify(users))
+            }
+        }
+
+        return users
     }
 
     static login(email: string, password: string) {
         const users = this.getUsers()
+        console.log('Pokušaj prijave sa email:', email)
+        console.log('Dostupni korisnici:', users.map(u => u.email))
+        
         for (let u of users) {
             if (u.email === email && u.password === password) {
                 localStorage.setItem(ACTIVE, email)
+                console.log('Uspešna prijava!')
                 return true
             }
         }
 
+        console.log('Neuspešna prijava - email ili lozinka nisu ispravni')
         return false
     }
 
@@ -77,6 +106,15 @@ export class AuthService {
     }
 
     static createReservation(toy: ToyModel) {
+        console.log('createReservation called with toy:', toy)
+        
+        const activeEmail = localStorage.getItem(ACTIVE)
+        console.log('Active user email:', activeEmail)
+        
+        if (!activeEmail) {
+            throw new Error('Nema aktivnog korisnika!')
+        }
+        
         const reservation: ReservationModel = {
             toyId: toy.id,
             naziv: toy.naziv,
@@ -89,21 +127,49 @@ export class AuthService {
             status: 'rezervisano',
             createdAt: new Date().toISOString()
         }
+        
+        console.log('Created reservation object:', reservation)
 
         const users = this.getUsers()
+        console.log('All users:', users)
+        
+        let found = false
         for (let u of users) {
-            if (u.email === localStorage.getItem(ACTIVE)) {
+            if (u.email === activeEmail) {
+                console.log('Found user:', u.email)
+                if (!u.reservations) {
+                    u.reservations = []
+                }
                 u.reservations.push(reservation)
+                found = true
+                console.log('Reservation added. User reservations:', u.reservations)
+                break
             }
         }
+        
+        if (!found) {
+            console.error('User not found!', activeEmail)
+            throw new Error(`Korisnik sa emailom ${activeEmail} nije pronađen!`)
+        }
+        
         localStorage.setItem(USERS, JSON.stringify(users))
+        console.log('Users saved to localStorage')
+        
+        // Proveri da li je sačuvano
+        const savedUsers = JSON.parse(localStorage.getItem(USERS) || '[]')
+        const savedUser = savedUsers.find((u: UserModel) => u.email === activeEmail)
+        console.log('Verification - saved user reservations:', savedUser?.reservations)
     }
 
     static getReservationsByStatus(status: 'rezervisano' | 'pristiglo' | 'otkazano'): ReservationModel[] {
         const users = this.getUsers()
+        const activeEmail = localStorage.getItem(ACTIVE)
+        
         for (let u of users) {
-            if (u.email === localStorage.getItem(ACTIVE)) {
-                return u.reservations.filter((r) => r.status === status)
+            if (u.email === activeEmail) {
+                const filtered = (u.reservations || []).filter((r) => r.status === status)
+                console.log(`getReservationsByStatus(${status}) - Found ${filtered.length} reservations`)
+                return filtered
             }
         }
 
@@ -112,12 +178,18 @@ export class AuthService {
 
     static getAllReservations(): ReservationModel[] {
         const users = this.getUsers()
+        const activeEmail = localStorage.getItem(ACTIVE)
+        console.log('getAllReservations - Active email:', activeEmail)
+        
         for (let u of users) {
-            if (u.email === localStorage.getItem(ACTIVE)) {
-                return u.reservations
+            if (u.email === activeEmail) {
+                console.log('getAllReservations - Found user:', u.email)
+                console.log('getAllReservations - User reservations:', u.reservations)
+                return u.reservations || []
             }
         }
 
+        console.log('getAllReservations - User not found, returning empty array')
         return []
     }
 

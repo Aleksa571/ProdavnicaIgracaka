@@ -1,6 +1,6 @@
 import { Component, signal, OnInit } from '@angular/core';
 import { ToyModel } from '../../models/toy.model';
-import { RouterLink } from "@angular/router";
+import { RouterLink, Router } from "@angular/router";
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -12,6 +12,7 @@ import { FormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { CommonModule } from '@angular/common';
+import { Alerts } from '../alerts';
 
 @Component({
   selector: 'app-home',
@@ -85,7 +86,7 @@ export class Home implements OnInit {
     }
   }
 
-  constructor() {}
+  constructor(private router: Router) {}
 
   async ngOnInit() {
     try {
@@ -210,9 +211,38 @@ export class Home implements OnInit {
 
   reserveToy(toy: ToyModel) {
     if (!AuthService.getActiveUser()) {
+      Alerts.error('Morate se prijaviti da biste rezervisali igračku!')
+      this.router.navigate(['/login'])
       return
     }
-    AuthService.createReservation(toy)
-    alert(`Igračka "${toy.naziv}" je dodata u korpu rezervacija!`)
+    
+    if (!toy.id) {
+      Alerts.error('Igračka nema validan ID. Ne možete je rezervisati.')
+      return
+    }
+
+    // Proveri da li igračka već postoji u korpi
+    const existingReservations = AuthService.getAllReservations()
+    const alreadyReserved = existingReservations.some(
+      r => r.toyId === toy.id && r.status !== 'otkazano'
+    )
+    
+    if (alreadyReserved) {
+      Alerts.error('Ova igračka je već u vašoj korpi!')
+      this.router.navigate(['/korpa'])
+      return
+    }
+
+    try {
+      AuthService.createReservation(toy)
+      Alerts.success(`Igračka "${toy.naziv}" je dodata u korpu rezervacija!`)
+      // Preusmeri na korpu nakon kratke pauze
+      setTimeout(() => {
+        this.router.navigate(['/korpa'])
+      }, 500)
+    } catch (error: any) {
+      console.error('Error creating reservation:', error)
+      Alerts.error('Greška pri rezervaciji igračke. Pokušajte ponovo.')
+    }
   }
 }

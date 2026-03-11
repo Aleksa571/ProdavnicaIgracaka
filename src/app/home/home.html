@@ -95,9 +95,15 @@
                 </div>
             </mat-card-content>
             <mat-card-actions>
+                @if(toy.id !== undefined && toy.id !== null) {
                 <a [routerLink]="`/detalji/${toy.id}`" matButton>
                     <mat-icon fontIcon="description" /> Detalji
                 </a>
+                } @else {
+                <button mat-button disabled>
+                    <mat-icon fontIcon="description" /> Detalji (ID nedostaje)
+                </button>
+                }
                 @if (authService.getActiveUser()) {
                 <button mat-raised-button color="primary" (click)="reserveToy(toy)">
                     <mat-icon fontIcon="shopping_cart" /> Rezerviši
