@@ -130,7 +130,23 @@ export class AuthService {
                 }
             }
         }
-
+        
         localStorage.setItem(USERS, JSON.stringify(users))
+    }
+
+    static createUser(user: Partial<UserModel>) {
+        const users = this.getUsers()
+        user.orders = []
+        users.push(user as UserModel)
+        localStorage.setItem(USERS, JSON.stringify(users))
+    }
+
+    static existsByEmail(email: string) {
+        const users = this.getUsers()
+        for (let u of users) {
+            if (u.email === email) return true
+        }
+
+        return false
     }
 }

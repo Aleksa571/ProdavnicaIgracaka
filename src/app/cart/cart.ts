@@ -94,4 +94,3 @@ export class Cart {
     return DataService.getFullAgeGroupText(order.ageGroup)
   }
 }
- 

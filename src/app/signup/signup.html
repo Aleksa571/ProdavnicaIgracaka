@@ -1,0 +1,53 @@
+<mat-card class="small-card">
+    <mat-card-header>
+        <h1>Signup</h1>
+    </mat-card-header>
+    <mat-card-content>
+        <div>
+            <mat-form-field class="full-width">
+                <mat-label>First Name</mat-label>
+                <input matInput type="text" [(ngModel)]="user.firstName">
+            </mat-form-field>
+            <mat-form-field class="full-width">
+                <mat-label>Last Name</mat-label>
+                <input matInput type="text" [(ngModel)]="user.lastName">
+            </mat-form-field>
+            <mat-form-field class="full-width">
+                <mat-label>Phone</mat-label>
+                <input matInput type="text" [(ngModel)]="user.phone">
+            </mat-form-field>
+            <mat-form-field class="full-width">
+                <mat-label>Address</mat-label>
+                <input matInput type="text" [(ngModel)]="user.address">
+            </mat-form-field>
+            <mat-form-field class="full-width">
+                <mat-label>Favorite Destination</mat-label>
+                <mat-select [(ngModel)]="user.destination">
+                    @for (dest of destinations(); track dest) {
+                    <mat-option [value]="dest">{{dest}}</mat-option>
+                    }
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field class="full-width">
+                <mat-label>Email</mat-label>
+                <input matInput type="email" [(ngModel)]="user.email" id="email">
+            </mat-form-field>
+            <mat-form-field class="full-width">
+                <mat-label>Password</mat-label>
+                <input matInput type="password" [(ngModel)]="user.password" id="password">
+            </mat-form-field>
+            <mat-form-field class="full-width">
+                <mat-label>Repeat Password</mat-label>
+                <input matInput type="password" [(ngModel)]="repeat">
+            </mat-form-field>
+        </div>
+    </mat-card-content>
+    <mat-card-actions>
+        <button type="button" matButton (click)="doSignup()">
+            <mat-icon fontIcon="send" /> Submit
+        </button>
+        <a routerLink="/login" matButton>
+            <mat-icon fontIcon="login" /> Login Instead
+        </a>
+    </mat-card-actions>
+</mat-card>

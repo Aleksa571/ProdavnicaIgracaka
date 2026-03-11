@@ -64,9 +64,7 @@ export class Order {
   }
 
   calculateTotal() {
-    const seatingCost = this.seatingTypes.find((st) => st.id === this.order.seatingTypeId)!.price
-    const airlineImpact = this.airlines.find((a) => a.id === this.order.airlineId)!.priceImpact
-    return (seatingCost * airlineImpact * this.order.count!) / (this.order.ageGroup == 'c' ? 2 : 1)
+    return this.utils.calculateTotal(this.order as any)
   }
 
   placeOrder() {
