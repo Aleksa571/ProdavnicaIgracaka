@@ -1,4 +1,4 @@
-import { Component, signal, OnInit, AfterViewInit } from '@angular/core';
+import { Component, signal, OnInit, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { ToyModel } from '../../models/toy.model';
 import { RouterLink, Router } from "@angular/router";
 import { MatButtonModule } from '@angular/material/button';
@@ -41,6 +41,12 @@ export class Home implements OnInit, AfterViewInit {
   searchCenaMin = ''
   searchCenaMax = ''
   searchMinRating = ''
+  
+  priceRange = signal<[number, number]>([0, 0])
+  priceRangeMin = signal<number>(0)
+  priceRangeMax = signal<number>(0)
+  priceDistribution = signal<number[]>([])
+  priceFilterExpanded = signal<boolean>(true)
 
   public authService = AuthService
   toys = signal<ToyModel[]>([])
@@ -85,9 +91,13 @@ export class Home implements OnInit, AfterViewInit {
     }
   }
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   async ngOnInit() {
+    this.isLoading.set(true)
     try {
       console.log('Loading toys...')
       const [allToys, types, ageGroups] = await Promise.all([
@@ -108,8 +118,25 @@ export class Home implements OnInit, AfterViewInit {
       this.filteredToys.set(allToys)
       this.toyTypes.set(types)
       this.ageGroups.set(ageGroups)
+      
+      // Initialize price range
+      const prices = allToys.map(t => t.cena || 0).filter(p => p > 0)
+      if (prices.length > 0) {
+        const minPrice = Math.min(...prices)
+        const maxPrice = Math.max(...prices)
+        this.priceRange.set([minPrice, maxPrice])
+        this.priceRangeMin.set(minPrice)
+        this.priceRangeMax.set(maxPrice)
+        this.searchCenaMin = minPrice.toString()
+        this.searchCenaMax = maxPrice.toString()
+        this.calculatePriceDistribution(allToys, minPrice, maxPrice)
+      }
+      
       this.updatePaginatedToys()
       this.isLoading.set(false)
+      
+      // Force change detection to ensure UI updates
+      this.cdr.detectChanges()
       
       setTimeout(() => {
         this.animateCards()
@@ -123,6 +150,7 @@ export class Home implements OnInit, AfterViewInit {
       this.toys.set([])
       this.filteredToys.set([])
       this.isLoading.set(false)
+      this.cdr.detectChanges()
     }
   }
 
@@ -174,6 +202,67 @@ export class Home implements OnInit, AfterViewInit {
     return ['devojčica', 'dečak', 'svi']
   }
 
+  calculatePriceDistribution(toys: ToyModel[], minPrice: number, maxPrice: number) {
+    const buckets = 20
+    const bucketSize = (maxPrice - minPrice) / buckets
+    const distribution = new Array(buckets).fill(0)
+    
+    toys.forEach(toy => {
+      const price = toy.cena || 0
+      if (price >= minPrice && price <= maxPrice) {
+        const bucketIndex = Math.min(
+          Math.floor((price - minPrice) / bucketSize),
+          buckets - 1
+        )
+        distribution[bucketIndex]++
+      }
+    })
+    
+    this.priceDistribution.set(distribution)
+  }
+
+  parseFloat(value: string): number {
+    return parseFloat(value) || 0
+  }
+
+  formatPriceValue(value: number): string {
+    return value.toLocaleString('sr-RS', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    })
+  }
+
+  onMinPriceChange(value: string) {
+    const numValue = parseFloat(value) || this.priceRange()[0]
+    const maxValue = this.priceRangeMax()
+    if (numValue > maxValue) {
+      this.priceRangeMin.set(maxValue)
+      this.searchCenaMin = maxValue.toString()
+    } else {
+      this.priceRangeMin.set(numValue)
+      this.searchCenaMin = numValue.toString()
+    }
+    this.filter()
+  }
+
+  onMaxPriceChange(value: string) {
+    const numValue = parseFloat(value) || this.priceRange()[1]
+    const minValue = this.priceRangeMin()
+    if (numValue < minValue) {
+      this.priceRangeMax.set(minValue)
+      this.searchCenaMax = minValue.toString()
+    } else {
+      this.priceRangeMax.set(numValue)
+      this.searchCenaMax = numValue.toString()
+    }
+    this.filter()
+  }
+
+  getMaxDistributionValue(): number {
+    const dist = this.priceDistribution()
+    return dist.length > 0 ? Math.max(...dist) : 1
+  }
+
   filter() {
     const criteria: any = {}
 
@@ -207,6 +296,12 @@ export class Home implements OnInit, AfterViewInit {
 
     const filtered = ToyService.searchToys(this.toys(), criteria)
     this.filteredToys.set(filtered)
+    
+    // Update price distribution based on all toys (to show full range)
+    const rangeMin = this.priceRange()[0]
+    const rangeMax = this.priceRange()[1]
+    this.calculatePriceDistribution(this.toys(), rangeMin, rangeMax)
+    
     this.pageIndex = 0
     this.updatePaginatedToys()
   }
@@ -218,10 +313,14 @@ export class Home implements OnInit, AfterViewInit {
     this.searchUzrast = ''
     this.searchCiljnaGrupa = ''
     this.searchDatumProizvodnje = ''
-    this.searchCenaMin = ''
-    this.searchCenaMax = ''
+    const [minPrice, maxPrice] = this.priceRange()
+    this.searchCenaMin = minPrice.toString()
+    this.searchCenaMax = maxPrice.toString()
+    this.priceRangeMin.set(minPrice)
+    this.priceRangeMax.set(maxPrice)
     this.searchMinRating = ''
     this.filteredToys.set(this.toys())
+    this.calculatePriceDistribution(this.toys(), minPrice, maxPrice)
     this.pageIndex = 0
     this.updatePaginatedToys()
   }

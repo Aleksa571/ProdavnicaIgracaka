@@ -1,74 +1,125 @@
 @if(!isLoading()) {
 <div class="home-container">
-<div class="search-wrapper">
-    <mat-form-field>
-        <mat-label>Pretraga po nazivu</mat-label>
-        <input matInput type="text" [(ngModel)]="searchNaziv" (keyup)="filter()">
-    </mat-form-field>
-    <mat-form-field>
-        <mat-label>Pretraga po opisu</mat-label>
-        <input matInput type="text" [(ngModel)]="searchOpis" (keyup)="filter()">
-    </mat-form-field>
-    <mat-form-field>
-        <mat-label>Tip igračke</mat-label>
-        <mat-select [(ngModel)]="searchTip" (ngModelChange)="filter()">
-            <mat-option value="">Svi tipovi</mat-option>
-            @for (tip of getToyTypes(); track tip) {
-            <mat-option [value]="tip">{{tip}}</mat-option>
-            }
-        </mat-select>
-    </mat-form-field>
-    <mat-form-field>
-        <mat-label>Uzrast</mat-label>
-        <mat-select [(ngModel)]="searchUzrast" (ngModelChange)="filter()">
-            <mat-option value="">Svi uzrasti</mat-option>
-            @for (uzrast of getAgeGroups(); track uzrast) {
-            <mat-option [value]="uzrast">{{uzrast}} godina</mat-option>
-            }
-        </mat-select>
-    </mat-form-field>
-    <mat-form-field>
-        <mat-label>Ciljna grupa</mat-label>
-        <mat-select [(ngModel)]="searchCiljnaGrupa" (ngModelChange)="filter()">
-            <mat-option value="">Sve grupe</mat-option>
-            @for (grupa of getTargetGroups(); track grupa) {
-            <mat-option [value]="grupa">{{grupa}}</mat-option>
-            }
-        </mat-select>
-    </mat-form-field>
-    <mat-form-field>
-        <mat-label>Datum proizvodnje</mat-label>
-        <input matInput type="date" [(ngModel)]="searchDatumProizvodnje" (change)="filter()">
-    </mat-form-field>
-    <mat-form-field>
-        <mat-label>Minimalna cena (RSD)</mat-label>
-        <input matInput type="number" [(ngModel)]="searchCenaMin" (keyup)="filter()">
-    </mat-form-field>
-    <mat-form-field>
-        <mat-label>Maksimalna cena (RSD)</mat-label>
-        <input matInput type="number" [(ngModel)]="searchCenaMax" (keyup)="filter()">
-    </mat-form-field>
-    <mat-form-field>
-        <mat-label>Minimalna ocena</mat-label>
-        <mat-select [(ngModel)]="searchMinRating" (ngModelChange)="filter()">
-            <mat-option value="">Sve ocene</mat-option>
-            <mat-option [value]="1">1+</mat-option>
-            <mat-option [value]="2">2+</mat-option>
-            <mat-option [value]="3">3+</mat-option>
-            <mat-option [value]="4">4+</mat-option>
-            <mat-option [value]="5">5</mat-option>
-        </mat-select>
-    </mat-form-field>
-    <button mat-raised-button color="primary" (click)="clearFilters()">Obriši filtere</button>
-</div>
-<div class="card-wrapper">
-    @if(filteredToys().length > 0) {
-        <div class="results-header">
-            <div class="results-count">
+    <div class="filters-sidebar">
+        <div class="filters-header">
+            <h3>Filteri</h3>
+        </div>
+        <div class="filters-content">
+            <mat-form-field>
+                <mat-label>Pretraga po nazivu</mat-label>
+                <input matInput type="text" [(ngModel)]="searchNaziv" (keyup)="filter()">
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Pretraga po opisu</mat-label>
+                <input matInput type="text" [(ngModel)]="searchOpis" (keyup)="filter()">
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Tip igračke</mat-label>
+                <mat-select [(ngModel)]="searchTip" (ngModelChange)="filter()">
+                    <mat-option value="">Svi tipovi</mat-option>
+                    @for (tip of getToyTypes(); track tip) {
+                    <mat-option [value]="tip">{{tip}}</mat-option>
+                    }
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Uzrast</mat-label>
+                <mat-select [(ngModel)]="searchUzrast" (ngModelChange)="filter()">
+                    <mat-option value="">Svi uzrasti</mat-option>
+                    @for (uzrast of getAgeGroups(); track uzrast) {
+                    <mat-option [value]="uzrast">{{uzrast}} godina</mat-option>
+                    }
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Ciljna grupa</mat-label>
+                <mat-select [(ngModel)]="searchCiljnaGrupa" (ngModelChange)="filter()">
+                    <mat-option value="">Sve grupe</mat-option>
+                    @for (grupa of getTargetGroups(); track grupa) {
+                    <mat-option [value]="grupa">{{grupa}}</mat-option>
+                    }
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Datum proizvodnje</mat-label>
+                <input matInput type="date" [(ngModel)]="searchDatumProizvodnje" (change)="filter()">
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Minimalna ocena</mat-label>
+                <mat-select [(ngModel)]="searchMinRating" (ngModelChange)="filter()">
+                    <mat-option value="">Sve ocene</mat-option>
+                    <mat-option [value]="1">1+</mat-option>
+                    <mat-option [value]="2">2+</mat-option>
+                    <mat-option [value]="3">3+</mat-option>
+                    <mat-option [value]="4">4+</mat-option>
+                    <mat-option [value]="5">5</mat-option>
+                </mat-select>
+            </mat-form-field>
+            <div class="price-filter-container">
+                <div class="price-filter-header" (click)="priceFilterExpanded.set(!priceFilterExpanded())">
+                    <div class="price-filter-title">
+                        <mat-icon class="price-icon">attach_money</mat-icon>
+                        <h3>Cena</h3>
+                    </div>
+                    <mat-icon [class.expanded]="priceFilterExpanded()">{{priceFilterExpanded() ? 'expand_less' : 'expand_more'}}</mat-icon>
+                </div>
+                @if(priceFilterExpanded()) {
+                <div class="price-filter-content">
+                    <div class="price-range-display-top">
+                        <span>{{formatPriceValue(priceRangeMin())}} RSD</span>
+                        <span>{{formatPriceValue(priceRangeMax())}} RSD</span>
+                    </div>
+                    <div class="price-slider-container">
+                        <div class="slider-wrapper" 
+                             [style.--slider-left.%]="((priceRangeMin() - priceRange()[0]) / (priceRange()[1] - priceRange()[0])) * 100"
+                             [style.--slider-width.%]="((priceRangeMax() - priceRangeMin()) / (priceRange()[1] - priceRange()[0])) * 100">
+                            <input 
+                                type="range" 
+                                [min]="priceRange()[0]" 
+                                [max]="priceRange()[1]" 
+                                [step]="100"
+                                [value]="priceRangeMin()"
+                                (input)="onMinPriceChange($any($event.target).value)"
+                                class="price-slider price-slider-min">
+                            <input 
+                                type="range" 
+                                [min]="priceRange()[0]" 
+                                [max]="priceRange()[1]" 
+                                [step]="100"
+                                [value]="priceRangeMax()"
+                                (input)="onMaxPriceChange($any($event.target).value)"
+                                class="price-slider price-slider-max">
+                        </div>
+                    </div>
+                    <div class="price-inputs">
+                        <mat-form-field class="price-input-field">
+                            <mat-label>Min</mat-label>
+                            <input matInput type="number" [(ngModel)]="searchCenaMin" (ngModelChange)="onMinPriceChange($event)" [min]="priceRange()[0]" [max]="priceRange()[1]">
+                        </mat-form-field>
+                        <span class="price-input-separator">-</span>
+                        <mat-form-field class="price-input-field">
+                            <mat-label>Max</mat-label>
+                            <input matInput type="number" [(ngModel)]="searchCenaMax" (ngModelChange)="onMaxPriceChange($event)" [min]="priceRange()[0]" [max]="priceRange()[1]">
+                        </mat-form-field>
+                    </div>
+                    <div class="price-range-display-bottom">
+                        <span>{{formatPriceValue(priceRangeMin())}} RSD - {{formatPriceValue(priceRangeMax())}} RSD</span>
+                    </div>
+                </div>
+                }
+            </div>
+            <button mat-raised-button color="primary" (click)="clearFilters()" class="clear-filters-btn">Obriši filtere</button>
+        </div>
+    </div>
+    <div class="main-content">
+        <div class="content-header">
+            <div class="results-count-small">
                 <mat-icon>toys</mat-icon>
-                <span>Pronađeno igračaka: <strong>{{filteredToys().length}}</strong></span>
+                <span><strong>{{filteredToys().length}}</strong> igračaka</span>
             </div>
         </div>
+        <div class="card-wrapper">
+    @if(filteredToys().length > 0) {
         @for (toy of paginatedToys(); track toy.id){
         <mat-card class="toy-card" appearance="outlined">
             <div class="toy-image-wrapper">
@@ -146,7 +197,8 @@
             <p>Nema rezultata pretrage. Pokušajte sa drugim kriterijumima.</p>
         </div>
     }
-</div>
+        </div>
+    </div>
 </div>
 }
 @else {

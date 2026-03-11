@@ -1,20 +1,371 @@
 .home-container {
-    max-width: 1400px;
+    max-width: 1600px;
     margin: 0 auto;
-    padding: 30px 20px;
+    padding: 20px 15px;
     animation: fadeIn 0.6s ease-out;
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+}
+
+.filters-sidebar {
+    width: 260px;
+    flex-shrink: 0;
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4), 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 10px;
+    position: sticky;
+    top: 15px;
+    max-height: calc(100vh - 30px);
+    overflow-y: auto;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.filters-header {
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid rgba(251, 191, 36, 0.3);
+}
+
+.filters-header h3 {
+    margin: 0;
+    color: var(--accent);
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.filters-content {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.filters-content mat-form-field {
+    width: 100%;
+}
+
+.filters-content ::ng-deep .mat-mdc-form-field {
+    font-size: 0.85rem;
+    margin-bottom: 0;
+}
+
+.filters-content ::ng-deep .mat-mdc-form-field-label {
+    font-size: 0.8rem !important;
+}
+
+.filters-content ::ng-deep .mat-mdc-text-field-wrapper {
+    padding: 6px 10px !important;
+}
+
+.filters-content ::ng-deep .mat-mdc-form-field-subscript-wrapper {
+    margin-top: 0;
+}
+
+.clear-filters-btn {
+    width: 100%;
+    margin-top: 6px;
+    font-size: 0.8rem;
+    padding: 6px 12px;
+    min-height: 36px;
+}
+
+.main-content {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.content-header {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-bottom: -10px;
+}
+
+.results-count-small {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.7);
+    padding: 6px 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.results-count-small mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    color: var(--accent);
+}
+
+.results-count-small strong {
+    color: var(--accent);
+    font-weight: 600;
+}
+
+.price-filters {
+    padding: 0;
+}
+
+.price-filter-container {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: var(--radius);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    padding: 0;
+    margin-bottom: 0;
+    overflow: visible;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: box-shadow 0.3s ease, transform 0.2s ease;
+}
+
+.price-filter-container:hover {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+    transform: translateY(-1px);
+}
+
+.price-filter-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 12px;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.2s ease;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.price-filter-header:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.price-filter-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.price-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    color: var(--accent);
+}
+
+.price-filter-header h3 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #ffffff;
+}
+
+.price-filter-header mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+    color: rgba(255, 255, 255, 0.6);
+    transition: transform 0.3s ease, color 0.2s ease;
+}
+
+.price-filter-header mat-icon.expanded {
+    transform: rotate(180deg);
+}
+
+.price-filter-content {
+    padding: 10px;
+    overflow: visible;
+}
+
+.price-range-display-top {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.price-range-display-bottom {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.7);
+    text-align: center;
+}
+
+.price-slider-container {
+    position: relative;
+    padding: 10px 0 15px 0;
+}
+
+.slider-wrapper {
+    position: relative;
+    height: 40px;
+    padding: 15px 0;
+}
+
+.slider-wrapper::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 3px;
+    transform: translateY(-50%);
+    z-index: 0;
+}
+
+.price-slider {
+    position: absolute;
+    width: 100%;
+    height: 6px;
+    background: transparent;
+    outline: none;
+    -webkit-appearance: none;
+    appearance: none;
+    z-index: 2;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+}
+
+.price-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    background: #2563eb;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    transition: all 0.2s ease;
+    pointer-events: all;
+    position: relative;
+    z-index: 3;
+    border: 2px solid #ffffff;
+}
+
+.price-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.15);
+    box-shadow: 0 3px 8px rgba(37, 99, 235, 0.5);
+}
+
+.price-slider::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    background: #2563eb;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    transition: all 0.2s ease;
+    pointer-events: all;
+    position: relative;
+    z-index: 3;
+}
+
+.price-slider::-moz-range-thumb:hover {
+    transform: scale(1.15);
+    box-shadow: 0 3px 8px rgba(37, 99, 235, 0.5);
+}
+
+.price-slider::-webkit-slider-runnable-track {
+    height: 6px;
+    background: transparent;
+    border-radius: 3px;
+}
+
+.price-slider::-moz-range-track {
+    height: 6px;
+    background: transparent;
+    border-radius: 3px;
+}
+
+.price-slider-min {
+    z-index: 2;
+}
+
+.price-slider-max {
+    z-index: 1;
+}
+
+.slider-wrapper::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: var(--slider-left, 0%);
+    width: var(--slider-width, 100%);
+    height: 6px;
+    background: #2563eb;
+    border-radius: 3px;
+    transform: translateY(-50%);
+    z-index: 1;
+    transition: width 0.1s ease, left 0.1s ease;
+}
+
+.price-inputs {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
+    margin-top: 10px;
+    margin-bottom: 8px;
+    min-height: 60px;
+}
+
+.price-input-field {
+    flex: 1 1 calc(50% - 4px);
+    min-width: 0;
+    max-width: calc(50% - 4px);
+}
+
+.price-input-separator {
+    display: none;
+}
+
+.price-input-field ::ng-deep .mat-mdc-form-field-label {
+    font-size: 0.8rem !important;
+}
+
+.price-input-field ::ng-deep .mat-mdc-text-field-wrapper {
+    padding-bottom: 0 !important;
+    min-height: 56px !important;
+}
+
+.price-input-field ::ng-deep input {
+    font-size: 0.8rem !important;
+    padding: 10px 8px !important;
+    text-align: center;
+    height: auto !important;
+    line-height: 1.4 !important;
+}
+
+.price-input-field ::ng-deep .mat-mdc-form-field-subscript-wrapper {
+    display: none !important;
+}
+
+.price-filters mat-form-field {
+    flex: 1;
+    min-width: 200px;
 }
 
 .toy-card {
-    width: 300px;
-    flex: 0 0 300px;
+    width: 100%;
     background: var(--card);
     border-radius: var(--radius);
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-    padding: 20px;
+    padding: 16px;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     border: 1px solid var(--border);
     animation: fadeInUp 0.6s ease-out backwards;
@@ -86,11 +437,35 @@
 }
 
 .card-wrapper {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 24px;
-    padding-top: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    max-width: 100%;
+    gap: 18px;
+    padding-top: 0;
+}
+
+@media (min-width: 1200px) {
+    .card-wrapper {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media (min-width: 900px) and (max-width: 1199px) {
+    .card-wrapper {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (min-width: 600px) and (max-width: 899px) {
+    .card-wrapper {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 599px) {
+    .card-wrapper {
+        grid-template-columns: 1fr;
+    }
 }
 
 .details-btn{
@@ -128,67 +503,61 @@
     width: 80px;
 }
 
-.card-wrapper {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 20px;
-    padding: 20px 0;
-}
 
 .card-content {
     margin-top: 10px;
 }
-.search-wrapper {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 15px;
-    padding: 20px 0;
-    margin-bottom: 20px;
-}
 
-mat-form-field {
-    width: 300px;
-}
-
-.search-wrapper ::ng-deep mat-form-field .mat-mdc-text-field-wrapper {
+/* Sidebar filter styles */
+.filters-sidebar ::ng-deep mat-form-field .mat-mdc-text-field-wrapper {
     background-color: #334155 !important;
     border: 1px solid rgba(255, 255, 255, 0.15) !important;
 }
 
-.search-wrapper ::ng-deep mat-form-field input {
+.filters-sidebar ::ng-deep mat-form-field input {
     background-color: #334155 !important;
     color: #ffffff !important;
     -webkit-text-fill-color: #ffffff !important;
 }
 
-.search-wrapper ::ng-deep mat-form-field .mat-mdc-select {
+.filters-sidebar ::ng-deep mat-form-field .mat-mdc-select {
     background-color: #334155 !important;
     border: 1px solid rgba(255, 255, 255, 0.15) !important;
 }
 
-.search-wrapper ::ng-deep mat-form-field .mat-mdc-select-value-text {
+.filters-sidebar ::ng-deep mat-form-field .mat-mdc-select-value-text {
     color: #ffffff !important;
     background-color: #334155 !important;
 }
 
-.search-wrapper ::ng-deep button[mat-raised-button][color="primary"] {
+.filters-sidebar ::ng-deep button[mat-raised-button][color="primary"] {
     background-color: #334155 !important;
     color: #ffffff !important;
     border: 1px solid rgba(255, 255, 255, 0.2) !important;
     font-weight: 600 !important;
 }
 
-.search-wrapper ::ng-deep button[mat-raised-button][color="primary"] .mdc-button__label {
+.filters-sidebar ::ng-deep button[mat-raised-button][color="primary"] .mdc-button__label {
     color: #ffffff !important;
 }
 
-.search-wrapper ::ng-deep button[mat-raised-button][color="primary"]:hover {
+.filters-sidebar ::ng-deep button[mat-raised-button][color="primary"]:hover {
     background-color: #475569 !important;
     border-color: var(--accent) !important;
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3) !important;
+}
+
+/* Price filters styles */
+.price-filters ::ng-deep mat-form-field .mat-mdc-text-field-wrapper {
+    background-color: #334155 !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+}
+
+.price-filters ::ng-deep mat-form-field input {
+    background-color: #334155 !important;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
 }
 
 .toy-type, .toy-age, .toy-group {
@@ -241,58 +610,29 @@ mat-form-field {
     font-size: 1.1rem;
 }
 
-.results-header {
-    width: 100%;
-    margin-bottom: 30px;
-    padding: 15px 20px;
-    background: rgba(37, 99, 235, 0.05);
-    border-radius: 8px;
-    border-left: 4px solid var(--accent);
-    animation: slideInRight 0.6s ease-out;
-    transition: all 0.3s ease;
-}
-
-.results-header:hover {
-    background: rgba(37, 99, 235, 0.08);
-    transform: translateX(4px);
-}
-
-.results-count {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 1.1rem;
-    color: #ffffff !important;
-}
-
-.results-count mat-icon {
-    color: var(--accent);
-    font-size: 24px;
-    width: 24px;
-    height: 24px;
-}
-
-.results-count strong {
-    color: var(--accent);
-    font-size: 1.2rem;
-    text-shadow: 0 2px 8px rgba(251, 191, 36, 0.3);
-}
 
 .pagination-wrapper {
+    grid-column: 1 / -1;
     width: 100%;
-    margin-top: 40px;
-    margin-bottom: 20px;
+    margin-top: 30px;
+    margin-bottom: 15px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 20px;
-    padding: 20px 0;
+    justify-content: center;
+    gap: 15px;
+    padding: 15px 0;
+    text-align: center;
 }
 
 .pagination-controls {
     display: flex;
     align-items: center;
-    gap: 10px;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    margin: 0 auto;
+    flex-wrap: wrap;
 }
 
 .page-numbers {
@@ -371,70 +711,117 @@ mat-form-field {
 }
 
 /* Dropdown panel styling - dark background matching the app */
-.search-wrapper ::ng-deep .mat-mdc-select-panel {
+.filters-sidebar ::ng-deep .mat-mdc-select-panel,
+.price-filters ::ng-deep .mat-mdc-select-panel {
     background-color: #334155 !important;
     border: 1px solid rgba(255, 255, 255, 0.15) !important;
     border-radius: 8px !important;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4) !important;
 }
 
-.search-wrapper ::ng-deep .cdk-overlay-pane .mat-mdc-select-panel {
+.filters-sidebar ::ng-deep .cdk-overlay-pane .mat-mdc-select-panel,
+.price-filters ::ng-deep .cdk-overlay-pane .mat-mdc-select-panel {
     background-color: #334155 !important;
     border: 1px solid rgba(255, 255, 255, 0.15) !important;
 }
 
-.search-wrapper ::ng-deep .mat-mdc-select-panel .mat-mdc-option {
+.filters-sidebar ::ng-deep .mat-mdc-select-panel .mat-mdc-option,
+.price-filters ::ng-deep .mat-mdc-select-panel .mat-mdc-option {
     background-color: #334155 !important;
     color: #ffffff !important;
 }
 
-.search-wrapper ::ng-deep .mat-mdc-select-panel .mat-mdc-option .mdc-list-item__primary-text {
+.filters-sidebar ::ng-deep .mat-mdc-select-panel .mat-mdc-option .mdc-list-item__primary-text,
+.price-filters ::ng-deep .mat-mdc-select-panel .mat-mdc-option .mdc-list-item__primary-text {
     color: #ffffff !important;
 }
 
-.search-wrapper ::ng-deep .mat-mdc-select-panel .mat-mdc-option:hover {
+.filters-sidebar ::ng-deep .mat-mdc-select-panel .mat-mdc-option:hover,
+.price-filters ::ng-deep .mat-mdc-select-panel .mat-mdc-option:hover {
     background-color: #475569 !important;
     color: #ffffff !important;
 }
 
-.search-wrapper ::ng-deep .mat-mdc-select-panel .mat-mdc-option:hover .mdc-list-item__primary-text {
+.filters-sidebar ::ng-deep .mat-mdc-select-panel .mat-mdc-option:hover .mdc-list-item__primary-text,
+.price-filters ::ng-deep .mat-mdc-select-panel .mat-mdc-option:hover .mdc-list-item__primary-text {
     color: #ffffff !important;
 }
 
-.search-wrapper ::ng-deep .mat-mdc-select-panel .mat-mdc-option.mdc-list-item--selected {
+.filters-sidebar ::ng-deep .mat-mdc-select-panel .mat-mdc-option.mdc-list-item--selected,
+.price-filters ::ng-deep .mat-mdc-select-panel .mat-mdc-option.mdc-list-item--selected {
     background-color: rgba(251, 191, 36, 0.3) !important;
     color: var(--accent) !important;
 }
 
-.search-wrapper ::ng-deep .mat-mdc-select-panel .mat-mdc-option.mdc-list-item--selected .mdc-list-item__primary-text {
+.filters-sidebar ::ng-deep .mat-mdc-select-panel .mat-mdc-option.mdc-list-item--selected .mdc-list-item__primary-text,
+.price-filters ::ng-deep .mat-mdc-select-panel .mat-mdc-option.mdc-list-item--selected .mdc-list-item__primary-text {
     color: var(--accent) !important;
 }
 
-.search-wrapper ::ng-deep .mat-mdc-select-panel .mdc-list {
+.filters-sidebar ::ng-deep .mat-mdc-select-panel .mdc-list,
+.price-filters ::ng-deep .mat-mdc-select-panel .mdc-list {
     background-color: #334155 !important;
 }
 
-.search-wrapper ::ng-deep .mat-mdc-select-panel .mdc-list-item {
+.filters-sidebar ::ng-deep .mat-mdc-select-panel .mdc-list-item,
+.price-filters ::ng-deep .mat-mdc-select-panel .mdc-list-item {
     background-color: #334155 !important;
     color: #ffffff !important;
 }
 
-.search-wrapper ::ng-deep .mat-mdc-select-panel .mdc-list-item .mdc-list-item__primary-text {
+.filters-sidebar ::ng-deep .mat-mdc-select-panel .mdc-list-item .mdc-list-item__primary-text,
+.price-filters ::ng-deep .mat-mdc-select-panel .mdc-list-item .mdc-list-item__primary-text {
     color: #ffffff !important;
 }
 
-.search-wrapper ::ng-deep .mat-mdc-select-panel .mdc-list-item:hover {
+.filters-sidebar ::ng-deep .mat-mdc-select-panel .mdc-list-item:hover,
+.price-filters ::ng-deep .mat-mdc-select-panel .mdc-list-item:hover {
     background-color: #475569 !important;
 }
 
-.search-wrapper ::ng-deep .mat-mdc-select-panel .mdc-list-item:hover .mdc-list-item__primary-text {
+.filters-sidebar ::ng-deep .mat-mdc-select-panel .mdc-list-item:hover .mdc-list-item__primary-text,
+.price-filters ::ng-deep .mat-mdc-select-panel .mdc-list-item:hover .mdc-list-item__primary-text {
     color: #ffffff !important;
 }
 
-.search-wrapper ::ng-deep .mat-mdc-select-panel .mdc-list-item.mdc-list-item--selected {
+.filters-sidebar ::ng-deep .mat-mdc-select-panel .mdc-list-item.mdc-list-item--selected,
+.price-filters ::ng-deep .mat-mdc-select-panel .mdc-list-item.mdc-list-item--selected {
     background-color: rgba(251, 191, 36, 0.3) !important;
 }
 
-.search-wrapper ::ng-deep .mat-mdc-select-panel .mdc-list-item.mdc-list-item--selected .mdc-list-item__primary-text {
+.filters-sidebar ::ng-deep .mat-mdc-select-panel .mdc-list-item.mdc-list-item--selected .mdc-list-item__primary-text,
+.price-filters ::ng-deep .mat-mdc-select-panel .mdc-list-item.mdc-list-item--selected .mdc-list-item__primary-text {
     color: var(--accent) !important;
+}
+
+/* Responsive design */
+@media (max-width: 1024px) {
+    .home-container {
+        flex-direction: column;
+    }
+    
+    .filters-sidebar {
+        width: 100%;
+        position: relative;
+        top: 0;
+        max-height: none;
+    }
+    
+    .price-inputs {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .price-input-separator {
+        display: none;
+    }
+    
+    .price-input-field {
+        width: 100%;
+    }
+    
+    .content-header {
+        justify-content: center;
+        margin-bottom: 10px;
+    }
 }
