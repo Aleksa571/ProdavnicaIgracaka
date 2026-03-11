@@ -1,14 +1,16 @@
 :root {
-    --bg: #f5f7fb;
-    --card: #ffffff;
-    --accent: #2563eb;
-    /* blue-600 */
-    --text: #0f172a;
-    /* slate-900 */
-    --muted: #64748b;
-    /* slate-500 */
-    --radius: 10px;
+    --bg: #1e293b;
+    --card: #334155;
+    --card-hover: #475569;
+    --accent: #fbbf24;
+    --accent-dark: #f59e0b;
+    --text: #ffffff;
+    --text-muted: #ffffff;
+    --muted: #ffffff;
+    --radius: 12px;
     --gap: 16px;
+    --nav-bg: #0f172a;
+    --border: rgba(251, 191, 36, 0.2);
 }
 
 * {
@@ -23,11 +25,96 @@ body {
 body {
     margin: 0;
     font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-    background: var(--bg);
-    color: var(--text);
+    background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+    background-attachment: fixed;
+    color: #ffffff !important;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     line-height: 1.4;
+    min-height: 100vh;
+}
+
+body * {
+    color: #ffffff;
+}
+
+p, span, div, h1, h2, h3, h4, h5, h6, li, td, th, label, mat-label {
+    color: #ffffff !important;
+}
+
+mat-card, mat-card-content, mat-card-title, mat-card-subtitle {
+    color: #ffffff !important;
+}
+
+mat-card * {
+    color: #ffffff !important;
+}
+
+::ng-deep mat-card-header h1,
+::ng-deep mat-card-header h2,
+::ng-deep mat-card-header h3 {
+    color: #ffffff !important;
+    font-weight: 700 !important;
+}
+
+::ng-deep mat-card-content,
+::ng-deep mat-card-content * {
+    color: #ffffff !important;
+}
+
+::ng-deep mat-card-content p,
+::ng-deep mat-card-content span,
+::ng-deep mat-card-content div {
+    color: #ffffff !important;
+}
+
+mat-table, mat-cell, mat-header-cell {
+    color: #ffffff !important;
+}
+
+mat-table *, mat-cell *, mat-header-cell * {
+    color: #ffffff !important;
+}
+
+::ng-deep .mat-mdc-table {
+    background-color: transparent !important;
+}
+
+::ng-deep .mat-mdc-table tbody {
+    background-color: transparent !important;
+}
+
+::ng-deep .mat-mdc-table tbody tr {
+    background-color: #334155 !important;
+}
+
+::ng-deep .mat-mdc-table tbody tr td,
+::ng-deep .mat-mdc-table tbody tr mat-cell {
+    background-color: #334155 !important;
+    color: #ffffff !important;
+}
+
+::ng-deep .mat-mdc-table thead {
+    background-color: #1e293b !important;
+}
+
+::ng-deep .mat-mdc-table thead tr {
+    background-color: #1e293b !important;
+}
+
+::ng-deep .mat-mdc-table thead tr th,
+::ng-deep .mat-mdc-table thead tr mat-header-cell {
+    background-color: #1e293b !important;
+    color: #ffffff !important;
+}
+
+::ng-deep .mat-mdc-table tbody tr:hover {
+    background-color: #475569 !important;
+}
+
+::ng-deep .mat-mdc-table tbody tr:hover td,
+::ng-deep .mat-mdc-table tbody tr:hover mat-cell {
+    background-color: #475569 !important;
 }
 
 .container {
@@ -37,7 +124,7 @@ body {
 }
 
 .muted {
-    color: var(--muted)
+    color: #ffffff !important;
 }
 
 .center {
@@ -50,11 +137,6 @@ body {
     display: flex;
     flex-wrap: nowrap;
 }
-
-/* You can add global styles to this file, and also import other style files */
-/* body {
-    font-family: monospace;
-} */
 
 .no-wrap {
     display: flex;
@@ -75,27 +157,186 @@ body {
     font-family: Roboto, "Helvetica Neue", sans-serif;
     border-radius: 16px;
     padding: 24px;
+    background-color: #334155 !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    color: #ffffff !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5) !important;
 }
 
-.mat-swal-title{
-    font-weight: 500;
-    font-size:20px;
-    margin:0 0 8px 0;
+.mat-swal-title {
+    font-weight: 600;
+    font-size: 20px;
+    margin: 0 0 8px 0;
+    color: #ffffff !important;
 }
-.mat-swal-actions{
+
+.mat-swal-popup .swal2-content,
+.mat-swal-popup .swal2-html-container {
+    color: #ffffff !important;
+}
+
+.mat-swal-popup .swal2-icon {
+    color: #ffffff !important;
+}
+
+.mat-swal-popup .swal2-icon.swal2-success {
+    border-color: var(--accent) !important;
+    color: var(--accent) !important;
+}
+
+.mat-swal-popup .swal2-icon.swal2-error {
+    border-color: #ef4444 !important;
+    color: #ef4444 !important;
+}
+
+.mat-swal-popup .swal2-icon.swal2-warning {
+    border-color: var(--accent) !important;
+    color: var(--accent) !important;
+}
+
+.mat-swal-popup .swal2-icon.swal2-info {
+    border-color: var(--accent) !important;
+    color: var(--accent) !important;
+}
+
+.mat-swal-popup .swal2-icon.swal2-question {
+    border-color: var(--accent) !important;
+    color: var(--accent) !important;
+}
+
+.mat-swal-popup .swal2-loader {
+    border-color: var(--accent) transparent var(--accent) transparent !important;
+}
+
+.mat-swal-actions {
     gap: 8px;
-    margin-top:20px;
-
-}
-.mat-swal-cancel{
-    background: transparent !important;
-    color: var(--mat-sys-primary) !important;
+    margin-top: 20px;
 }
 
-.mat-swal-confirm{
-    background: #1976d2 !important;
-    color: #fff !important;
+.mat-swal-cancel {
+    background: rgba(255, 255, 255, 0.1) !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border-radius: 8px !important;
+    padding: 10px 20px !important;
+    font-weight: 600 !important;
+}
+
+.mat-swal-cancel:hover {
+    background: rgba(255, 255, 255, 0.2) !important;
+    border-color: rgba(255, 255, 255, 0.3) !important;
+    color: #ffffff !important;
+}
+
+.mat-swal-confirm {
+    background: var(--accent) !important;
+    color: #0f172a !important;
     border: none !important;
+    border-radius: 8px !important;
+    padding: 10px 20px !important;
+    font-weight: 700 !important;
+}
+
+.mat-swal-confirm:hover {
+    background: var(--accent-dark) !important;
+    box-shadow: 0 4px 12px rgba(251, 191, 36, 0.4) !important;
+    color: #0f172a !important;
+}
+
+::ng-deep .swal2-popup {
+    background-color: #334155 !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    border-radius: 16px !important;
+}
+
+::ng-deep .swal2-title {
+    color: #ffffff !important;
+}
+
+::ng-deep .swal2-content {
+    color: #ffffff !important;
+}
+
+::ng-deep .swal2-html-container {
+    color: #ffffff !important;
+}
+
+::ng-deep .swal2-icon {
+    border-color: var(--accent) !important;
+}
+
+::ng-deep .swal2-icon.swal2-success {
+    border-color: var(--accent) !important;
+    color: var(--accent) !important;
+}
+
+::ng-deep .swal2-icon.swal2-success [class^=swal2-success-line] {
+    background-color: var(--accent) !important;
+}
+
+::ng-deep .swal2-icon.swal2-error {
+    border-color: #ef4444 !important;
+    color: #ef4444 !important;
+}
+
+::ng-deep .swal2-icon.swal2-error [class^=swal2-x-mark-line] {
+    background-color: #ef4444 !important;
+}
+
+::ng-deep .swal2-icon.swal2-warning {
+    border-color: var(--accent) !important;
+    color: var(--accent) !important;
+}
+
+::ng-deep .swal2-icon.swal2-info {
+    border-color: var(--accent) !important;
+    color: var(--accent) !important;
+}
+
+::ng-deep .swal2-icon.swal2-question {
+    border-color: var(--accent) !important;
+    color: var(--accent) !important;
+}
+
+::ng-deep .swal2-loader {
+    border-color: var(--accent) transparent var(--accent) transparent !important;
+}
+
+::ng-deep .swal2-actions {
+    gap: 8px !important;
+}
+
+::ng-deep .swal2-cancel {
+    background: rgba(255, 255, 255, 0.1) !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+}
+
+::ng-deep .swal2-cancel:hover {
+    background: rgba(255, 255, 255, 0.2) !important;
+    border-color: rgba(255, 255, 255, 0.3) !important;
+    color: #ffffff !important;
+}
+
+::ng-deep .swal2-confirm {
+    background: var(--accent) !important;
+    color: #0f172a !important;
+    border: none !important;
+    border-radius: 8px !important;
+    font-weight: 700 !important;
+}
+
+::ng-deep .swal2-confirm:hover {
+    background: var(--accent-dark) !important;
+    box-shadow: 0 4px 12px rgba(251, 191, 36, 0.4) !important;
+    color: #0f172a !important;
+}
+
+::ng-deep .swal2-backdrop-show {
+    background-color: rgba(0, 0, 0, 0.6) !important;
 }
 
 .flex-wrapper {
@@ -110,4 +351,565 @@ body {
 }
 .mb-3 {
     margin-bottom: 15px;
+}
+
+html {
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+}
+
+body {
+    overflow-x: hidden;
+}
+
+* {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.animate-on-scroll {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.6s ease-out;
+}
+
+.animate-on-scroll.animated {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+a, button, mat-button, mat-icon-button {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -1000px 0;
+    }
+    100% {
+        background-position: 1000px 0;
+    }
+}
+
+.loading-shimmer {
+    animation: shimmer 2s infinite linear;
+    background: linear-gradient(to right, var(--card) 0%, var(--card-hover) 20%, var(--card) 40%, var(--card) 100%);
+    background-size: 1000px 100%;
+}
+
+::ng-deep .mat-mdc-form-field {
+    --mdc-filled-text-field-container-color: #334155 !important;
+    --mdc-filled-text-field-label-text-color: #ffffff !important;
+    --mdc-filled-text-field-input-text-color: #ffffff !important;
+    --mdc-filled-text-field-focus-label-text-color: var(--accent) !important;
+    --mdc-filled-text-field-focus-active-indicator-color: var(--accent) !important;
+    --mdc-filled-text-field-hover-active-indicator-color: var(--accent) !important;
+}
+
+::ng-deep .mat-mdc-form-field .mat-mdc-text-field-wrapper {
+    background-color: #334155 !important;
+    border-radius: 8px !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+}
+
+::ng-deep .mat-mdc-form-field .mat-mdc-text-field-wrapper:hover {
+    border-color: rgba(255, 255, 255, 0.25) !important;
+    background-color: #475569 !important;
+}
+
+::ng-deep .mat-mdc-form-field .mat-mdc-text-field-wrapper.mdc-text-field--focused {
+    border-color: var(--accent) !important;
+    border-width: 2px !important;
+    background-color: #334155 !important;
+}
+
+::ng-deep .mat-mdc-form-field .mat-mdc-text-field-wrapper .mat-mdc-form-field-input-control {
+    background-color: #334155 !important;
+}
+
+::ng-deep .mat-mdc-form-field .mat-mdc-text-field-wrapper .mat-mdc-form-field-input-control input,
+::ng-deep .mat-mdc-form-field .mat-mdc-text-field-wrapper .mat-mdc-form-field-input-control textarea {
+    background-color: #334155 !important;
+}
+
+::ng-deep .mat-mdc-form-field input,
+::ng-deep .mat-mdc-form-field textarea {
+    color: #ffffff !important;
+    caret-color: var(--accent) !important;
+    background-color: #334155 !important;
+    -webkit-text-fill-color: #ffffff !important;
+    font-size: 1rem !important;
+}
+
+::ng-deep .mat-mdc-form-field input::placeholder,
+::ng-deep .mat-mdc-form-field textarea::placeholder {
+    color: rgba(255, 255, 255, 0.7) !important;
+    opacity: 1 !important;
+    -webkit-text-fill-color: rgba(255, 255, 255, 0.7) !important;
+}
+
+::ng-deep .mat-mdc-form-field input:-webkit-autofill,
+::ng-deep .mat-mdc-form-field input:-webkit-autofill:hover,
+::ng-deep .mat-mdc-form-field input:-webkit-autofill:focus {
+    -webkit-text-fill-color: #ffffff !important;
+    -webkit-box-shadow: 0 0 0px 1000px #334155 inset !important;
+    transition: background-color 5000s ease-in-out 0s;
+    border-radius: 8px !important;
+}
+
+::ng-deep .mat-mdc-select {
+    background-color: #1e293b !important;
+    border-radius: 8px !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+::ng-deep .mat-mdc-select:hover {
+    border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+::ng-deep .mat-mdc-select.mdc-select--focused {
+    border-color: var(--accent) !important;
+    border-width: 2px !important;
+}
+
+::ng-deep .mat-mdc-select-value-text {
+    color: #ffffff !important;
+    background-color: #1e293b !important;
+}
+
+::ng-deep .mat-mdc-select-trigger {
+    background-color: #1e293b !important;
+}
+
+::ng-deep .mat-mdc-option {
+    background-color: #334155 !important;
+    color: #ffffff !important;
+}
+
+::ng-deep .mat-mdc-option:hover {
+    background-color: #475569 !important;
+    color: #ffffff !important;
+}
+
+::ng-deep .mat-mdc-option.mdc-list-item--selected {
+    background-color: rgba(251, 191, 36, 0.3) !important;
+    color: var(--accent) !important;
+    font-weight: 600 !important;
+}
+
+::ng-deep .mat-mdc-select-panel {
+    background-color: #334155 !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    border-radius: 8px !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4) !important;
+}
+
+::ng-deep .cdk-overlay-pane .mat-mdc-select-panel {
+    background-color: #334155 !important;
+}
+
+::ng-deep .mat-mdc-select-panel .mat-mdc-option {
+    background-color: #334155 !important;
+    color: #ffffff !important;
+}
+
+::ng-deep .mat-mdc-select-panel .mat-mdc-option:hover {
+    background-color: #475569 !important;
+    color: #ffffff !important;
+}
+
+::ng-deep .mat-mdc-select-panel .mat-mdc-option.mdc-list-item--selected {
+    background-color: rgba(251, 191, 36, 0.3) !important;
+    color: var(--accent) !important;
+}
+
+::ng-deep .cdk-overlay-container .mat-mdc-select-panel {
+    background-color: #334155 !important;
+}
+
+::ng-deep .cdk-overlay-container .mat-mdc-select-panel .mat-mdc-option {
+    background-color: #334155 !important;
+    color: #ffffff !important;
+}
+
+::ng-deep .cdk-overlay-container .mat-mdc-select-panel .mat-mdc-option:hover {
+    background-color: #475569 !important;
+    color: #ffffff !important;
+}
+
+::ng-deep .cdk-overlay-container .mat-mdc-select-panel .mat-mdc-option.mdc-list-item--selected {
+    background-color: rgba(251, 191, 36, 0.3) !important;
+    color: var(--accent) !important;
+}
+
+::ng-deep .cdk-overlay-pane {
+    background-color: transparent !important;
+}
+
+::ng-deep .cdk-overlay-pane .mat-mdc-select-panel {
+    background-color: #334155 !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    border-radius: 8px !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4) !important;
+}
+
+::ng-deep .cdk-overlay-pane .mat-mdc-select-panel .mat-mdc-option {
+    background-color: #334155 !important;
+    color: #ffffff !important;
+}
+
+::ng-deep .cdk-overlay-pane .mat-mdc-select-panel .mat-mdc-option:hover {
+    background-color: #475569 !important;
+    color: #ffffff !important;
+}
+
+::ng-deep .cdk-overlay-pane .mat-mdc-select-panel .mat-mdc-option.mdc-list-item--selected {
+    background-color: rgba(251, 191, 36, 0.3) !important;
+    color: var(--accent) !important;
+}
+
+::ng-deep .mat-mdc-select-panel .mdc-list {
+    background-color: #334155 !important;
+}
+
+::ng-deep .mat-mdc-select-panel {
+    background-color: #334155 !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    border-radius: 8px !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4) !important;
+}
+
+::ng-deep .mat-mdc-select-panel * {
+    background-color: #334155 !important;
+    color: #ffffff !important;
+}
+
+/* Ensure text in dropdown options is white and readable */
+::ng-deep .mat-mdc-select-panel .mdc-list-item__primary-text,
+::ng-deep .mat-mdc-select-panel .mat-mdc-option-text,
+::ng-deep .mat-mdc-select-panel .mdc-list-item {
+    color: #ffffff !important;
+    background-color: #334155 !important;
+}
+
+::ng-deep .mdc-list-item {
+    background-color: #334155 !important;
+    color: #ffffff !important;
+}
+
+::ng-deep .mdc-list-item:hover {
+    background-color: #475569 !important;
+    color: #ffffff !important;
+}
+
+::ng-deep .mdc-list-item.mdc-list-item--selected {
+    background-color: rgba(251, 191, 36, 0.3) !important;
+    color: var(--accent) !important;
+}
+
+::ng-deep .mdc-list-item__primary-text {
+    color: #ffffff !important;
+}
+
+::ng-deep .mdc-list-item--selected .mdc-list-item__primary-text {
+    color: var(--accent) !important;
+}
+
+/* More specific selectors for dropdown text */
+::ng-deep .mat-mdc-select-panel .mdc-list-item__primary-text {
+    color: #ffffff !important;
+    font-weight: 400 !important;
+}
+
+::ng-deep .mat-mdc-select-panel .mdc-list-item--selected .mdc-list-item__primary-text {
+    color: var(--accent) !important;
+    font-weight: 600 !important;
+}
+
+::ng-deep .mat-mdc-select-panel .mdc-list-item:hover .mdc-list-item__primary-text {
+    color: #ffffff !important;
+}
+
+::ng-deep .mat-pseudo-checkbox {
+    color: var(--accent) !important;
+}
+
+::ng-deep .mat-pseudo-checkbox-checked {
+    background-color: var(--accent) !important;
+}
+
+::ng-deep .mat-pseudo-checkbox-checked::after {
+    color: #0f172a !important;
+}
+
+::ng-deep .cdk-overlay-backdrop {
+    background-color: rgba(0, 0, 0, 0.6) !important;
+}
+
+::ng-deep .cdk-overlay-container {
+    z-index: 1000;
+}
+
+::ng-deep .cdk-overlay-pane.mat-mdc-select-panel {
+    background-color: #334155 !important;
+}
+
+::ng-deep .cdk-overlay-pane .mat-mdc-select-panel .mdc-list-item {
+    background-color: #334155 !important;
+    color: #ffffff !important;
+}
+
+::ng-deep .cdk-overlay-pane .mat-mdc-select-panel .mdc-list-item:hover {
+    background-color: #475569 !important;
+    color: #ffffff !important;
+}
+
+::ng-deep .cdk-overlay-pane .mat-mdc-select-panel .mdc-list-item.mdc-list-item--selected {
+    background-color: rgba(251, 191, 36, 0.3) !important;
+    color: var(--accent) !important;
+}
+
+::ng-deep .mat-mdc-select-panel .mdc-list-item {
+    background-color: #334155 !important;
+    color: #ffffff !important;
+}
+
+::ng-deep .mat-mdc-select-panel .mdc-list-item:hover {
+    background-color: #475569 !important;
+}
+
+::ng-deep .mat-mdc-select-panel .mdc-list-item--selected {
+    background-color: rgba(251, 191, 36, 0.3) !important;
+    color: var(--accent) !important;
+}
+
+::ng-deep .mat-mdc-button.mat-primary,
+::ng-deep .mat-mdc-raised-button.mat-primary {
+    --mdc-filled-button-container-color: #334155 !important;
+    --mdc-filled-button-label-text-color: #ffffff !important;
+    --mdc-text-button-label-text-color: #ffffff !important;
+    background-color: #334155 !important;
+    color: #ffffff !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.5px;
+    border-radius: 8px !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+::ng-deep .mat-mdc-button.mat-primary .mdc-button__label,
+::ng-deep .mat-mdc-raised-button.mat-primary .mdc-button__label {
+    color: #ffffff !important;
+    font-weight: 600 !important;
+}
+
+::ng-deep .mat-mdc-button.mat-primary mat-icon,
+::ng-deep .mat-mdc-raised-button.mat-primary mat-icon {
+    color: #ffffff !important;
+}
+
+::ng-deep .mat-mdc-button.mat-primary:hover,
+::ng-deep .mat-mdc-raised-button.mat-primary:hover {
+    --mdc-filled-button-container-color: #475569 !important;
+    background-color: #475569 !important;
+    border-color: var(--accent) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(251, 191, 36, 0.3) !important;
+}
+
+::ng-deep .mat-mdc-button.mat-primary:hover .mdc-button__label,
+::ng-deep .mat-mdc-raised-button.mat-primary:hover .mdc-button__label {
+    color: #ffffff !important;
+}
+
+::ng-deep .mat-mdc-button.mat-primary:hover mat-icon,
+::ng-deep .mat-mdc-raised-button.mat-primary:hover mat-icon {
+    color: var(--accent) !important;
+}
+
+::ng-deep .mat-mdc-button:not(.mat-primary),
+::ng-deep .mat-mdc-raised-button:not(.mat-primary) {
+    --mdc-text-button-label-text-color: #ffffff !important;
+    --mdc-filled-button-container-color: #1e293b !important;
+    --mdc-filled-button-label-text-color: #ffffff !important;
+    color: #ffffff !important;
+    background-color: #1e293b !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border-radius: 8px !important;
+}
+
+::ng-deep .mat-mdc-button:not(.mat-primary) .mdc-button__label,
+::ng-deep .mat-mdc-raised-button:not(.mat-primary) .mdc-button__label {
+    color: #ffffff !important;
+}
+
+::ng-deep .mat-mdc-button:not(.mat-primary) mat-icon,
+::ng-deep .mat-mdc-raised-button:not(.mat-primary) mat-icon {
+    color: #ffffff !important;
+}
+
+::ng-deep .mat-mdc-button:not(.mat-primary):hover,
+::ng-deep .mat-mdc-raised-button:not(.mat-primary):hover {
+    background-color: #334155 !important;
+    border-color: var(--accent) !important;
+    color: #ffffff !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+}
+
+::ng-deep .mat-mdc-button:not(.mat-primary),
+::ng-deep .mat-mdc-raised-button:not(.mat-primary) {
+    --mdc-text-button-label-text-color: #ffffff !important;
+    color: #ffffff !important;
+    background-color: transparent !important;
+}
+
+::ng-deep .mat-mdc-button:not(.mat-primary):hover,
+::ng-deep .mat-mdc-raised-button:not(.mat-primary):hover {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+::ng-deep .mat-mdc-button[disabled],
+::ng-deep .mat-mdc-raised-button[disabled] {
+    color: rgba(255, 255, 255, 0.3) !important;
+    background-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+::ng-deep .mat-mdc-icon-button {
+    color: #ffffff !important;
+}
+
+::ng-deep .mat-mdc-icon-button[color="warn"] {
+    color: #ef4444 !important;
+}
+
+::ng-deep .mat-mdc-icon-button[color="warn"]:hover {
+    background-color: rgba(239, 68, 68, 0.2) !important;
+    color: #f87171 !important;
+}
+
+::ng-deep .mat-mdc-icon-button[color="accent"] {
+    color: var(--accent) !important;
+}
+
+::ng-deep .mat-mdc-icon-button[color="accent"]:hover {
+    background-color: rgba(251, 191, 36, 0.2) !important;
+    color: var(--accent-dark) !important;
+}
+
+::ng-deep .mat-mdc-icon-button:not([color]):hover {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    color: var(--accent) !important;
+}
+
+::ng-deep a[mat-button],
+::ng-deep a.mat-mdc-button {
+    color: #ffffff !important;
+    text-decoration: none !important;
+}
+
+::ng-deep a[mat-button]:hover,
+::ng-deep a.mat-mdc-button:hover {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    color: var(--accent) !important;
+}
+
+::ng-deep a[mat-button] mat-icon,
+::ng-deep a.mat-mdc-button mat-icon {
+    color: inherit !important;
+}
+
+::ng-deep .mat-mdc-form-field input[disabled],
+::ng-deep .mat-mdc-form-field textarea[disabled] {
+    color: rgba(255, 255, 255, 0.5) !important;
+    -webkit-text-fill-color: rgba(255, 255, 255, 0.5) !important;
+}
+
+::ng-deep mat-card {
+    background-color: var(--card);
+    color: var(--text);
+    border: 1px solid var(--border);
+}
+
+::ng-deep .mat-mdc-chip {
+    --mdc-chip-container-color: rgba(255, 255, 255, 0.1) !important;
+    --mdc-chip-label-text-color: #ffffff !important;
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+::ng-deep .mat-mdc-chip:hover {
+    background-color: rgba(255, 255, 255, 0.2) !important;
+    border-color: var(--accent) !important;
+}
+
+::ng-deep .mat-mdc-chip.mdc-evolution-chip--selected {
+    background-color: var(--accent) !important;
+    color: #0f172a !important;
+    font-weight: 600 !important;
 }

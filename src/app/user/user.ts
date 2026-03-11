@@ -76,7 +76,6 @@ export class User {
       const recommended: ToyModel[] = []
       
       for (const favoriteType of this.activeUser.omiljeneVrsteIgračaka) {
-        // Ekstraktuj string iz favoriteType ako je objekat
         const favTypeStr = typeof favoriteType === 'string' 
           ? favoriteType 
           : ((favoriteType as any)?.name || (favoriteType as any)?.type || (favoriteType as any)?.value || String(favoriteType))
@@ -97,7 +96,6 @@ export class User {
 
   isFavoriteType(type: string): boolean {
     if (!this.activeUser || !this.activeUser.omiljeneVrsteIgračaka) return false
-    // Proveri da li je tip string ili objekat
     return this.activeUser.omiljeneVrsteIgračaka.some((fav: any) => {
       if (typeof fav === 'string') {
         return fav === type
@@ -118,7 +116,6 @@ export class User {
     
     const currentFavorites = this.activeUser.omiljeneVrsteIgračaka
     
-    // Pronađi index - proveri i string i objekat format
     const index = currentFavorites.findIndex((fav: any) => {
       if (typeof fav === 'string') {
         return fav === type
@@ -132,7 +129,6 @@ export class User {
     if (index >= 0) {
       currentFavorites.splice(index, 1)
     } else {
-      // Dodaj kao string
       currentFavorites.push(type as any)
     }
     

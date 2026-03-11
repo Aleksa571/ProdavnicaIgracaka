@@ -1,4 +1,4 @@
-import { Component, signal, OnInit } from '@angular/core';
+import { Component, signal, OnInit, AfterViewInit } from '@angular/core';
 import { ToyModel } from '../../models/toy.model';
 import { RouterLink, Router } from "@angular/router";
 import { MatButtonModule } from '@angular/material/button';
@@ -31,7 +31,7 @@ import { Alerts } from '../alerts';
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
-export class Home implements OnInit {
+export class Home implements OnInit, AfterViewInit {
   searchNaziv = ''
   searchOpis = ''
   searchTip = ''
@@ -49,8 +49,7 @@ export class Home implements OnInit {
   ageGroups = signal<string[]>([])
   isLoading = signal(true)
   
-  // Paginacija
-  pageSize = 8 // 2 reda x 4 kolone = 8 igračaka
+  pageSize = 8
   pageIndex = 0
   paginatedToys = signal<ToyModel[]>([])
 
@@ -111,6 +110,10 @@ export class Home implements OnInit {
       this.ageGroups.set(ageGroups)
       this.updatePaginatedToys()
       this.isLoading.set(false)
+      
+      setTimeout(() => {
+        this.animateCards()
+      }, 100)
     } catch (error: any) {
       console.error('Greška pri učitavanju igračaka:', error)
       if (error.response) {
@@ -121,6 +124,42 @@ export class Home implements OnInit {
       this.filteredToys.set([])
       this.isLoading.set(false)
     }
+  }
+
+  ngAfterViewInit() {
+    this.setupScrollAnimations()
+  }
+
+  animateCards() {
+    const cards = document.querySelectorAll('.toy-card')
+    cards.forEach((card, index) => {
+      setTimeout(() => {
+        (card as HTMLElement).style.opacity = '1'
+      }, index * 100)
+    })
+  }
+
+  setupScrollAnimations() {
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animated')
+          observer.unobserve(entry.target)
+        }
+      })
+    }, observerOptions)
+
+    setTimeout(() => {
+      document.querySelectorAll('.toy-card, .details-card, .user-card').forEach(el => {
+        el.classList.add('animate-on-scroll')
+        observer.observe(el)
+      })
+    }, 500)
   }
 
   getToyTypes(): string[] {
@@ -192,6 +231,10 @@ export class Home implements OnInit {
     const endIndex = startIndex + this.pageSize
     const paginated = this.filteredToys().slice(startIndex, endIndex)
     this.paginatedToys.set(paginated)
+    
+    setTimeout(() => {
+      this.animateCards()
+    }, 100)
   }
 
 
@@ -221,7 +264,6 @@ export class Home implements OnInit {
       return
     }
 
-    // Proveri da li igračka već postoji u korpi
     const existingReservations = AuthService.getAllReservations()
     const alreadyReserved = existingReservations.some(
       r => r.toyId === toy.id && r.status !== 'otkazano'
@@ -236,7 +278,6 @@ export class Home implements OnInit {
     try {
       AuthService.createReservation(toy)
       Alerts.success(`Igračka "${toy.naziv}" je dodata u korpu rezervacija!`)
-      // Preusmeri na korpu nakon kratke pauze
       setTimeout(() => {
         this.router.navigate(['/korpa'])
       }, 500)

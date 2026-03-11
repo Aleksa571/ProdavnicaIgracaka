@@ -1,41 +1,77 @@
 .cart-wrapper {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 20px;
+    padding: 24px;
+    animation: fadeIn 0.6s ease-out;
 }
 
 .cart-card {
-    margin-bottom: 20px;
+    margin-bottom: 24px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    background: var(--card);
+    border: 1px solid var(--border);
+    backdrop-filter: blur(10px);
+}
+
+.cart-card:hover {
+    box-shadow: 0 12px 32px rgba(251, 191, 36, 0.2);
+    border-color: var(--accent);
 }
 
 .summary-section {
-    background: rgba(37, 99, 235, 0.1);
-    padding: 20px;
-    border-radius: 8px;
-    margin: 20px 0;
+    background: linear-gradient(135deg, rgba(251, 191, 36, 0.15) 0%, rgba(251, 191, 36, 0.08) 100%);
+    padding: 24px;
+    border-radius: 12px;
+    margin: 24px 0;
+    border: 2px solid var(--border);
+    box-shadow: 0 4px 16px rgba(251, 191, 36, 0.2);
+    backdrop-filter: blur(10px);
 }
 
 .summary-section h2 {
     margin: 0;
     font-size: 1.5rem;
+    color: #ffffff !important;
+}
+
+.summary-section {
+    color: #ffffff !important;
+}
+
+.summary-section * {
+    color: #ffffff !important;
 }
 
 .total-price {
     color: var(--accent);
-    font-weight: 600;
-    font-size: 1.8rem;
+    font-weight: 700;
+    font-size: 2rem;
+    text-shadow: 0 2px 12px rgba(251, 191, 36, 0.4);
 }
 
 .reservations-table {
     width: 100%;
     margin: 20px 0;
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.reservations-table mat-row {
+    opacity: 0;
+    animation: slideInLeft 0.5s ease-out forwards;
 }
 
 .empty-message {
     text-align: center;
-    padding: 40px;
-    color: var(--muted);
+    padding: 60px 40px;
+    color: #ffffff !important;
     font-style: italic;
+    font-size: 1.1rem;
+    background: var(--card);
+    border-radius: 12px;
+    border: 2px dashed var(--border);
+    backdrop-filter: blur(10px);
 }
 
 .rating-display {
@@ -66,7 +102,35 @@
 .rating-label {
     margin-right: 8px;
     font-size: 0.9rem;
-    color: #666;
+    color: #ffffff !important;
+}
+
+.rating-display span {
+    color: #ffffff !important;
+    margin-left: 8px;
+}
+
+.reservations-table mat-cell .rating-display,
+.reservations-table mat-cell .rating-buttons {
+    color: #ffffff !important;
+}
+
+.reservations-table mat-cell * {
+    color: #ffffff !important;
+}
+
+.reservations-table mat-cell span,
+.reservations-table mat-cell div {
+    color: #ffffff !important;
+}
+
+.reservations-table ::ng-deep .mat-mdc-table {
+    background-color: transparent !important;
+}
+
+.reservations-table ::ng-deep .mat-mdc-table tbody,
+.reservations-table ::ng-deep .mat-mdc-table thead {
+    background-color: transparent !important;
 }
 
 .opis-cell {
@@ -90,7 +154,6 @@
     box-sizing: border-box;
 }
 
-/* Ograniči header kolonu za opis */
 .reservations-table mat-header-cell:nth-child(2),
 .reservations-table mat-header-cell[ng-reflect-name="opis"] {
     max-width: 200px !important;
@@ -100,7 +163,7 @@
 }
 
 .no-actions {
-    color: var(--muted);
+    color: #ffffff !important;
     font-style: italic;
 }
 
@@ -114,16 +177,32 @@ mat-cell textarea {
 }
 
 h1 {
-    font-size: 2rem;
-    margin-bottom: 20px;
+    font-size: 2.2rem;
+    margin-bottom: 24px;
+    color: var(--accent);
+    font-weight: 700;
+    letter-spacing: -0.5px;
 }
 
 h2 {
-    font-size: 1.3rem;
-    margin: 30px 0 15px 0;
-    color: #333;
-    border-bottom: 2px solid var(--accent);
-    padding-bottom: 8px;
+    font-size: 1.4rem;
+    margin: 32px 0 20px 0;
+    color: #ffffff !important;
+    border-bottom: 3px solid var(--accent);
+    padding-bottom: 12px;
+    font-weight: 700;
+    position: relative;
+}
+
+h2::after {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 0;
+    width: 60px;
+    height: 3px;
+    background: var(--accent);
+    border-radius: 2px;
 }
 
 .status-chip {
@@ -187,14 +266,32 @@ mat-cell {
 
 mat-header-cell {
     padding: 12px 16px;
-    font-weight: 600;
-    color: #333;
+    font-weight: 700;
+    color: #ffffff !important;
 }
 
 .reservations-table {
     width: 100%;
     margin: 20px 0;
     overflow-x: auto;
+    background-color: transparent !important;
+}
+
+.reservations-table ::ng-deep * {
+    background-color: transparent !important;
+}
+
+.reservations-table ::ng-deep .mat-mdc-table-wrapper {
+    background-color: transparent !important;
+}
+
+.reservations-table ::ng-deep .mat-mdc-table-container {
+    background-color: transparent !important;
+}
+
+.reservations-table ::ng-deep .mat-elevation-z8 {
+    background-color: transparent !important;
+    box-shadow: none !important;
 }
 
 .reservations-table mat-table {
@@ -202,9 +299,39 @@ mat-header-cell {
     border-collapse: separate;
     border-spacing: 0;
     width: 100%;
+    background-color: transparent !important;
 }
 
-/* Ograniči širinu opis kolone */
+.reservations-table ::ng-deep table {
+    background-color: transparent !important;
+}
+
+.reservations-table ::ng-deep table tbody {
+    background-color: transparent !important;
+}
+
+.reservations-table ::ng-deep table tbody tr {
+    background-color: #334155 !important;
+}
+
+.reservations-table ::ng-deep table tbody tr td {
+    background-color: #334155 !important;
+    color: #ffffff !important;
+}
+
+.reservations-table ::ng-deep table thead {
+    background-color: #1e293b !important;
+}
+
+.reservations-table ::ng-deep table thead tr {
+    background-color: #1e293b !important;
+}
+
+.reservations-table ::ng-deep table thead tr th {
+    background-color: #1e293b !important;
+    color: #ffffff !important;
+}
+
 .reservations-table mat-header-cell:has-text("Opis"),
 .reservations-table mat-header-cell[ng-reflect-name="opis"] {
     max-width: 200px !important;
@@ -213,15 +340,65 @@ mat-header-cell {
 }
 
 .reservations-table mat-row {
-    transition: background-color 0.2s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    animation: slideInLeft 0.5s ease-out backwards;
+    background-color: #334155 !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
 }
 
+.reservations-table ::ng-deep mat-row {
+    background-color: #334155 !important;
+}
+
+.reservations-table ::ng-deep mat-row:hover {
+    background-color: #475569 !important;
+}
+
+.reservations-table mat-row:nth-child(1) { animation-delay: 0.1s; }
+.reservations-table mat-row:nth-child(2) { animation-delay: 0.2s; }
+.reservations-table mat-row:nth-child(3) { animation-delay: 0.3s; }
+.reservations-table mat-row:nth-child(4) { animation-delay: 0.4s; }
+.reservations-table mat-row:nth-child(5) { animation-delay: 0.5s; }
+
 .reservations-table mat-row:hover {
-    background-color: rgba(0, 0, 0, 0.02);
+    background-color: #475569 !important;
+    transform: translateX(4px);
+    box-shadow: 0 2px 12px rgba(251, 191, 36, 0.2);
+    border-left: 3px solid var(--accent);
 }
 
 .reservations-table mat-header-row {
-    background-color: #f5f5f5;
+    background-color: #1e293b !important;
+    border-bottom: 2px solid var(--border);
+}
+
+.reservations-table ::ng-deep mat-header-row {
+    background-color: #1e293b !important;
+}
+
+.reservations-table mat-header-cell {
+    color: #ffffff !important;
+    font-weight: 700;
+    background-color: #1e293b !important;
+}
+
+.reservations-table ::ng-deep mat-header-cell {
+    color: #ffffff !important;
+    background-color: #1e293b !important;
+}
+
+.reservations-table mat-cell {
+    color: #ffffff !important;
+    background-color: #334155 !important;
+}
+
+.reservations-table ::ng-deep mat-cell {
+    color: #ffffff !important;
+    background-color: #334155 !important;
+}
+
+.reservations-table ::ng-deep mat-row:hover mat-cell {
+    background-color: #475569 !important;
 }
 
 .status-chip {
@@ -239,6 +416,32 @@ mat-header-cell {
     text-overflow: clip;
     max-width: 100%;
     box-sizing: border-box;
+    background-color: #334155 !important;
+    color: #ffffff !important;
+}
+
+.reservations-table ::ng-deep mat-chip {
+    background-color: #334155 !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+.reservations-table ::ng-deep mat-chip[color="primary"] {
+    background-color: rgba(251, 191, 36, 0.2) !important;
+    color: var(--accent) !important;
+    border-color: var(--accent) !important;
+}
+
+.reservations-table ::ng-deep mat-chip[color="accent"] {
+    background-color: rgba(251, 191, 36, 0.3) !important;
+    color: var(--accent) !important;
+    border-color: var(--accent) !important;
+}
+
+.reservations-table ::ng-deep mat-chip[color="warn"] {
+    background-color: rgba(239, 68, 68, 0.2) !important;
+    color: #f87171 !important;
+    border-color: #f87171 !important;
 }
 
 .status-cell {
@@ -291,11 +494,60 @@ mat-cell {
     vertical-align: middle;
     overflow: visible !important;
     box-sizing: border-box;
+    background-color: #334155 !important;
+    color: #ffffff !important;
+}
+
+.reservations-table ::ng-deep .mat-mdc-table {
+    background-color: transparent !important;
+}
+
+.reservations-table ::ng-deep .mat-mdc-table tbody {
+    background-color: transparent !important;
+}
+
+.reservations-table ::ng-deep .mat-mdc-table tbody tr {
+    background-color: #334155 !important;
+}
+
+.reservations-table ::ng-deep .mat-mdc-table tbody tr:hover {
+    background-color: #475569 !important;
+}
+
+.reservations-table ::ng-deep .mat-mdc-table thead {
+    background-color: #1e293b !important;
+}
+
+.reservations-table ::ng-deep .mat-mdc-table thead tr {
+    background-color: #1e293b !important;
+}
+
+.reservations-table ::ng-deep .mat-mdc-table tbody tr td {
+    background-color: #334155 !important;
+    color: #ffffff !important;
+}
+
+.reservations-table ::ng-deep .mat-mdc-table tbody tr:hover td {
+    background-color: #475569 !important;
+}
+
+.reservations-table ::ng-deep .mat-mdc-table thead tr th {
+    background-color: #1e293b !important;
+    color: #ffffff !important;
+}
+
+.reservations-table ::ng-deep .mat-mdc-table-wrapper {
+    background-color: transparent !important;
+}
+
+.reservations-table ::ng-deep .mat-mdc-table-container {
+    background-color: transparent !important;
 }
 
 mat-cell.status-cell {
     overflow: visible !important;
     white-space: nowrap;
+    background-color: #334155 !important;
 }
 
 mat-cell.opis-cell {
@@ -305,12 +557,13 @@ mat-cell.opis-cell {
     min-width: 150px !important;
     width: 200px !important;
     flex: 0 0 200px !important;
+    background-color: #334155 !important;
 }
 
 mat-header-cell {
     padding: 12px 16px;
-    font-weight: 600;
-    color: #333;
+    font-weight: 700;
+    color: #ffffff !important;
     font-size: 0.875rem;
     text-transform: uppercase;
     letter-spacing: 0.5px;

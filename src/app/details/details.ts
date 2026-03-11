@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, AfterViewInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToyModel } from '../../models/toy.model';
 import { MatCardModule } from '@angular/material/card';
@@ -26,9 +26,9 @@ import { Alerts } from '../alerts';
   templateUrl: './details.html',
   styleUrl: './details.css',
 })
-export class DetaljiIgracke {
+export class DetaljiIgracke implements AfterViewInit {
   public authService = AuthService
-  public console = console // Dodajemo console u template
+  public console = console
   toy = signal<ToyModel | null>(null)
   isLoading = signal(true)
 
@@ -49,12 +49,47 @@ export class DetaljiIgracke {
         console.log('Loaded toy:', toy)
         this.toy.set(toy)
         this.isLoading.set(false)
+        
+        setTimeout(() => {
+          this.animateCards()
+        }, 100)
       } catch (error) {
         console.error('Greška pri učitavanju igračke:', error)
         Alerts.error('Greška pri učitavanju igračke. Pokušajte ponovo.')
         this.isLoading.set(false)
       }
     })
+  }
+
+  ngAfterViewInit() {
+    this.setupScrollAnimations()
+  }
+
+  animateCards() {
+    const cards = document.querySelectorAll('.details-card')
+    cards.forEach((card, index) => {
+      setTimeout(() => {
+        (card as HTMLElement).style.opacity = '1'
+      }, index * 150)
+    })
+  }
+
+  setupScrollAnimations() {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animated')
+          observer.unobserve(entry.target)
+        }
+      })
+    }, { threshold: 0.1 })
+
+    setTimeout(() => {
+      document.querySelectorAll('.details-card, .review-item').forEach(el => {
+        el.classList.add('animate-on-scroll')
+        observer.observe(el)
+      })
+    }, 500)
   }
 
   formatPrice(price: number): string {
@@ -110,7 +145,6 @@ export class DetaljiIgracke {
       return
     }
 
-    // Proveri da li igračka već postoji u korpi
     const existingReservations = AuthService.getAllReservations()
     console.log('Existing reservations:', existingReservations)
     const alreadyReserved = existingReservations.some(
@@ -129,12 +163,10 @@ export class DetaljiIgracke {
       AuthService.createReservation(toy)
       console.log('createReservation completed successfully')
       
-      // Proveri da li je stvarno dodato
       const afterReservations = AuthService.getAllReservations()
       console.log('Reservations after adding:', afterReservations)
       
       Alerts.success(`Igračka "${toy.naziv}" je dodata u korpu rezervacija!`)
-      // Preusmeri na korpu nakon kratke pauze
       setTimeout(() => {
         console.log('Navigating to cart...')
         this.router.navigate(['/korpa'])

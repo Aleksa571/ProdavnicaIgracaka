@@ -1,12 +1,53 @@
 .user-card {
-    width: 360px;
+    width: 380px;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    animation: fadeInUp 0.6s ease-out backwards;
+    background: var(--card);
+    border: 1px solid var(--border);
+    backdrop-filter: blur(10px);
+}
+
+.user-card h1 {
+    color: #ffffff !important;
+    font-weight: 700 !important;
+    font-size: 1.5rem !important;
+    margin: 0 !important;
+}
+
+.user-card mat-card-header {
+    padding: 20px 20px 10px 20px !important;
+    border-bottom: 2px solid var(--border);
+    margin-bottom: 10px;
+}
+
+.user-card mat-card-content {
+    padding: 20px !important;
+    color: #ffffff !important;
+}
+
+.user-card mat-card-actions {
+    padding: 16px 20px 20px 20px !important;
+    border-top: 1px solid var(--border);
+    margin-top: 10px;
+}
+
+.user-card:nth-child(1) { animation-delay: 0.1s; }
+.user-card:nth-child(2) { animation-delay: 0.2s; }
+
+.user-card:hover {
+    box-shadow: 0 16px 40px rgba(251, 191, 36, 0.2);
+    transform: translateY(-6px) scale(1.02);
+    border-color: var(--accent);
 }
 
 .user-wrapper {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 24px;
     justify-content: center;
+    padding: 20px;
+    animation: fadeIn 0.6s ease-out;
 }
 
 .user-details {
@@ -15,21 +56,52 @@
 
 .user-info {
     display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
+    flex-direction: column;
+    gap: 12px;
     justify-content: start;
+    align-items: flex-start;
+    padding: 20px 0;
+}
+
+.user-info img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 3px solid var(--accent);
+    box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3);
 }
 
 .favorite-types-section {
-    margin-top: 20px;
-    padding: 15px;
-    background: rgba(0, 0, 0, 0.02);
-    border-radius: 8px;
+    margin-top: 24px;
+    padding: 20px;
+    background: linear-gradient(135deg, rgba(251, 191, 36, 0.1) 0%, rgba(251, 191, 36, 0.05) 100%);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    backdrop-filter: blur(10px);
 }
 
 .favorite-types-section h3 {
     margin: 0 0 15px 0;
     font-size: 1.1rem;
+    color: #ffffff !important;
+    font-weight: 600;
+}
+
+.user-info h3,
+.user-info p {
+    color: #ffffff !important;
+}
+
+.user-info h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: 10px 0 5px 0;
+}
+
+.user-info p {
+    font-size: 1rem;
+    margin: 5px 0;
+    opacity: 0.9;
 }
 
 .types-chips {
@@ -41,17 +113,58 @@
 .types-chips mat-chip {
     cursor: pointer;
     transition: all 0.2s;
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
 }
 
 .types-chips mat-chip:hover {
     transform: scale(1.05);
+    background-color: rgba(255, 255, 255, 0.2) !important;
+    border-color: var(--accent) !important;
 }
 
 .types-chips mat-chip.selected-chip {
-    background-color: var(--accent);
-    color: white;
+    background-color: var(--accent) !important;
+    color: #0f172a !important;
+    font-weight: 600 !important;
+    border-color: var(--accent) !important;
 }
 
 .user-img {
     border-radius: 16px;
+}
+
+.user-card ::ng-deep mat-form-field .mat-mdc-text-field-wrapper {
+    background-color: #334155 !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+}
+
+.user-card ::ng-deep mat-form-field input {
+    background-color: #334155 !important;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+}
+
+.user-card ::ng-deep button[mat-raised-button][color="primary"] {
+    background-color: #334155 !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+.user-card ::ng-deep button[mat-raised-button][color="primary"] .mdc-button__label {
+    color: #ffffff !important;
+}
+
+.user-card ::ng-deep button[mat-raised-button][color="primary"] mat-icon {
+    color: #ffffff !important;
+}
+
+.user-card ::ng-deep button[mat-raised-button][color="primary"]:hover {
+    background-color: #475569 !important;
+    border-color: var(--accent) !important;
+}
+
+.user-card ::ng-deep button[mat-raised-button][color="primary"]:hover mat-icon {
+    color: var(--accent) !important;
 }

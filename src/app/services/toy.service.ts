@@ -29,28 +29,24 @@ export class ToyService {
     }
 
     private static mapToyData(item: any): ToyModel {
-        // Ekstraktuj tip - može biti string ili objekat
         let tipValue: any = item.tip || item.type || ''
         if (tipValue && typeof tipValue === 'object' && tipValue !== null) {
             tipValue = tipValue.name || tipValue.type || tipValue.value || String(tipValue)
         }
         const tip = String(tipValue)
         
-        // Ekstraktuj uzrast - može biti string ili objekat
         let uzrastValue: any = item.uzrast || item.ageGroup || item.age || ''
         if (uzrastValue && typeof uzrastValue === 'object' && uzrastValue !== null) {
             uzrastValue = uzrastValue.name || uzrastValue.age || uzrastValue.value || String(uzrastValue)
         }
         const uzrast = String(uzrastValue)
         
-        // Ekstraktuj ciljnu grupu
         let ciljnaGrupaValue: any = item.ciljnaGrupa || item.targetGroup || item.target || 'svi'
         if (ciljnaGrupaValue && typeof ciljnaGrupaValue === 'object' && ciljnaGrupaValue !== null) {
             ciljnaGrupaValue = ciljnaGrupaValue.name || ciljnaGrupaValue.group || ciljnaGrupaValue.value || 'svi'
         }
         const ciljnaGrupa = String(ciljnaGrupaValue)
         
-        // Ekstraktuj ID - može biti pod različitim nazivima
         let idValue: any = item.id || item.toyId || item._id
         if (idValue === undefined || idValue === null) {
             console.warn('Toy item missing ID:', item)
@@ -111,7 +107,6 @@ export class ToyService {
         try {
             const response = await client.get<any[]>('/age-group')
             const data = response.data || []
-            // Ako API vraća objekte, ekstraktujemo string vrednosti
             return data.map(item => {
                 if (typeof item === 'string') {
                     return item
@@ -130,7 +125,6 @@ export class ToyService {
         try {
             const response = await client.get<any[]>('/type')
             const data = response.data || []
-            // Ako API vraća objekte, ekstraktujemo string vrednosti
             return data.map(item => {
                 if (typeof item === 'string') {
                     return item

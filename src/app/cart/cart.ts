@@ -1,4 +1,4 @@
-import { Component, signal, computed, OnInit, OnDestroy } from '@angular/core';
+import { Component, signal, computed, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { filter, Subscription } from 'rxjs';
@@ -33,18 +33,13 @@ import { MatChipsModule } from '@angular/material/chips';
   styleUrl: './cart.css',
 })
 export class Korpa implements OnInit, OnDestroy {
-  // Kolone za rezervisano - samo pregled i uklanjanje
   displayedColumnsRezervisano = ['naziv', 'opis', 'tip', 'uzrast', 'ciljnaGrupa', 'datumProizvodnje', 'cena', 'status', 'options']
-  // Kolone za pristiglo - sa ocenjivanjem
   displayedColumnsPristiglo = ['naziv', 'opis', 'tip', 'uzrast', 'ciljnaGrupa', 'datumProizvodnje', 'cena', 'status', 'ocena', 'options']
-  // Kolone za otkazano - samo pregled
   displayedColumnsOtkazano = ['naziv', 'opis', 'tip', 'uzrast', 'ciljnaGrupa', 'datumProizvodnje', 'cena', 'status']
   private routerSubscription?: Subscription;
   
-  // Signal za sve rezervacije
   private reservationsSignal = signal<ReservationModel[]>([])
   
-  // Computed signale za različite statuse
   rezervisano = computed(() => 
     this.reservationsSignal().filter(r => r.status === 'rezervisano')
   )
@@ -61,7 +56,6 @@ export class Korpa implements OnInit, OnDestroy {
       return
     }
     
-    // Osveži podatke kada se navigira na ovu stranicu
     this.routerSubscription = this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe((event: any) => {
@@ -76,10 +70,42 @@ export class Korpa implements OnInit, OnDestroy {
     this.loadReservations()
   }
 
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.setupScrollAnimations()
+      this.animateTableRows()
+    }, 300)
+  }
+
   ngOnDestroy() {
     if (this.routerSubscription) {
       this.routerSubscription.unsubscribe()
     }
+  }
+
+  animateTableRows() {
+    const rows = document.querySelectorAll('.reservations-table mat-row')
+    rows.forEach((row, index) => {
+      setTimeout(() => {
+        (row as HTMLElement).style.opacity = '1'
+      }, index * 100)
+    })
+  }
+
+  setupScrollAnimations() {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animated')
+          observer.unobserve(entry.target)
+        }
+      })
+    }, { threshold: 0.1 })
+
+    document.querySelectorAll('.reservations-table, .summary-section').forEach(el => {
+      el.classList.add('animate-on-scroll')
+      observer.observe(el)
+    })
   }
 
   loadReservations() {
@@ -92,11 +118,6 @@ export class Korpa implements OnInit, OnDestroy {
 
   reloadComponent() {
     this.loadReservations()
-    // Alternativno, možemo koristiti router reload
-    // this.router.navigateByUrl('/', { skipLocationChange: true })
-    //   .then(() => {
-    //     this.router.navigate(['/korpa'])
-    //   })
   }
 
   getReservations(): ReservationModel[] {
@@ -142,7 +163,6 @@ export class Korpa implements OnInit, OnDestroy {
   }
 
   calculateTotal(): number {
-    // Računaj samo rezervisane igračke
     let total = 0;
     for (let reservation of this.rezervisano()) {
       total += reservation.cena;

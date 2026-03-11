@@ -1,39 +1,386 @@
-mat-toolbar{
-    display:flex;
+mat-toolbar {
+    display: flex;
     align-items: center;
-    background-color: var(--accent);
-    color: #fff;
-    padding: 0 16px;
-    box-shadow: 0 2px 6px rgba(16,24,40,0.06);
+    justify-content: space-between;
+    background: #0f172a;
+    color: #f1f5f9 !important;
+    padding: 0 40px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    animation: fadeInDown 0.5s ease-out;
+    min-height: 70px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
-.spacer{
+
+mat-toolbar * {
+    color: #f1f5f9 !important;
+}
+
+.nav-left,
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+}
+
+.nav-left {
+    justify-content: flex-start;
+}
+
+.nav-right {
+    justify-content: flex-end;
+}
+
+.nav-center {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.brand-title {
+    font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+    font-size: 1.9rem;
+    font-weight: 900;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #ffffff 0%, #fbbf24 30%, #ffffff 60%, #fbbf24 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin: 0;
+    animation: shimmerText 4s ease-in-out infinite;
+    position: relative;
+    filter: drop-shadow(0 2px 8px rgba(251, 191, 36, 0.4));
+}
+
+.brand-title::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #fbbf24, transparent);
+    opacity: 0.6;
+    animation: shimmerLine 4s ease-in-out infinite;
+}
+
+.brand-title::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(135deg, rgba(251, 191, 36, 0.1), transparent, rgba(251, 191, 36, 0.1));
+    border-radius: 4px;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.brand-title:hover::before {
+    opacity: 1;
+}
+
+@keyframes shimmerLine {
+    0%, 100% {
+        opacity: 0.4;
+        transform: scaleX(0.8);
+    }
+    50% {
+        opacity: 0.8;
+        transform: scaleX(1);
+    }
+}
+
+@keyframes shimmerText {
+    0%, 100% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+}
+
+.spacer {
     flex: 1 1 auto;
 }
-.wrapper{
+
+.wrapper {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
     padding: 0;
+    background: transparent;
 }
 
-.nav-right{
+.nav-right {
     margin-left: auto;
     display: flex;
     align-items: center;
-    gap: 12px; 
+    gap: 8px;
 }
 
-.nav-right a,
-.nav-right button{
-    margin: 0; 
-    color: inherit;
+.nav-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #f1f5f9 !important;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 10px 16px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    border-radius: 4px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
 }
 
-/* nav link icon spacing */
-.nav-link{display:inline-flex;align-items:center;gap:8px}
-.nav-link mat-icon{font-size:20px;color:rgba(255,255,255,0.95)}
+.nav-link span {
+    color: #f1f5f9 !important;
+}
 
-main.app-main{
+.nav-link mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    color: rgba(255, 255, 255, 0.9);
+    transition: all 0.3s ease;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 2px;
+    background: #fbbf24;
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nav-link:hover,
+.nav-link.active {
+    color: #ffffff;
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+    width: calc(100% - 8px);
+}
+
+.nav-link:hover mat-icon {
+    color: #fbbf24;
+    transform: scale(1.1);
+}
+
+.nav-link:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.nav-left .nav-link,
+.nav-right .nav-link {
+    margin: 0 4px;
+}
+
+.nav-right button.nav-link {
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    letter-spacing: inherit;
+    text-transform: inherit;
+    color: #f1f5f9 !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.nav-right button.nav-link span {
+    color: #f1f5f9 !important;
+}
+
+mat-toolbar a[matButton],
+mat-toolbar button[matButton] {
+    min-width: auto;
+    padding: 0;
+    line-height: normal;
+    color: #f1f5f9 !important;
+}
+
+mat-toolbar button[matButton] {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+mat-toolbar button[matButton] .mat-mdc-button-persistent-ripple {
+    display: none;
+}
+
+::ng-deep mat-toolbar button[matButton] .mdc-button__label {
+    color: #f1f5f9 !important;
+}
+
+::ng-deep mat-toolbar button[matButton] {
+    --mdc-text-button-label-text-color: #f1f5f9 !important;
+    color: #f1f5f9 !important;
+}
+
+::ng-deep mat-toolbar button[matButton]:hover {
+    --mdc-text-button-hover-label-text-color: #ffffff !important;
+    color: #ffffff !important;
+}
+
+::ng-deep mat-toolbar button[matButton] mat-icon {
+    color: rgba(241, 245, 249, 0.9) !important;
+}
+
+::ng-deep mat-toolbar button[matButton]:hover mat-icon {
+    color: #fbbf24 !important;
+}
+
+.logout-btn {
+    color: #f1f5f9 !important;
+    background: transparent !important;
+    border: none !important;
+    padding: 10px 16px !important;
+    font-family: inherit !important;
+    font-size: 0.85rem !important;
+    font-weight: 600 !important;
+    letter-spacing: 1px !important;
+    text-transform: uppercase !important;
+    cursor: pointer !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    position: relative !important;
+    border-radius: 4px !important;
+    box-shadow: none !important;
+    margin: 0 !important;
+    min-width: auto !important;
+    line-height: normal !important;
+}
+
+.logout-btn span {
+    color: #f1f5f9 !important;
+}
+
+.logout-btn:hover {
+    color: #ffffff !important;
+    background: rgba(255, 255, 255, 0.05) !important;
+}
+
+.logout-btn:hover span {
+    color: #ffffff !important;
+}
+
+.logout-btn mat-icon {
+    color: rgba(241, 245, 249, 0.9) !important;
+    font-size: 18px !important;
+    width: 18px !important;
+    height: 18px !important;
+    transition: all 0.3s ease !important;
+}
+
+.logout-btn:hover mat-icon {
+    color: #fbbf24 !important;
+    transform: scale(1.1) !important;
+}
+
+.logout-btn::after {
+    content: '' !important;
+    position: absolute !important;
+    bottom: 0 !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    width: 0 !important;
+    height: 2px !important;
+    background: #fbbf24 !important;
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.logout-btn:hover::after {
+    width: calc(100% - 8px) !important;
+}
+
+@media (max-width: 1024px) {
+    .brand-title {
+        font-size: 1.5rem;
+        letter-spacing: 2px;
+    }
+    
+    .nav-link {
+        font-size: 0.75rem;
+        padding: 8px 12px;
+    }
+    
+    .nav-link mat-icon {
+        font-size: 16px;
+        width: 16px;
+        height: 16px;
+    }
+}
+
+@media (max-width: 768px) {
+    mat-toolbar {
+        padding: 0 16px;
+        flex-wrap: wrap;
+        min-height: auto;
+    }
+    
+    .nav-center {
+        order: 1;
+        width: 100%;
+        position: relative;
+        left: auto;
+        transform: none;
+        margin: 8px 0;
+    }
+    
+    .nav-left,
+    .nav-right {
+        flex: 0 0 auto;
+        order: 2;
+    }
+    
+    .brand-title {
+        font-size: 1.3rem;
+        letter-spacing: 1.5px;
+    }
+    
+    .nav-link {
+        font-size: 0.7rem;
+        padding: 6px 10px;
+        gap: 4px;
+    }
+    
+    .nav-link span {
+        display: none;
+    }
+    
+    .nav-link mat-icon {
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
+    }
+}
+
+main.app-main {
     flex: 1 1 auto;
-    padding: 24px 12px;
+    padding: 24px;
 }

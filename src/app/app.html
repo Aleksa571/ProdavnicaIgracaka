@@ -1,29 +1,32 @@
 <mat-toolbar color="primary">
-  <span>
-    <strong>Prodavnica Igračaka</strong>
-  </span>
-  <span class="spacer"></span>
-  <a routerLink="/" matButton>
-    <mat-icon fontIcon="home" /> Početna
-  </a>
-  <a routerLink="/about" matButton>
-    <mat-icon fontIcon="info" /> O nama
-  </a>
-  @if(authService.getActiveUser()) {
-  <a routerLink="/korpa" matButton>
-    <mat-icon fontIcon="shopping_cart" /> Korpa
-  </a>
-  <a routerLink="/profil" matButton>
-    <mat-icon fontIcon="admin_panel_settings" /> Profil
-  </a>
-  <button matButton (click)="doLogout()">
-    <mat-icon fontIcon="logout" /> Odjavi se
-  </button>
-  } @else {
-  <a routerLink="/login" matButton>
-    <mat-icon fontIcon="login" /> Prijava
-  </a>
-  }
+  <div class="nav-left">
+    <a routerLink="/" class="nav-link" routerLinkActive="active">
+      <mat-icon fontIcon="home" /> <span>POČETNA</span>
+    </a>
+    <a routerLink="/about" class="nav-link" routerLinkActive="active">
+      <mat-icon fontIcon="info" /> <span>O NAMA</span>
+    </a>
+  </div>
+  <div class="nav-center">
+    <h1 class="brand-title">Prodavnica Igracaka</h1>
+  </div>
+  <div class="nav-right">
+    @if(authService.getActiveUser()) {
+    <a routerLink="/korpa" class="nav-link" routerLinkActive="active">
+      <mat-icon fontIcon="shopping_cart" /> <span>KORPA</span>
+    </a>
+    <a routerLink="/profil" class="nav-link" routerLinkActive="active">
+      <mat-icon fontIcon="person" /> <span>{{userDisplayName()}}</span>
+    </a>
+    <button class="nav-link logout-btn" (click)="doLogout()">
+      <mat-icon fontIcon="logout" /> <span>ODJAVI SE</span>
+    </button>
+    } @else {
+    <a routerLink="/login" class="nav-link" routerLinkActive="active">
+      <mat-icon fontIcon="login" /> <span>PRIJAVA</span>
+    </a>
+    }
+  </div>
 </mat-toolbar>
 <div class="wrapper">
   <router-outlet />

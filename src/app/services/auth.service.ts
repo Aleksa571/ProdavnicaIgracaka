@@ -25,20 +25,17 @@ export class AuthService {
 
         const users = JSON.parse(localStorage.getItem(USERS)!)
         
-        // Osiguraj da svi korisnici imaju reservations array
         for (let u of users) {
             if (!u.reservations) {
                 u.reservations = []
             }
         }
         
-        // Proveri da li default korisnik postoji, ako ne - dodaj ga
         const defaultUserExists = users.some((u: UserModel) => u.email === baseUser.email)
         if (!defaultUserExists) {
             users.push(baseUser)
             localStorage.setItem(USERS, JSON.stringify(users))
         } else {
-            // Ako već postoji, osiguraj da ima reservations array
             const defaultUser = users.find((u: UserModel) => u.email === baseUser.email)
             if (defaultUser && !defaultUser.reservations) {
                 defaultUser.reservations = []
@@ -155,7 +152,6 @@ export class AuthService {
         localStorage.setItem(USERS, JSON.stringify(users))
         console.log('Users saved to localStorage')
         
-        // Proveri da li je sačuvano
         const savedUsers = JSON.parse(localStorage.getItem(USERS) || '[]')
         const savedUser = savedUsers.find((u: UserModel) => u.email === activeEmail)
         console.log('Verification - saved user reservations:', savedUser?.reservations)
