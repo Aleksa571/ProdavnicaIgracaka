@@ -512,6 +512,33 @@
 .filters-sidebar ::ng-deep mat-form-field .mat-mdc-text-field-wrapper {
     background-color: #334155 !important;
     border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    border-radius: 12px !important;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.filters-sidebar ::ng-deep mat-form-field .mat-mdc-form-field-focus-overlay {
+    border-radius: 12px !important;
+}
+
+.filters-sidebar ::ng-deep mat-form-field .mat-mdc-text-field-wrapper:hover {
+    background-color: #3b4a5f !important;
+    border-color: rgba(251, 191, 36, 0.45) !important;
+}
+
+.filters-sidebar ::ng-deep mat-form-field .mat-mdc-text-field-wrapper.mdc-text-field--focused {
+    background-color: #3f4f65 !important;
+    border-color: var(--accent) !important;
+    box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.2) !important;
+}
+
+.filters-sidebar ::ng-deep mat-form-field .mat-mdc-floating-label,
+.filters-sidebar ::ng-deep mat-form-field .mat-mdc-select-arrow {
+    color: rgba(255, 255, 255, 0.75) !important;
+}
+
+.filters-sidebar ::ng-deep mat-form-field.mat-focused .mat-mdc-floating-label,
+.filters-sidebar ::ng-deep mat-form-field.mat-focused .mat-mdc-select-arrow {
+    color: var(--accent) !important;
 }
 
 .filters-sidebar ::ng-deep mat-form-field input {
