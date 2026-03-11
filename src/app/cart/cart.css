@@ -74,6 +74,279 @@
     backdrop-filter: blur(10px);
 }
 
+.cancelled-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding: 16px;
+    background: rgba(239, 68, 68, 0.1);
+    border-radius: 8px;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.cancelled-info {
+    color: #ffffff !important;
+    margin: 0;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.clear-all-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: #ef4444 !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+.clear-all-btn:hover {
+    background-color: #dc2626 !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4) !important;
+}
+
+.clear-all-btn mat-icon {
+    color: #ffffff !important;
+}
+
+.rating-dialog-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 999;
+    backdrop-filter: blur(4px);
+}
+
+.rating-dialog-card {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    max-width: 550px;
+    width: 90%;
+    background: var(--card) !important;
+    border: 2px solid var(--border) !important;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6) !important;
+    border-radius: 16px !important;
+    animation: scaleIn 0.3s ease-out;
+}
+
+.dialog-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+}
+
+.dialog-header h2 {
+    margin: 0;
+    color: #ffffff !important;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.dialog-icon {
+    color: var(--accent);
+    font-size: 32px;
+    width: 32px;
+    height: 32px;
+}
+
+.dialog-subtitle {
+    color: rgba(255, 255, 255, 0.8) !important;
+    font-size: 1rem;
+    margin: 0;
+    font-style: italic;
+}
+
+.rating-dialog-content {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding: 8px 0;
+}
+
+.rating-stars-section {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 20px;
+    background: rgba(251, 191, 36, 0.1);
+    border-radius: 12px;
+    border: 1px solid rgba(251, 191, 36, 0.2);
+}
+
+.rating-label {
+    font-weight: 600;
+    color: #ffffff !important;
+    font-size: 1rem;
+}
+
+.rating-stars {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.rating-stars button {
+    transition: all 0.2s ease;
+    padding: 4px;
+}
+
+.rating-stars button mat-icon {
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 36px;
+    width: 36px;
+    height: 36px;
+    transition: all 0.2s ease;
+}
+
+.rating-stars button:hover mat-icon {
+    color: var(--accent);
+    transform: scale(1.15);
+}
+
+.rating-stars button.selected mat-icon {
+    color: var(--accent);
+}
+
+.rating-value-text {
+    color: var(--accent) !important;
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin-left: auto;
+}
+
+.rating-dialog-card mat-form-field {
+    width: 100%;
+}
+
+.rating-dialog-card mat-form-field .mat-mdc-text-field-wrapper {
+    background-color: #334155 !important;
+    border: none !important;
+    border-radius: 8px !important;
+    box-shadow: none !important;
+}
+
+.rating-dialog-card mat-form-field .mat-mdc-form-field-focus-overlay {
+    background-color: transparent !important;
+}
+
+.rating-dialog-card mat-form-field .mat-mdc-form-field-subscript-wrapper {
+    display: none !important;
+}
+
+.rating-dialog-card mat-form-field textarea {
+    color: #ffffff !important;
+    background-color: #334155 !important;
+    -webkit-text-fill-color: #ffffff !important;
+    font-size: 1rem;
+    line-height: 1.5;
+    border: none !important;
+    padding: 12px !important;
+    border-radius: 8px !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.rating-dialog-card mat-form-field .mat-mdc-text-field-wrapper:not(.mdc-text-field--disabled) .mdc-text-field__input {
+    background-color: #334155 !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.rating-dialog-card mat-form-field .mat-mdc-text-field-wrapper:not(.mdc-text-field--disabled):hover {
+    background-color: #475569 !important;
+    border: none !important;
+}
+
+.rating-dialog-card mat-form-field .mat-mdc-text-field-wrapper:not(.mdc-text-field--disabled):hover .mdc-text-field__input {
+    background-color: #475569 !important;
+}
+
+.rating-dialog-card mat-form-field .mat-mdc-text-field-wrapper.mdc-text-field--focused {
+    background-color: #334155 !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.rating-dialog-card mat-form-field .mat-mdc-text-field-wrapper.mdc-text-field--focused .mdc-text-field__input {
+    background-color: #334155 !important;
+}
+
+.rating-dialog-card mat-form-field .mdc-line-ripple {
+    display: none !important;
+}
+
+.rating-dialog-card mat-form-field .mdc-notched-outline {
+    display: none !important;
+}
+
+.rating-dialog-card mat-form-field .mdc-notched-outline__leading,
+.rating-dialog-card mat-form-field .mdc-notched-outline__notch,
+.rating-dialog-card mat-form-field .mdc-notched-outline__trailing {
+    border: none !important;
+}
+
+.rating-dialog-card mat-form-field textarea::placeholder {
+    color: rgba(255, 255, 255, 0.5) !important;
+    -webkit-text-fill-color: rgba(255, 255, 255, 0.5) !important;
+}
+
+.dialog-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    padding: 16px 0 0 0;
+    margin-top: 8px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.cancel-btn {
+    color: rgba(255, 255, 255, 0.7) !important;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.cancel-btn:hover {
+    color: #ffffff !important;
+    background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.submit-btn {
+    background-color: var(--accent) !important;
+    color: #0f172a !important;
+    font-weight: 600 !important;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 24px !important;
+}
+
+.submit-btn:hover:not([disabled]) {
+    background-color: var(--accent-dark) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(251, 191, 36, 0.4) !important;
+}
+
+.submit-btn[disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.submit-btn mat-icon {
+    color: #0f172a !important;
+}
+
 .rating-display {
     display: flex;
     gap: 2px;
@@ -219,8 +492,9 @@ h2::after {
 
 .status-cell {
     padding: 12px 16px !important;
-    min-width: 150px;
-    max-width: 200px;
+    min-width: 130px;
+    margin-right: 16px !important;
+    white-space: nowrap;
     overflow: visible !important;
 }
 
@@ -332,12 +606,6 @@ mat-header-cell {
     color: #ffffff !important;
 }
 
-.reservations-table mat-header-cell:has-text("Opis"),
-.reservations-table mat-header-cell[ng-reflect-name="opis"] {
-    max-width: 200px !important;
-    min-width: 150px !important;
-    width: 200px !important;
-}
 
 .reservations-table mat-row {
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -447,6 +715,7 @@ mat-header-cell {
 .status-cell {
     padding: 12px 16px !important;
     min-width: 130px;
+    margin-right: 16px;
     white-space: nowrap;
 }
 
@@ -457,13 +726,14 @@ mat-header-cell {
 .actions-cell {
     padding: 12px 16px !important;
     min-width: 120px;
+    padding-left: 8px !important;
 }
 
 .action-buttons {
     display: flex;
     gap: 8px;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: flex-end;
     flex-wrap: nowrap;
 }
 
@@ -550,15 +820,6 @@ mat-cell.status-cell {
     background-color: #334155 !important;
 }
 
-mat-cell.opis-cell {
-    overflow: hidden !important;
-    white-space: nowrap;
-    max-width: 200px !important;
-    min-width: 150px !important;
-    width: 200px !important;
-    flex: 0 0 200px !important;
-    background-color: #334155 !important;
-}
 
 mat-header-cell {
     padding: 12px 16px;
@@ -567,4 +828,15 @@ mat-header-cell {
     font-size: 0.875rem;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+}
+
+/* Dodatni stilovi za spacing između status i action buttons */
+.reservations-table mat-cell.status-cell {
+    padding-right: 16px !important;
+    margin-right: 16px !important;
+}
+
+.reservations-table mat-cell.actions-cell {
+    padding-left: 8px !important;
+    min-width: 120px;
 }

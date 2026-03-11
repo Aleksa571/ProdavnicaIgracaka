@@ -11,6 +11,7 @@ import { Loading } from '../loading/loading';
 import { CommonModule } from '@angular/common';
 import { MatChipsModule } from '@angular/material/chips';
 import { Alerts } from '../alerts';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-detalji-igracke',
@@ -21,7 +22,8 @@ import { Alerts } from '../alerts';
     MatButtonModule,
     Loading,
     CommonModule,
-    MatChipsModule
+    MatChipsModule,
+    RouterLink
   ],
   templateUrl: './details.html',
   styleUrl: './details.css',
@@ -31,6 +33,7 @@ export class DetaljiIgracke implements AfterViewInit {
   public console = console
   toy = signal<ToyModel | null>(null)
   isLoading = signal(true)
+  private currentToyId: number | null = null
 
   constructor(route: ActivatedRoute, private router: Router) {
     route.params.subscribe(async params => {
@@ -44,21 +47,43 @@ export class DetaljiIgracke implements AfterViewInit {
         return
       }
       
-      try {
-        const toy = await ToyService.getToyById(id)
-        console.log('Loaded toy:', toy)
-        this.toy.set(toy)
-        this.isLoading.set(false)
-        
-        setTimeout(() => {
-          this.animateCards()
-        }, 100)
-      } catch (error) {
-        console.error('Greška pri učitavanju igračke:', error)
-        Alerts.error('Greška pri učitavanju igračke. Pokušajte ponovo.')
-        this.isLoading.set(false)
-      }
+      this.currentToyId = id
+      await this.loadToy(id)
     })
+  }
+
+  async loadToy(id: number) {
+    try {
+      this.isLoading.set(true)
+      const toy = await ToyService.getToyById(id)
+      console.log('Loaded toy:', toy)
+      console.log('Toy reviews:', toy.recenzije)
+      if (toy.recenzije) {
+        console.log('Review details:', toy.recenzije.map(r => ({ 
+          author: r.author, 
+          rating: r.rating, 
+          comment: r.comment, 
+          hasComment: !!r.comment,
+          commentLength: r.comment ? r.comment.length : 0
+        })))
+      }
+      this.toy.set(toy)
+      this.isLoading.set(false)
+      
+      setTimeout(() => {
+        this.animateCards()
+      }, 100)
+    } catch (error) {
+      console.error('Greška pri učitavanju igračke:', error)
+      Alerts.error('Greška pri učitavanju igračke. Pokušajte ponovo.')
+      this.isLoading.set(false)
+    }
+  }
+
+  async refreshToy() {
+    if (this.currentToyId !== null) {
+      await this.loadToy(this.currentToyId)
+    }
   }
 
   ngAfterViewInit() {
@@ -145,16 +170,23 @@ export class DetaljiIgracke implements AfterViewInit {
       return
     }
 
-    const existingReservations = AuthService.getAllReservations()
-    console.log('Existing reservations:', existingReservations)
-    const alreadyReserved = existingReservations.some(
-      r => r.toyId === toy.id && r.status !== 'otkazano'
-    )
-    console.log('Already reserved?', alreadyReserved)
+    // Proveri da li je igračka već rezervisana od strane bilo kog korisnika
+    const isReservedByAnyUser = AuthService.isToyReservedByAnyUser(toy.id)
+    console.log('Is toy reserved by any user?', isReservedByAnyUser)
     
-    if (alreadyReserved) {
-      Alerts.error('Ova igračka je već u vašoj korpi!')
-      this.router.navigate(['/korpa'])
+    if (isReservedByAnyUser) {
+      // Proveri da li je rezervisana od strane trenutnog korisnika
+      const existingReservations = AuthService.getAllReservations()
+      const alreadyReservedByMe = existingReservations.some(
+        r => r.toyId === toy.id && r.status !== 'otkazano'
+      )
+      
+      if (alreadyReservedByMe) {
+        Alerts.error('Ova igračka je već u vašoj korpi!')
+        this.router.navigate(['/korpa'])
+      } else {
+        Alerts.error('Ova igračka je već rezervisana od strane drugog korisnika!')
+      }
       return
     }
 

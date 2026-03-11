@@ -94,6 +94,39 @@
     border: 1px solid rgba(255, 193, 7, 0.2);
 }
 
+.rating-section.no-reviews {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.view-reviews-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 12px;
+    padding: 8px 16px;
+    background: rgba(251, 191, 36, 0.2);
+    border-radius: 8px;
+    color: var(--accent) !important;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(251, 191, 36, 0.3);
+}
+
+.view-reviews-link:hover {
+    background: rgba(251, 191, 36, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3);
+}
+
+.view-reviews-link mat-icon {
+    color: var(--accent);
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+}
+
 .rating-label {
     display: block;
     margin-bottom: 8px;
@@ -117,6 +150,40 @@
 .reviews-card {
     max-width: 1130px;
     margin: 20px auto;
+    background: var(--card) !important;
+    border: 1px solid var(--border) !important;
+}
+
+.reviews-card ::ng-deep .mat-mdc-card {
+    background: var(--card) !important;
+}
+
+.reviews-card mat-card-content {
+    background: var(--card) !important;
+    color: #ffffff !important;
+}
+
+.reviews-card mat-card-content * {
+    color: #ffffff !important;
+}
+
+.reviews-card mat-card-header {
+    margin-bottom: 20px;
+}
+
+.reviews-card mat-card-header h2 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #ffffff !important;
+    margin: 0;
+}
+
+.reviews-card mat-card-header h2 mat-icon {
+    color: var(--accent);
+    font-size: 28px;
+    width: 28px;
+    height: 28px;
 }
 
 .reviews-list {
@@ -128,13 +195,21 @@
 
 .review-item {
     padding: 20px;
-    background: rgba(251, 191, 36, 0.05);
+    background: var(--card) !important;
     border-radius: 12px;
     border-left: 4px solid var(--accent);
+    border-right: 1px solid var(--border);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     animation: fadeInUp 0.6s ease-out backwards;
     backdrop-filter: blur(10px);
+    color: #ffffff !important;
+}
+
+.review-item * {
+    color: #ffffff !important;
 }
 
 .review-item:nth-child(1) { animation-delay: 0.1s; }
@@ -143,10 +218,11 @@
 .review-item:nth-child(4) { animation-delay: 0.4s; }
 
 .review-item:hover {
-    background: rgba(251, 191, 36, 0.15);
+    background: #475569 !important;
     transform: translateX(8px) scale(1.01);
     box-shadow: 0 8px 20px rgba(251, 191, 36, 0.3);
     border-left-width: 6px;
+    border-color: var(--accent);
 }
 
 .review-header {
@@ -154,11 +230,26 @@
     align-items: center;
     gap: 15px;
     margin-bottom: 8px;
+    flex-wrap: wrap;
+}
+
+.review-author {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.review-author mat-icon {
+    color: var(--accent);
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
 }
 
 .review-rating {
     display: flex;
-    gap: 2px;
+    align-items: center;
+    gap: 4px;
 }
 
 .review-rating mat-icon {
@@ -168,14 +259,73 @@
     height: 18px;
 }
 
+.rating-number {
+    color: #ffffff !important;
+    font-size: 0.9rem;
+    margin-left: 4px;
+}
+
 .review-date {
     margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 6px;
     color: #ffffff !important;
     font-size: 0.9rem;
 }
 
+.review-date mat-icon {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+}
+
 .review-comment {
-    margin: 8px 0 0 0;
+    margin: 12px 0 0 0;
     color: #ffffff !important;
-    line-height: 1.5;
+    line-height: 1.6;
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    min-height: 20px;
+}
+
+.review-comment.no-comment {
+    padding: 8px 12px;
+}
+
+.review-comment .no-comment-text {
+    color: rgba(255, 255, 255, 0.6) !important;
+    font-style: italic;
+    font-size: 0.9rem;
+}
+
+/* Stilizovanje dugmeta Rezerviši da bude boje pozadine */
+.details-card ::ng-deep button[mat-raised-button][color="primary"] {
+    background-color: var(--card) !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    font-weight: 600 !important;
+}
+
+.details-card ::ng-deep button[mat-raised-button][color="primary"] .mdc-button__label {
+    color: #ffffff !important;
+}
+
+.details-card ::ng-deep button[mat-raised-button][color="primary"] mat-icon {
+    color: #ffffff !important;
+}
+
+.details-card ::ng-deep button[mat-raised-button][color="primary"]:hover {
+    background-color: #475569 !important;
+    border-color: var(--accent) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3) !important;
+}
+
+.details-card ::ng-deep button[mat-raised-button][color="primary"]:hover mat-icon {
+    color: var(--accent) !important;
 }

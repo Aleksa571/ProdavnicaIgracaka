@@ -26,6 +26,10 @@
                         <span>({{getAverageRating().toFixed(1)}} / {{getReviews().length}} recenzija)</span>
                     </div>
                 </div>
+            } @else {
+                <div class="rating-section no-reviews">
+                    <span class="rating-label">Još nema recenzija za ovu igračku</span>
+                </div>
             }
         </mat-card-content>
     </mat-card>
@@ -69,23 +73,45 @@
     </mat-card>
 </div>
 @if(hasReviews()) {
-<mat-card class="reviews-card">
+<mat-card class="reviews-card" id="reviews-section">
+    <mat-card-header>
+        <h2>
+            <mat-icon>rate_review</mat-icon>
+            Recenzije korisnika ({{getReviews().length}})
+        </h2>
+    </mat-card-header>
     <mat-card-content>
-        <h2>Recenzije</h2>
         <div class="reviews-list">
             @for (review of getReviews(); track $index) {
                 <div class="review-item">
                     <div class="review-header">
-                        <strong>{{review.author}}</strong>
+                        <div class="review-author">
+                            <mat-icon>person</mat-icon>
+                            <strong>{{review.author}}</strong>
+                        </div>
                         <div class="review-rating">
                             @for(star of getReviewStars(review.rating); track $index) {
                                 <mat-icon>{{star}}</mat-icon>
                             }
+                            <span class="rating-number">({{review.rating}}/5)</span>
                         </div>
-                        <span class="review-date">{{formatDate(review.date)}}</span>
+                        <span class="review-date">
+                            <mat-icon>calendar_today</mat-icon>
+                            {{formatDate(review.date)}}
+                        </span>
                     </div>
-                    @if(review.comment) {
-                        <p class="review-comment">{{review.comment}}</p>
+                    <p class="review-comment" [class.no-comment]="!review.comment || review.comment.trim() === ''">
+                        @if(review.comment && review.comment.trim() !== '') {
+                            {{review.comment}}
+                        } @else {
+                            <span class="no-comment-text">Korisnik nije ostavio komentar.</span>
+                        }
+                    </p>
+                    <!-- Debug info - remove later -->
+                    @if(false) {
+                        <small style="color: rgba(255,255,255,0.5); font-size: 0.7rem;">
+                            Debug: comment="{{review.comment}}", hasComment={{!!review.comment}}, length={{review.comment ? review.comment.length : 0}}
+                        </small>
                     }
                 </div>
             }

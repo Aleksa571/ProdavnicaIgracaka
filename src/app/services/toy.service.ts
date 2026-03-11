@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { ToyModel } from '../../models/toy.model';
+import { ToyModel, Review } from '../../models/toy.model';
+import { AuthService } from './auth.service';
 
 const client = axios.create({
     baseURL: 'https://toy.pequla.com/api',
@@ -59,6 +60,50 @@ export class ToyService {
             throw new Error(`Invalid toy ID: ${idValue}`)
         }
         
+        const toyId = id
+        const apiReviews: Review[] = item.recenzije || item.reviews || []
+        const localReviews = AuthService.getReviewsForToy(toyId)
+        
+        console.log('Loading toy:', toyId, 'API reviews:', apiReviews, 'Local reviews:', localReviews)
+        
+        // Kombinuj recenzije iz API-ja sa lokalnim recenzijama
+        // Lokalne recenzije imaju prioritet ako postoji duplikat po autoru
+        const allReviews: Review[] = [...apiReviews]
+        const authorSet = new Set(apiReviews.map(r => r.author))
+        
+        for (const localReview of localReviews) {
+            console.log('Processing local review:', localReview)
+            console.log('Local review comment:', localReview.comment, 'Type:', typeof localReview.comment)
+            
+            // Konvertuj u Review format ako je potrebno
+            const review: Review = {
+                author: localReview.author,
+                rating: localReview.rating,
+                comment: localReview.comment || '',
+                date: localReview.date
+            }
+            
+            if (authorSet.has(review.author)) {
+                // Zameni API recenziju lokalnom ako postoji
+                const index = allReviews.findIndex(r => r.author === review.author)
+                if (index >= 0) {
+                    allReviews[index] = review
+                    console.log('Replaced API review with local:', allReviews[index])
+                    console.log('Replaced review comment:', allReviews[index].comment)
+                }
+            } else {
+                // Dodaj novu lokalnu recenziju
+                allReviews.push(review)
+                console.log('Added local review:', allReviews[allReviews.length - 1])
+                console.log('Added review comment:', allReviews[allReviews.length - 1].comment)
+            }
+        }
+        
+        console.log('Final combined reviews:', allReviews)
+        allReviews.forEach((r, idx) => {
+            console.log(`Final review ${idx}:`, { author: r.author, rating: r.rating, comment: r.comment, commentLength: r.comment ? r.comment.length : 0 })
+        })
+        
         return {
             id: id,
             naziv: item.naziv || item.name || item.title || '',
@@ -68,7 +113,7 @@ export class ToyService {
             ciljnaGrupa: ciljnaGrupa as any,
             datumProizvodnje: item.datumProizvodnje || item.productionDate || item.date || '',
             cena: item.cena || item.price || 0,
-            recenzije: item.recenzije || item.reviews || [],
+            recenzije: allReviews,
             imageUrl: item.imageUrl || item.image || item.image_url || ''
         }
     }

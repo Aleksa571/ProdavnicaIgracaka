@@ -1,4 +1,4 @@
-import { Component, signal, computed, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
+import { Component, signal, computed, OnInit, OnDestroy, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { filter, Subscription } from 'rxjs';
@@ -33,10 +33,14 @@ import { MatChipsModule } from '@angular/material/chips';
   styleUrl: './cart.css',
 })
 export class Korpa implements OnInit, OnDestroy {
-  displayedColumnsRezervisano = ['naziv', 'opis', 'tip', 'uzrast', 'ciljnaGrupa', 'datumProizvodnje', 'cena', 'status', 'options']
-  displayedColumnsPristiglo = ['naziv', 'opis', 'tip', 'uzrast', 'ciljnaGrupa', 'datumProizvodnje', 'cena', 'status', 'ocena', 'options']
-  displayedColumnsOtkazano = ['naziv', 'opis', 'tip', 'uzrast', 'ciljnaGrupa', 'datumProizvodnje', 'cena', 'status']
+  displayedColumnsRezervisano = ['naziv', 'tip', 'uzrast', 'ciljnaGrupa', 'datumProizvodnje', 'cena', 'status', 'options']
+  displayedColumnsPristiglo = ['naziv', 'tip', 'uzrast', 'ciljnaGrupa', 'datumProizvodnje', 'cena', 'status', 'ocena', 'options']
+  displayedColumnsOtkazano = ['naziv', 'tip', 'uzrast', 'ciljnaGrupa', 'datumProizvodnje', 'cena', 'status', 'options']
   private routerSubscription?: Subscription;
+  ratingComment: string = ''
+  ratingReservation: ReservationModel | null = null
+  showRatingDialog: boolean = false
+  selectedRating: number = 0
   
   private reservationsSignal = signal<ReservationModel[]>([])
   
@@ -50,7 +54,7 @@ export class Korpa implements OnInit, OnDestroy {
     this.reservationsSignal().filter(r => r.status === 'otkazano')
   )
 
-  constructor(public router: Router) {
+  constructor(public router: Router, private cdr: ChangeDetectorRef) {
     if (!AuthService.getActiveUser()) {
       router.navigate(['/login'])
       return
@@ -114,6 +118,8 @@ export class Korpa implements OnInit, OnDestroy {
     console.log('Rezervisano count:', reservations.filter(r => r.status === 'rezervisano').length)
     this.reservationsSignal.set(reservations)
     console.log('Signal updated. Rezervisano signal:', this.rezervisano().length)
+    // Force change detection to ensure UI updates
+    this.cdr.detectChanges()
   }
 
   reloadComponent() {
@@ -132,7 +138,10 @@ export class Korpa implements OnInit, OnDestroy {
     if (reservation.status === 'pristiglo') {
       Alerts.confirm(`Da li ste sigurni da želite da obrišete "${reservation.naziv}" iz korpe?`, () => {
         AuthService.deleteReservation(reservation.createdAt);
-        this.loadReservations();
+        // Use setTimeout to ensure the deletion is complete before reloading
+        setTimeout(() => {
+          this.loadReservations();
+        }, 100);
       });
     } else {
       Alerts.error('Možete obrisati samo igračke sa statusom "pristiglo"!');
@@ -143,23 +152,62 @@ export class Korpa implements OnInit, OnDestroy {
     if (reservation.status === 'rezervisano') {
       Alerts.confirm(`Da li ste sigurni da želite da uklonite "${reservation.naziv}" iz korpe?`, () => {
         AuthService.cancelReservation(reservation.createdAt);
-        this.loadReservations();
+        // Use setTimeout to ensure the cancellation is complete before reloading
+        setTimeout(() => {
+          this.loadReservations();
+        }, 100);
       });
     }
   }
 
   updateReservationStatus(reservation: ReservationModel, newStatus: 'rezervisano' | 'pristiglo' | 'otkazano') {
     AuthService.updateReservationStatus(reservation.createdAt, newStatus);
-    this.loadReservations();
+    // Use setTimeout to ensure the update is complete before reloading
+    setTimeout(() => {
+      this.loadReservations();
+    }, 100);
   }
 
-  rateToy(reservation: ReservationModel, rating: number) {
+  openRatingDialog(reservation: ReservationModel) {
     if (reservation.status === 'pristiglo') {
-      AuthService.rateToy(reservation.createdAt, rating);
-      this.loadReservations();
+      this.ratingReservation = reservation
+      this.ratingComment = ''
+      this.selectedRating = 0
+      this.showRatingDialog = true
     } else {
       Alerts.error('Možete ocenjivati samo igračke sa statusom "pristiglo"!');
     }
+  }
+
+  selectRating(rating: number) {
+    this.selectedRating = rating
+  }
+
+  submitRating() {
+    if (!this.ratingReservation) return
+    
+    if (this.selectedRating === 0) {
+      Alerts.error('Molimo izaberite ocenu!');
+      return
+    }
+    
+    AuthService.rateToy(this.ratingReservation.createdAt, this.selectedRating, this.ratingComment);
+    this.showRatingDialog = false
+    this.ratingReservation = null
+    this.ratingComment = ''
+    this.selectedRating = 0
+    
+    setTimeout(() => {
+      this.loadReservations();
+      Alerts.success('Recenzija je uspešno dodata!');
+    }, 100);
+  }
+
+  cancelRating() {
+    this.showRatingDialog = false
+    this.ratingReservation = null
+    this.ratingComment = ''
+    this.selectedRating = 0
   }
 
   calculateTotal(): number {
@@ -193,5 +241,35 @@ export class Korpa implements OnInit, OnDestroy {
       stars.push(i < rating ? 'star' : 'star_border');
     }
     return stars;
+  }
+
+  deleteCancelledReservation(reservation: ReservationModel) {
+    if (reservation.status === 'otkazano') {
+      Alerts.confirm(`Da li ste sigurni da želite trajno obrisati "${reservation.naziv}"?`, () => {
+        AuthService.deleteReservation(reservation.createdAt);
+        setTimeout(() => {
+          this.loadReservations();
+        }, 100);
+      });
+    }
+  }
+
+  clearCancelledReservations() {
+    const cancelledCount = this.otkazano().length;
+    if (cancelledCount === 0) {
+      Alerts.error('Nema otkazanih rezervacija za brisanje.');
+      return;
+    }
+
+    Alerts.confirm(`Da li ste sigurni da želite trajno obrisati sve otkazane rezervacije (${cancelledCount})?`, () => {
+      const cancelledReservations = this.otkazano();
+      for (const reservation of cancelledReservations) {
+        AuthService.deleteReservation(reservation.createdAt);
+      }
+      setTimeout(() => {
+        this.loadReservations();
+        Alerts.success(`Uspešno obrisano ${cancelledCount} otkazanih rezervacija.`);
+      }, 100);
+    });
   }
 }

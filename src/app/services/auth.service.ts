@@ -4,6 +4,7 @@ import { UserModel } from "../../models/user.model"
 
 const USERS = 'users'
 const ACTIVE = 'active'
+const REVIEWS = 'toy_reviews'
 
 export class AuthService {
     static getUsers(): UserModel[] {
@@ -189,6 +190,28 @@ export class AuthService {
         return []
     }
 
+    static isToyReservedByAnyUser(toyId: number): boolean {
+        const users = this.getUsers()
+        for (let u of users) {
+            if (u.reservations && u.reservations.some(r => r.toyId === toyId && r.status === 'rezervisano')) {
+                return true
+            }
+        }
+        return false
+    }
+
+    static getToyReservationsByAllUsers(toyId: number): ReservationModel[] {
+        const users = this.getUsers()
+        const allReservations: ReservationModel[] = []
+        for (let u of users) {
+            if (u.reservations) {
+                const toyReservations = u.reservations.filter(r => r.toyId === toyId && r.status === 'rezervisano')
+                allReservations.push(...toyReservations)
+            }
+        }
+        return allReservations
+    }
+
     static cancelReservation(createdAt: string) {
         const users = this.getUsers()
         for (let u of users) {
@@ -233,19 +256,83 @@ export class AuthService {
         localStorage.setItem(USERS, JSON.stringify(users))
     }
 
-    static rateToy(createdAt: string, ocena: number) {
+    static rateToy(createdAt: string, ocena: number, comment: string = '') {
         const users = this.getUsers()
+        const activeUser = this.getActiveUser()
+        let toyId: number | null = null
+        
+        // Postavi ocenu na rezervaciju
         for (let u of users) {
             if (u.email === localStorage.getItem(ACTIVE)) {
                 for (let r of u.reservations) {
                     if (r.createdAt === createdAt && r.status === 'pristiglo') {
                         r.ocena = ocena
+                        toyId = r.toyId
                     }
                 }
             }
         }
         
         localStorage.setItem(USERS, JSON.stringify(users))
+        
+        // Dodaj recenziju na igračku
+        if (toyId !== null && activeUser) {
+            this.addReviewToToy(toyId, {
+                author: `${activeUser.firstName} ${activeUser.lastName}`,
+                rating: ocena,
+                comment: comment,
+                date: new Date().toISOString()
+            })
+        }
+    }
+
+    static addReviewToToy(toyId: number, review: { author: string; rating: number; comment: string; date: string }) {
+        const reviews = this.getReviews()
+        if (!reviews[toyId]) {
+            reviews[toyId] = []
+        }
+        
+        console.log('Adding review for toy:', toyId, review)
+        console.log('Review comment value:', review.comment, 'Type:', typeof review.comment, 'Length:', review.comment ? review.comment.length : 0)
+        
+        // Proveri da li korisnik već ima recenziju za ovu igračku
+        const existingIndex = reviews[toyId].findIndex(r => r.author === review.author)
+        if (existingIndex >= 0) {
+            reviews[toyId][existingIndex] = { ...review }
+            console.log('Updated existing review:', reviews[toyId][existingIndex])
+            console.log('Updated review comment:', reviews[toyId][existingIndex].comment)
+        } else {
+            reviews[toyId].push({ ...review })
+            console.log('Added new review:', reviews[toyId][reviews[toyId].length - 1])
+            console.log('New review comment:', reviews[toyId][reviews[toyId].length - 1].comment)
+        }
+        
+        localStorage.setItem(REVIEWS, JSON.stringify(reviews))
+        const saved = JSON.parse(localStorage.getItem(REVIEWS) || '{}')
+        console.log('Saved reviews to localStorage:', saved)
+        if (saved[toyId]) {
+            console.log('Reviews for toy', toyId, ':', saved[toyId])
+            saved[toyId].forEach((r: any, idx: number) => {
+                console.log(`Review ${idx}:`, { author: r.author, comment: r.comment, hasComment: !!r.comment })
+            })
+        }
+    }
+
+    static getReviews(): { [toyId: number]: Array<{ author: string; rating: number; comment: string; date: string }> } {
+        const stored = localStorage.getItem(REVIEWS)
+        if (!stored) {
+            return {}
+        }
+        try {
+            return JSON.parse(stored)
+        } catch {
+            return {}
+        }
+    }
+
+    static getReviewsForToy(toyId: number): Array<{ author: string; rating: number; comment: string; date: string }> {
+        const reviews = this.getReviews()
+        return reviews[toyId] || []
     }
 
     static updateReservation(createdAt: string, updatedData: Partial<ReservationModel>) {

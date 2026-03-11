@@ -71,9 +71,17 @@
         </div>
         @for (toy of paginatedToys(); track toy.id){
         <mat-card class="toy-card" appearance="outlined">
-            @if(getImageUrl(toy)) {
-                <img mat-card-image [src]="getImageUrl(toy)" [alt]="toy.naziv" class="toy-image">
-            }
+            <div class="toy-image-wrapper">
+                @if(getImageUrl(toy)) {
+                    <img mat-card-image [src]="getImageUrl(toy)" [alt]="toy.naziv" class="toy-image">
+                }
+                @if(isToyReserved(toy)) {
+                    <div class="reservation-badge">
+                        <mat-icon>shopping_cart</mat-icon>
+                        <span>Rezervisano</span>
+                    </div>
+                }
+            </div>
             <mat-card-content class="card-content">
                 <mat-card-title>
                     <strong>{{toy.naziv || 'Bez naziva'}}</strong>

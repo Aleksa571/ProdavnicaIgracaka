@@ -14,14 +14,6 @@
                         <mat-header-cell *matHeaderCellDef>Naziv</mat-header-cell>
                         <mat-cell *matCellDef="let reservation">{{reservation.naziv}}</mat-cell>
                     </ng-container>
-                    <ng-container matColumnDef="opis">
-                        <mat-header-cell *matHeaderCellDef>Opis</mat-header-cell>
-                        <mat-cell *matCellDef="let reservation" class="opis-cell">
-                            <span class="description-text" [title]="reservation.opis">
-                                {{reservation.opis}}
-                            </span>
-                        </mat-cell>
-                    </ng-container>
                     <ng-container matColumnDef="tip">
                         <mat-header-cell *matHeaderCellDef>Tip</mat-header-cell>
                         <mat-cell *matCellDef="let reservation">{{reservation.tip}}</mat-cell>
@@ -49,7 +41,7 @@
                         </mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="options">
-                        <mat-header-cell *matHeaderCellDef>Akcije</mat-header-cell>
+                        <mat-header-cell *matHeaderCellDef></mat-header-cell>
                         <mat-cell *matCellDef="let reservation" class="actions-cell">
                             <div class="action-buttons">
                                 <button mat-icon-button color="warn" (click)="cancelReservation(reservation)" title="Ukloni iz korpe" class="action-btn">
@@ -74,14 +66,6 @@
                     <ng-container matColumnDef="naziv">
                         <mat-header-cell *matHeaderCellDef>Naziv</mat-header-cell>
                         <mat-cell *matCellDef="let reservation">{{reservation.naziv}}</mat-cell>
-                    </ng-container>
-                    <ng-container matColumnDef="opis">
-                        <mat-header-cell *matHeaderCellDef>Opis</mat-header-cell>
-                        <mat-cell *matCellDef="let reservation" class="opis-cell">
-                            <span class="description-text" [title]="reservation.opis">
-                                {{reservation.opis}}
-                            </span>
-                        </mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="tip">
                         <mat-header-cell *matHeaderCellDef>Tip</mat-header-cell>
@@ -122,11 +106,10 @@
                             } @else {
                                 <div class="rating-buttons">
                                     <span class="rating-label">Oceni:</span>
-                                    @for(rating of [1,2,3,4,5]; track rating) {
-                                        <button mat-icon-button (click)="rateToy(reservation, rating)" title="Oceni sa {{rating}}">
-                                            <mat-icon>star_border</mat-icon>
-                                        </button>
-                                    }
+                                    <button mat-raised-button color="accent" (click)="openRatingDialog(reservation)" title="Dodaj recenziju">
+                                        <mat-icon>rate_review</mat-icon>
+                                        Dodaj recenziju
+                                    </button>
                                 </div>
                             }
                         </mat-cell>
@@ -150,18 +133,17 @@
 
             <h2>Otkazano</h2>
             @if(otkazano().length > 0) {
+                <div class="cancelled-section-header">
+                    <p class="cancelled-info">Otkazane rezervacije se mogu trajno obrisati.</p>
+                    <button mat-raised-button color="warn" (click)="clearCancelledReservations()" class="clear-all-btn">
+                        <mat-icon>delete_sweep</mat-icon>
+                        Obriši sve otkazane
+                    </button>
+                </div>
                 <mat-table [dataSource]="otkazano()" class="reservations-table">
                     <ng-container matColumnDef="naziv">
                         <mat-header-cell *matHeaderCellDef>Naziv</mat-header-cell>
                         <mat-cell *matCellDef="let reservation">{{reservation.naziv}}</mat-cell>
-                    </ng-container>
-                    <ng-container matColumnDef="opis">
-                        <mat-header-cell *matHeaderCellDef>Opis</mat-header-cell>
-                        <mat-cell *matCellDef="let reservation" class="opis-cell">
-                            <span class="description-text" [title]="reservation.opis">
-                                {{reservation.opis}}
-                            </span>
-                        </mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="tip">
                         <mat-header-cell *matHeaderCellDef>Tip</mat-header-cell>
@@ -189,6 +171,16 @@
                             <mat-chip [color]="getStatusColor(reservation.status)" class="status-chip">{{reservation.status}}</mat-chip>
                         </mat-cell>
                     </ng-container>
+                    <ng-container matColumnDef="options">
+                        <mat-header-cell *matHeaderCellDef>Akcije</mat-header-cell>
+                        <mat-cell *matCellDef="let reservation" class="actions-cell">
+                            <div class="action-buttons">
+                                <button mat-icon-button color="warn" (click)="deleteCancelledReservation(reservation)" title="Obriši trajno" class="action-btn">
+                                    <mat-icon>delete_forever</mat-icon>
+                                </button>
+                            </div>
+                        </mat-cell>
+                    </ng-container>
                     <mat-header-row *matHeaderRowDef="displayedColumnsOtkazano"></mat-header-row>
                     <mat-row *matRowDef="let row; columns: displayedColumnsOtkazano;"></mat-row>
                 </mat-table>
@@ -197,4 +189,63 @@
             }
         </mat-card-content>
     </mat-card>
+    
+    @if(showRatingDialog && ratingReservation) {
+    <div class="rating-dialog-backdrop" (click)="cancelRating()"></div>
+    <mat-card class="rating-dialog-card">
+        <mat-card-header>
+            <div class="dialog-header">
+                <mat-icon class="dialog-icon">rate_review</mat-icon>
+                <h2>Dodaj recenziju</h2>
+            </div>
+            <p class="dialog-subtitle">"{{ratingReservation.naziv}}"</p>
+        </mat-card-header>
+        <mat-card-content>
+            <div class="rating-dialog-content">
+                <div class="rating-stars-section">
+                    <span class="rating-label">Vaša ocena:</span>
+                    <div class="rating-stars">
+                        @for(rating of [1,2,3,4,5]; track rating) {
+                            <button 
+                                mat-icon-button 
+                                (click)="selectRating(rating)" 
+                                [class.selected]="selectedRating >= rating"
+                                [title]="'Oceni sa ' + rating">
+                                <mat-icon>{{selectedRating >= rating ? 'star' : 'star_border'}}</mat-icon>
+                            </button>
+                        }
+                    </div>
+                    @if(selectedRating > 0) {
+                        <span class="rating-value-text">{{selectedRating}} / 5</span>
+                    }
+                </div>
+                <mat-form-field class="full-width">
+                    <mat-label>Komentar (opciono)</mat-label>
+                    <textarea 
+                        matInput 
+                        [(ngModel)]="ratingComment" 
+                        rows="4" 
+                        placeholder="Podelite svoje mišljenje o ovoj igrački..."
+                        class="comment-textarea">
+                    </textarea>
+                </mat-form-field>
+            </div>
+        </mat-card-content>
+        <mat-card-actions class="dialog-actions">
+            <button mat-button (click)="cancelRating()" class="cancel-btn">
+                <mat-icon>close</mat-icon>
+                Otkaži
+            </button>
+            <button 
+                mat-raised-button 
+                color="primary" 
+                (click)="submitRating()" 
+                [disabled]="selectedRating === 0"
+                class="submit-btn">
+                <mat-icon>check</mat-icon>
+                Potvrdi
+            </button>
+        </mat-card-actions>
+    </mat-card>
+    }
 </div>

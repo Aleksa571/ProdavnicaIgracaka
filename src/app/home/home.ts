@@ -252,6 +252,11 @@ export class Home implements OnInit, AfterViewInit {
     return ToyService.getImageUrl(toy)
   }
 
+  isToyReserved(toy: ToyModel): boolean {
+    if (!toy.id) return false
+    return AuthService.isToyReservedByAnyUser(toy.id)
+  }
+
   reserveToy(toy: ToyModel) {
     if (!AuthService.getActiveUser()) {
       Alerts.error('Morate se prijaviti da biste rezervisali igračku!')
@@ -264,14 +269,22 @@ export class Home implements OnInit, AfterViewInit {
       return
     }
 
-    const existingReservations = AuthService.getAllReservations()
-    const alreadyReserved = existingReservations.some(
-      r => r.toyId === toy.id && r.status !== 'otkazano'
-    )
+    // Proveri da li je igračka već rezervisana od strane bilo kog korisnika
+    const isReservedByAnyUser = AuthService.isToyReservedByAnyUser(toy.id)
     
-    if (alreadyReserved) {
-      Alerts.error('Ova igračka je već u vašoj korpi!')
-      this.router.navigate(['/korpa'])
+    if (isReservedByAnyUser) {
+      // Proveri da li je rezervisana od strane trenutnog korisnika
+      const existingReservations = AuthService.getAllReservations()
+      const alreadyReservedByMe = existingReservations.some(
+        r => r.toyId === toy.id && r.status !== 'otkazano'
+      )
+      
+      if (alreadyReservedByMe) {
+        Alerts.error('Ova igračka je već u vašoj korpi!')
+        this.router.navigate(['/korpa'])
+      } else {
+        Alerts.error('Ova igračka je već rezervisana od strane drugog korisnika!')
+      }
       return
     }
 
