@@ -1,29 +1,42 @@
 import { Component } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
-import { DataService } from '../services/data.service';
 import { MatCardModule } from '@angular/material/card';
 import { MatTableModule } from '@angular/material/table';
-import { OrderModel } from '../../models/order.model';
+import { ReservationModel } from '../../models/reservation.model';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { Utils } from '../utils';
-import { Alerts, matCustomClass } from '../alerts';
-import Swal from 'sweetalert2';
+import { Alerts } from '../alerts';
+import { CommonModule } from '@angular/common';
+import { MatSelectModule } from '@angular/material/select';
+import { FormsModule } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatChipsModule } from '@angular/material/chips';
 
 @Component({
-  selector: 'app-cart',
-  imports: [MatCardModule, MatTableModule, RouterLink, MatButtonModule, MatIconModule],
+  selector: 'app-korpa',
+  imports: [
+    MatCardModule, 
+    MatTableModule, 
+    MatButtonModule, 
+    MatIconModule,
+    CommonModule,
+    MatSelectModule,
+    FormsModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatChipsModule
+  ],
   templateUrl: './cart.html',
   styleUrl: './cart.css',
 })
-export class Cart {
-  airlines = DataService.getAirlines()
-  types = DataService.getSeatingTypes()
-  displayedColumns =
-    ['destination', 'flightNumber', 'scheduledAt', 'airline', 'seatingType', 'ageGroup', 'count', 'options']
+export class Korpa {
+  displayedColumns = ['naziv', 'tip', 'uzrast', 'cena', 'status', 'ocena', 'options']
+  editingReservation: string | null = null;
+  editData: Partial<ReservationModel> = {};
 
-  constructor(public router: Router, public utils: Utils) {
+  constructor(public router: Router) {
     if (!AuthService.getActiveUser()) {
       router.navigate(['/login'])
       return
@@ -33,64 +46,107 @@ export class Cart {
   reloadComponent() {
     this.router.navigateByUrl('/', { skipLocationChange: true })
       .then(() => {
-        this.router.navigate(['/cart'])
+        this.router.navigate(['/korpa'])
       })
   }
 
-  removeOrder(order: OrderModel) {
-    Alerts.confirm(`Are you sure you want to remove ${order.count} ticket${order.count > 1 ? 's' : ''} for ${order.destination}?`, () => {
-      AuthService.cancelOrder(order.createdAt)
-      this.reloadComponent()
-    })
+  getReservations(): ReservationModel[] {
+    return AuthService.getAllReservations();
   }
 
-  payAll() {
-    Alerts.confirm(`Are you sure you want to pay? Your total is ${this.calculateTotal()} EUR!`, () => {
-      AuthService.payOrders()
-      this.reloadComponent()
-    })
+  getReservationsByStatus(status: 'rezervisano' | 'pristiglo' | 'otkazano'): ReservationModel[] {
+    return AuthService.getReservationsByStatus(status);
   }
 
-  calculateTotal() {
-    let total = 0
-    for (let order of this.getOrders()) {
-      total += this.utils.calculateTotal(order)
+  removeReservation(reservation: ReservationModel) {
+    if (reservation.status === 'pristiglo') {
+      Alerts.confirm(`Da li ste sigurni da želite da obrišete "${reservation.naziv}" iz korpe?`, () => {
+        AuthService.deleteReservation(reservation.createdAt);
+        this.reloadComponent();
+      });
+    } else {
+      Alerts.error('Možete obrisati samo igračke sa statusom "pristiglo"!');
     }
-
-    return total
   }
 
-  showBarcode(order: OrderModel) {
-    const barcode = new Date(order.createdAt).getTime()
-    const src = `https://quickchart.io/barcode?type=code128&text=${barcode}&width=280&includeText=true`
-    Swal.fire({
-      title: `${order.destination} (${order.flightNumber})`,
-      customClass: matCustomClass,
-      html: `<img src="${src}" />`,
-    })
+  cancelReservation(reservation: ReservationModel) {
+    if (reservation.status === 'rezervisano') {
+      Alerts.confirm(`Da li ste sigurni da želite da otkažete rezervaciju za "${reservation.naziv}"?`, () => {
+        AuthService.cancelReservation(reservation.createdAt);
+        this.reloadComponent();
+      });
+    }
   }
 
-  getOrders() {
-    return AuthService.getOrdersByState('w')
+  updateReservationStatus(reservation: ReservationModel, newStatus: 'rezervisano' | 'pristiglo' | 'otkazano') {
+    AuthService.updateReservationStatus(reservation.createdAt, newStatus);
+    this.reloadComponent();
   }
 
-  getPaidOrders() {
-    return AuthService.getOrdersByState('p')
+  startEdit(reservation: ReservationModel) {
+    if (reservation.status === 'rezervisano') {
+      this.editingReservation = reservation.createdAt;
+      this.editData = { ...reservation };
+    } else {
+      Alerts.error('Možete menjati samo igračke sa statusom "rezervisano"!');
+    }
   }
 
-  getCanceledOrders() {
-    return AuthService.getOrdersByState('c')
+  saveEdit() {
+    if (this.editingReservation) {
+      AuthService.updateReservation(this.editingReservation, this.editData);
+      this.editingReservation = null;
+      this.editData = {};
+      this.reloadComponent();
+    }
   }
 
-  getAirline(order: OrderModel) {
-    return DataService.getAirlineById(order.airlineId).name
+  cancelEdit() {
+    this.editingReservation = null;
+    this.editData = {};
   }
 
-  getSeatingType(order: OrderModel) {
-    return DataService.getSeatingTypeById(order.seatingTypeId).name
+  rateToy(reservation: ReservationModel, rating: number) {
+    if (reservation.status === 'pristiglo') {
+      AuthService.rateToy(reservation.createdAt, rating);
+      this.reloadComponent();
+    } else {
+      Alerts.error('Možete ocenjivati samo igračke sa statusom "pristiglo"!');
+    }
   }
 
-  getAgeGroup(order: OrderModel) {
-    return DataService.getFullAgeGroupText(order.ageGroup)
+  calculateTotal(): number {
+    let total = 0;
+    for (let reservation of this.getReservations()) {
+      if (reservation.status !== 'otkazano') {
+        total += reservation.cena;
+      }
+    }
+    return total;
+  }
+
+  formatPrice(price: number): string {
+    return `${price.toLocaleString('sr-RS')} RSD`;
+  }
+
+  formatDate(date: string): string {
+    return new Date(date).toLocaleDateString('sr-RS');
+  }
+
+  getStatusColor(status: string): string {
+    switch(status) {
+      case 'rezervisano': return 'primary';
+      case 'pristiglo': return 'accent';
+      case 'otkazano': return 'warn';
+      default: return '';
+    }
+  }
+
+  getStars(rating: number): string[] {
+    const stars: string[] = [];
+    for (let i = 0; i < 5; i++) {
+      stars.push(i < rating ? 'star' : 'star_border');
+    }
+    return stars;
   }
 }

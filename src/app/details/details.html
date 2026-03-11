@@ -1,47 +1,94 @@
-@if(flight()) {
+@if(!isLoading() && toy()) {
 <div class="details-wrapper">
     <mat-card class="details-card">
+        @if(getImageUrl()) {
+            <img mat-card-image [src]="getImageUrl()" [alt]="toy()?.naziv" class="details-img">
+        }
         <mat-card-content>
-            <img [src]="utils.getImageUrl(flight()!)" class="details-img">
+            <h1>{{toy()?.naziv}}</h1>
+            <div class="toy-meta">
+                <mat-chip>{{toy()?.tip}}</mat-chip>
+                <mat-chip>{{toy()?.uzrast}} godina</mat-chip>
+                <mat-chip>{{toy()?.ciljnaGrupa}}</mat-chip>
+            </div>
+            <p class="toy-description">{{toy()?.opis}}</p>
+            <div class="price-section">
+                <span class="price-label">Cena:</span>
+                <span class="price-value">{{formatPrice(toy()!.cena)}}</span>
+            </div>
+            @if(hasReviews()) {
+                <div class="rating-section">
+                    <span class="rating-label">Prosečna ocena:</span>
+                    <div class="rating-value">
+                        @for(star of getStars(); track $index) {
+                            <mat-icon>{{star}}</mat-icon>
+                        }
+                        <span>({{getAverageRating().toFixed(1)}} / {{getReviews().length}} recenzija)</span>
+                    </div>
+                </div>
+            }
         </mat-card-content>
     </mat-card>
     <mat-card class="details-card">
         <mat-card-content>
-            <h1>{{flight()?.destination}} ({{flight()?.flightNumber}})</h1>
+            <h2>Detalji</h2>
             <mat-list>
                 <mat-list-item>
-                    <mat-icon matListItemIcon>history_2</mat-icon>
-                    <div matListItemTitle>Scheduled At</div>
-                    <div matListItemLine>{{utils.formatDate(flight()!.scheduledAt)}}</div>
+                    <mat-icon matListItemIcon>category</mat-icon>
+                    <div matListItemTitle>Tip igračke</div>
+                    <div matListItemLine>{{toy()?.tip}}</div>
                 </mat-list-item>
                 <mat-list-item>
-                    <mat-icon matListItemIcon>flight</mat-icon>
-                    <div matListItemTitle>Airplane Model</div>
-                    <div matListItemLine>{{flight()?.plane}}</div>
+                    <mat-icon matListItemIcon>cake</mat-icon>
+                    <div matListItemTitle>Uzrast</div>
+                    <div matListItemLine>{{toy()?.uzrast}} godina</div>
                 </mat-list-item>
                 <mat-list-item>
-                    <mat-icon matListItemIcon>bookmark</mat-icon>
-                    <div matListItemTitle>Terminal</div>
-                    <div matListItemLine>{{flight()?.terminal}}</div>
+                    <mat-icon matListItemIcon>people</mat-icon>
+                    <div matListItemTitle>Ciljna grupa</div>
+                    <div matListItemLine>{{toy()?.ciljnaGrupa}}</div>
+                </mat-list-item>
+                <mat-list-item>
+                    <mat-icon matListItemIcon>calendar_today</mat-icon>
+                    <div matListItemTitle>Datum proizvodnje</div>
+                    <div matListItemLine>{{formatDate(toy()!.datumProizvodnje)}}</div>
                 </mat-list-item>
             </mat-list>
         </mat-card-content>
         @if (authService.getActiveUser()) {
         <mat-card-actions>
-            <a [routerLink]="`/details/${flight()?.id}/order`" matButton>
-                <mat-icon fontIcon="airplane_ticket" /> Book now
-            </a>
+            <button mat-raised-button color="primary" (click)="reserveToy()">
+                <mat-icon fontIcon="shopping_cart" /> Rezerviši
+            </button>
         </mat-card-actions>
         }
     </mat-card>
 </div>
-<mat-card class="map-card">
+@if(hasReviews()) {
+<mat-card class="reviews-card">
     <mat-card-content>
-        <iframe width="100%" height="400" style="border:0" loading="lazy" allowfullscreen
-            [src]="getMapUrl(flight()!.destination)">
-        </iframe>
+        <h2>Recenzije</h2>
+        <div class="reviews-list">
+            @for (review of getReviews(); track $index) {
+                <div class="review-item">
+                    <div class="review-header">
+                        <strong>{{review.author}}</strong>
+                        <div class="review-rating">
+                            @for(star of getReviewStars(review.rating); track $index) {
+                                <mat-icon>{{star}}</mat-icon>
+                            }
+                        </div>
+                        <span class="review-date">{{formatDate(review.date)}}</span>
+                    </div>
+                    @if(review.comment) {
+                        <p class="review-comment">{{review.comment}}</p>
+                    }
+                </div>
+            }
+        </div>
     </mat-card-content>
 </mat-card>
+}
 } @else {
     <app-loading />
 }

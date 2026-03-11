@@ -1,16 +1,29 @@
-.flight-card{
-    width: 230px;
-    flex: 0 0 230px;
+.home-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 30px 20px;
+}
+
+.toy-card{
+    width: 300px;
+    flex: 0 0 300px;
     background: var(--card);
     border-radius: var(--radius);
     box-shadow: 0 6px 18px rgba(15,23,42,0.06);
     padding: 14px;
     display: flex;
     flex-direction: column;
-    align-items: center;
     gap: 8px;
-    text-align: center;
 }
+
+.toy-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: calc(var(--radius) - 4px);
+    margin-bottom: 10px;
+}
+
 .card-wrapper{
     display: flex;
     justify-content: center;
@@ -19,22 +32,6 @@
     padding-top: 12px;
 }
 
-.flight-number{font-weight:600}
-.destination{color:var(--muted)}
-
-/* constrain images inside cards so they are uniform */
-.flight-card img,
-.flight-card [mat-card-image] {
-    width: 100%;
-    height: 140px;
-    object-fit: cover;
-    border-radius: calc(var(--radius) - 4px);
-}
-
-/* make card content align and smaller */
-.flight-card mat-card-content{padding: 8px 6px}
-.flight-card h3{margin:6px 0 2px;font-size:1rem}
-.flight-card p{margin:0;color:var(--muted);font-size:0.9rem}
 
 /* details button: icon + label as a single clickable control */
 .details-btn{
@@ -63,15 +60,13 @@
     margin-right: auto;
     width: 80px;
 }
-.flight-card {
-    width: 240px;
-}
 
 .card-wrapper {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    gap: 5px;
+    gap: 20px;
+    padding: 20px 0;
 }
 
 .card-content {
@@ -81,9 +76,138 @@
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 15px;
+    padding: 20px 0;
+    margin-bottom: 20px;
 }
 
 mat-form-field {
     width: 300px;
+}
+
+.toy-type, .toy-age, .toy-group {
+    font-size: 0.9rem;
+    color: var(--muted);
+}
+
+.toy-description {
+    margin: 10px 0;
+    font-size: 0.9rem;
+    color: var(--muted);
+    line-height: 1.4;
+}
+
+.toy-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(0,0,0,0.1);
+}
+
+.price {
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: var(--accent);
+}
+
+.rating {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.9rem;
+}
+
+.rating mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    color: #ffc107;
+}
+
+.no-results {
+    text-align: center;
+    padding: 40px;
+    color: var(--muted);
+    font-size: 1.1rem;
+}
+
+.results-header {
+    width: 100%;
+    margin-bottom: 30px;
+    padding: 15px 20px;
+    background: rgba(37, 99, 235, 0.05);
+    border-radius: 8px;
+    border-left: 4px solid var(--accent);
+}
+
+.results-count {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.1rem;
+    color: #333;
+}
+
+.results-count mat-icon {
+    color: var(--accent);
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
+}
+
+.results-count strong {
+    color: var(--accent);
+    font-size: 1.2rem;
+}
+
+.pagination-wrapper {
+    width: 100%;
+    margin-top: 40px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 20px 0;
+}
+
+.pagination-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.page-numbers {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.page-number-btn {
+    min-width: 40px;
+    height: 40px;
+    padding: 0;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.page-number-btn.active-page {
+    background-color: var(--accent);
+    color: white;
+}
+
+.page-number-btn:hover:not(.active-page) {
+    background-color: rgba(37, 99, 235, 0.1);
+}
+
+.page-size-selector {
+    display: flex;
+    align-items: center;
+}
+
+.page-size-field {
+    width: 120px;
 }

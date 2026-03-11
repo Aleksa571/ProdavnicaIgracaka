@@ -3,7 +3,7 @@
     flex-wrap: wrap;
     justify-content: center;
     gap: 10px;
-	margin-bottom: 10px;
+    margin-bottom: 10px;
 }
 
 .details-card{
@@ -11,11 +11,125 @@
 }
 
 .details-img {
-    max-width: 100%;
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+    border-radius: calc(var(--radius) - 4px);
+    margin-bottom: 15px;
 }
 
 .map-card{
-	max-width: 1130px;
-	margin-left: auto;
-	margin-right: auto;
+    max-width: 1130px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.toy-meta {
+    display: flex;
+    gap: 8px;
+    margin: 15px 0;
+    flex-wrap: wrap;
+}
+
+.toy-description {
+    margin: 20px 0;
+    line-height: 1.6;
+    font-size: 1rem;
+    color: var(--muted);
+}
+
+.price-section {
+    margin: 20px 0;
+    padding: 15px;
+    background: rgba(37, 99, 235, 0.1);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.price-label {
+    font-weight: 500;
+}
+
+.price-value {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--accent);
+}
+
+.rating-section {
+    margin: 20px 0;
+    padding: 15px;
+    background: rgba(255, 193, 7, 0.1);
+    border-radius: 8px;
+}
+
+.rating-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.rating-value {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.rating-value mat-icon {
+    color: #ffc107;
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+}
+
+.reviews-card {
+    max-width: 1130px;
+    margin: 20px auto;
+}
+
+.reviews-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.review-item {
+    padding: 15px;
+    background: rgba(0, 0, 0, 0.02);
+    border-radius: 8px;
+    border-left: 3px solid var(--accent);
+}
+
+.review-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 8px;
+}
+
+.review-rating {
+    display: flex;
+    gap: 2px;
+}
+
+.review-rating mat-icon {
+    color: #ffc107;
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+}
+
+.review-date {
+    margin-left: auto;
+    color: var(--muted);
+    font-size: 0.9rem;
+}
+
+.review-comment {
+    margin: 8px 0 0 0;
+    color: var(--muted);
+    line-height: 1.5;
 }

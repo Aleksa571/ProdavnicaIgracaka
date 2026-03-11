@@ -1,0 +1,40 @@
+.small-card {
+    max-width: 500px;
+    margin: 40px auto;
+}
+
+.full-width {
+    width: 100%;
+}
+
+.favorite-types-section {
+    margin-top: 20px;
+    padding: 15px;
+    background: rgba(0, 0, 0, 0.02);
+    border-radius: 8px;
+}
+
+.favorite-types-section h3 {
+    margin: 0 0 15px 0;
+    font-size: 1.1rem;
+}
+
+.types-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.types-chips mat-chip {
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.types-chips mat-chip:hover {
+    transform: scale(1.05);
+}
+
+.types-chips mat-chip.selected-chip {
+    background-color: var(--accent);
+    color: white;
+}

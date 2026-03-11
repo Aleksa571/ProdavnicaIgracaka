@@ -1,5 +1,5 @@
-import { FlightModel } from "../../models/flight.model"
-import { OrderModel } from "../../models/order.model"
+import { ToyModel } from "../../models/toy.model"
+import { ReservationModel } from "../../models/reservation.model"
 import { UserModel } from "../../models/user.model"
 
 const USERS = 'users'
@@ -10,12 +10,12 @@ export class AuthService {
         const baseUser: UserModel = {
             email: 'user@example.com',
             password: 'user123',
-            destination: 'Zagreb',
             firstName: 'Example',
             lastName: 'User',
             phone: '0653093267',
             address: 'Danijelova 32',
-            orders: []
+            omiljeneVrsteIgračaka: ['konstruktor', 'slagalica'],
+            reservations: []
         }
 
         if (localStorage.getItem(USERS) == null) {
@@ -56,7 +56,7 @@ export class AuthService {
                 u.lastName = newUserData.lastName
                 u.address = newUserData.address
                 u.phone = newUserData.phone
-                u.destination = newUserData.destination
+                u.omiljeneVrsteIgračaka = newUserData.omiljeneVrsteIgračaka
             }
         }
         localStorage.setItem(USERS, JSON.stringify(users))
@@ -76,41 +76,58 @@ export class AuthService {
         localStorage.removeItem(ACTIVE)
     }
 
-    static createOrder(order: Partial<OrderModel>, flight: FlightModel) {
-        order.state = 'w'
-        order.flightId = flight.id
-        order.flightNumber = flight.flightNumber
-        order.destination = flight.destination
-        order.scheduledAt = flight.scheduledAt
-        order.createdAt = new Date().toISOString()
+    static createReservation(toy: ToyModel) {
+        const reservation: ReservationModel = {
+            toyId: toy.id,
+            naziv: toy.naziv,
+            opis: toy.opis,
+            tip: toy.tip,
+            uzrast: toy.uzrast,
+            ciljnaGrupa: toy.ciljnaGrupa,
+            datumProizvodnje: toy.datumProizvodnje,
+            cena: toy.cena,
+            status: 'rezervisano',
+            createdAt: new Date().toISOString()
+        }
 
         const users = this.getUsers()
         for (let u of users) {
             if (u.email === localStorage.getItem(ACTIVE)) {
-                u.orders.push(order as OrderModel)
+                u.reservations.push(reservation)
             }
         }
         localStorage.setItem(USERS, JSON.stringify(users))
     }
 
-    static getOrdersByState(state: 'w' | 'p' | 'c') {
+    static getReservationsByStatus(status: 'rezervisano' | 'pristiglo' | 'otkazano'): ReservationModel[] {
         const users = this.getUsers()
         for (let u of users) {
             if (u.email === localStorage.getItem(ACTIVE)) {
-                return u.orders.filter((o) => o.state === state)
+                return u.reservations.filter((r) => r.status === status)
             }
         }
 
         return []
     }
 
-    static cancelOrder(createdAt: string) {
+    static getAllReservations(): ReservationModel[] {
         const users = this.getUsers()
         for (let u of users) {
             if (u.email === localStorage.getItem(ACTIVE)) {
-                for (let o of u.orders) {
-                    if (o.state == 'w' && o.createdAt == createdAt) {
-                        o.state = 'c'
+                return u.reservations
+            }
+        }
+
+        return []
+    }
+
+    static cancelReservation(createdAt: string) {
+        const users = this.getUsers()
+        for (let u of users) {
+            if (u.email === localStorage.getItem(ACTIVE)) {
+                for (let r of u.reservations) {
+                    if (r.status === 'rezervisano' && r.createdAt === createdAt) {
+                        r.status = 'otkazano'
                     }
                 }
             }
@@ -119,13 +136,57 @@ export class AuthService {
         localStorage.setItem(USERS, JSON.stringify(users))
     }
 
-    static payOrders() {
+    static deleteReservation(createdAt: string) {
         const users = this.getUsers()
         for (let u of users) {
             if (u.email === localStorage.getItem(ACTIVE)) {
-                for (let o of u.orders) {
-                    if (o.state == 'w') {
-                        o.state = 'p'
+                u.reservations = u.reservations.filter(r => r.createdAt !== createdAt)
+            }
+        }
+        
+        localStorage.setItem(USERS, JSON.stringify(users))
+    }
+
+    static updateReservationStatus(createdAt: string, newStatus: 'rezervisano' | 'pristiglo' | 'otkazano') {
+        const users = this.getUsers()
+        for (let u of users) {
+            if (u.email === localStorage.getItem(ACTIVE)) {
+                for (let r of u.reservations) {
+                    if (r.createdAt === createdAt) {
+                        r.status = newStatus
+                        if (newStatus !== 'pristiglo') {
+                            delete r.ocena
+                        }
+                    }
+                }
+            }
+        }
+        
+        localStorage.setItem(USERS, JSON.stringify(users))
+    }
+
+    static rateToy(createdAt: string, ocena: number) {
+        const users = this.getUsers()
+        for (let u of users) {
+            if (u.email === localStorage.getItem(ACTIVE)) {
+                for (let r of u.reservations) {
+                    if (r.createdAt === createdAt && r.status === 'pristiglo') {
+                        r.ocena = ocena
+                    }
+                }
+            }
+        }
+        
+        localStorage.setItem(USERS, JSON.stringify(users))
+    }
+
+    static updateReservation(createdAt: string, updatedData: Partial<ReservationModel>) {
+        const users = this.getUsers()
+        for (let u of users) {
+            if (u.email === localStorage.getItem(ACTIVE)) {
+                for (let r of u.reservations) {
+                    if (r.createdAt === createdAt && r.status === 'rezervisano') {
+                        Object.assign(r, updatedData)
                     }
                 }
             }
@@ -136,7 +197,8 @@ export class AuthService {
 
     static createUser(user: Partial<UserModel>) {
         const users = this.getUsers()
-        user.orders = []
+        user.reservations = []
+        user.omiljeneVrsteIgračaka = user.omiljeneVrsteIgračaka || []
         users.push(user as UserModel)
         localStorage.setItem(USERS, JSON.stringify(users))
     }

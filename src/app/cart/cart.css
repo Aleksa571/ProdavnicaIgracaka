@@ -1,150 +1,81 @@
-/* Card Styling */
-mat-card {
-    margin: 24px 20px;
+.cart-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.cart-card {
+    margin-bottom: 20px;
+}
+
+.summary-section {
+    background: rgba(37, 99, 235, 0.1);
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+    margin: 20px 0;
 }
 
-mat-card:first-of-type {
-    margin-top: 24px;
-}
-
-mat-card-header {
-    padding: 0 0 16px 0;
-    margin-bottom: 16px;
-}
-
-mat-card-header h1 {
-    font-size: 24px;
-    font-weight: 500;
+.summary-section h2 {
     margin: 0;
-    color: #333;
+    font-size: 1.5rem;
 }
 
-mat-card-content {
-    padding: 16px;
+.total-price {
+    color: var(--accent);
+    font-weight: 600;
+    font-size: 1.8rem;
 }
 
-mat-card-actions {
-    padding: 16px;
-    display: flex;
-    justify-content: flex-end;
-}
-
-/* Table Styling */
-table.mat-mdc-table {
+.reservations-table {
     width: 100%;
-    margin-bottom: 20px;
-    background: white;
-    border-radius: 4px;
-    overflow: hidden;
+    margin: 20px 0;
 }
 
-.mat-mdc-header-cell {
-    font-weight: 600;
-    font-size: 14px;
-    color: #424242;
-    background-color: #f5f5f5;
+.empty-message {
+    text-align: center;
+    padding: 40px;
+    color: var(--muted);
+    font-style: italic;
 }
 
-.mat-mdc-cell {
-    font-size: 14px;
-    color: #666;
+.rating-display {
+    display: flex;
+    gap: 2px;
 }
 
-.mat-mdc-row:hover {
-    background-color: #fafafa;
-    transition: background-color 0.2s ease;
-}
-
-/* Total Price Styling */
-h3 {
-    font-size: 20px;
-    font-weight: 600;
-    color: #1976d2;
-    margin: 20px 0 0 0;
-    padding-right: 8px;
-    text-align: right;
-}
-
-/* Button Styling */
-button[type="button"] {
-    margin-left: 8px;
-    transition: all 0.3s ease;
-}
-
-button[type="button"]:hover {
-    transform: translateY(-2px);
-}
-
-mat-card-actions button {
-    background-color: #1976d2;
-    color: white;
-    padding: 8px 24px;
-    font-weight: 500;
-}
-
-mat-card-actions button:hover {
-    background-color: #1565c0;
-}
-
-/* Options Column Buttons */
-td.mat-mdc-cell button,
-td.mat-mdc-cell a {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    margin-right: 8px;
-    padding: 6px 12px;
-    font-size: 13px;
-}
-
-td.mat-mdc-cell button mat-icon,
-td.mat-mdc-cell a mat-icon {
+.rating-display mat-icon {
+    color: #ffc107;
     font-size: 18px;
     width: 18px;
     height: 18px;
 }
 
-/* Empty State */
-mat-card-content:has(+ :empty) {
-    text-align: center;
-    padding: 60px 20px;
-    color: #999;
-    font-size: 16px;
+.rating-buttons {
+    display: flex;
+    gap: 2px;
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-    mat-card {
-        margin: 16px 12px;
-        padding: 16px;
-    }
-    
-    mat-card-header h1 {
-        font-size: 20px;
-    }
-    
-    mat-card-content {
-        padding: 12px;
-    }
-    
-    mat-card-actions {
-        padding: 12px;
-    }
-    
-    table.mat-mdc-table {
-        font-size: 12px;
-    }
-    
-    td.mat-mdc-cell button,
-    td.mat-mdc-cell a {
-        font-size: 11px;
-        padding: 4px 8px;
-    }
-    
-    h3 {
-        font-size: 18px;
-    }
+.rating-buttons mat-icon {
+    color: #ffc107;
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+}
+
+.no-actions {
+    color: var(--muted);
+    font-style: italic;
+}
+
+h1 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+h2 {
+    font-size: 1.3rem;
+    margin: 30px 0 15px 0;
+    color: #333;
+    border-bottom: 2px solid var(--accent);
+    padding-bottom: 8px;
 }

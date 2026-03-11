@@ -1,58 +1,138 @@
-
-@if(flights().length > 0) {
+@if(!isLoading()) {
+<div class="home-container">
 <div class="search-wrapper">
     <mat-form-field>
-        <mat-label>Search</mat-label>
-        <input matInput type="text" [(ngModel)]="search" (keyup)="filter()">
+        <mat-label>Pretraga po nazivu</mat-label>
+        <input matInput type="text" [(ngModel)]="searchNaziv" (keyup)="filter()">
     </mat-form-field>
     <mat-form-field>
-        <mat-label>Destination</mat-label>
-        <mat-select [(ngModel)]="destination" (ngModelChange)="filter()">
-            <mat-option value="">All Destinations</mat-option>
-            @for (dest of getDestinations(); track dest) {
-            <mat-option [value]="dest">{{dest}}</mat-option>
+        <mat-label>Pretraga po opisu</mat-label>
+        <input matInput type="text" [(ngModel)]="searchOpis" (keyup)="filter()">
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Tip igračke</mat-label>
+        <mat-select [(ngModel)]="searchTip" (ngModelChange)="filter()">
+            <mat-option value="">Svi tipovi</mat-option>
+            @for (tip of getToyTypes(); track tip) {
+            <mat-option [value]="tip">{{tip}}</mat-option>
             }
         </mat-select>
     </mat-form-field>
     <mat-form-field>
-        <mat-label>From Date</mat-label>
-        <mat-select [(ngModel)]="fromDate" (ngModelChange)="filter()">
-            @for (date of getAvilableDates(); track date) {
-            <mat-option [value]="date">{{date}}</mat-option>
+        <mat-label>Uzrast</mat-label>
+        <mat-select [(ngModel)]="searchUzrast" (ngModelChange)="filter()">
+            <mat-option value="">Svi uzrasti</mat-option>
+            @for (uzrast of getAgeGroups(); track uzrast) {
+            <mat-option [value]="uzrast">{{uzrast}} godina</mat-option>
             }
         </mat-select>
     </mat-form-field>
     <mat-form-field>
-        <mat-label>To Date</mat-label>
-        <mat-select [(ngModel)]="toDate" (ngModelChange)="filter()">
-            @for (date of getAvilableDates(); track date) {
-            <mat-option [value]="date">{{date}}</mat-option>
+        <mat-label>Ciljna grupa</mat-label>
+        <mat-select [(ngModel)]="searchCiljnaGrupa" (ngModelChange)="filter()">
+            <mat-option value="">Sve grupe</mat-option>
+            @for (grupa of getTargetGroups(); track grupa) {
+            <mat-option [value]="grupa">{{grupa}}</mat-option>
             }
         </mat-select>
     </mat-form-field>
+    <mat-form-field>
+        <mat-label>Datum proizvodnje</mat-label>
+        <input matInput type="date" [(ngModel)]="searchDatumProizvodnje" (change)="filter()">
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Minimalna cena (RSD)</mat-label>
+        <input matInput type="number" [(ngModel)]="searchCenaMin" (keyup)="filter()">
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Maksimalna cena (RSD)</mat-label>
+        <input matInput type="number" [(ngModel)]="searchCenaMax" (keyup)="filter()">
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Minimalna ocena</mat-label>
+        <mat-select [(ngModel)]="searchMinRating" (ngModelChange)="filter()">
+            <mat-option value="">Sve ocene</mat-option>
+            <mat-option [value]="1">1+</mat-option>
+            <mat-option [value]="2">2+</mat-option>
+            <mat-option [value]="3">3+</mat-option>
+            <mat-option [value]="4">4+</mat-option>
+            <mat-option [value]="5">5</mat-option>
+        </mat-select>
+    </mat-form-field>
+    <button mat-raised-button color="primary" (click)="clearFilters()">Obriši filtere</button>
 </div>
 <div class="card-wrapper">
-    @for (f of filteredFlights(); track $index){
-    <mat-card class="flight-card" appearance="outlined">
-        <img mat-card-image [src]="utils.getImageUrl(f)" [alt]="f.destination">
-        <mat-card-content class="card-content">
-            <mat-card-title>
-                <strong>{{f.destination}}</strong>
-            </mat-card-title>
-            <mat-card-subtitle>{{utils.formatDate(f.scheduledAt)}}</mat-card-subtitle>
-        </mat-card-content>
-        <mat-card-actions>
-            <a [routerLink]="`/details/${f.id}`" matButton>
-                <mat-icon fontIcon="description" /> Details
-            </a>
-            @if (authService.getActiveUser()) {
-            <a [routerLink]="`/details/${f.id}/order`" matButton>
-                <mat-icon fontIcon="airplane_ticket" /> Book now
-            </a>
+    @if(filteredToys().length > 0) {
+        <div class="results-header">
+            <div class="results-count">
+                <mat-icon>toys</mat-icon>
+                <span>Pronađeno igračaka: <strong>{{filteredToys().length}}</strong></span>
+            </div>
+        </div>
+        @for (toy of paginatedToys(); track toy.id){
+        <mat-card class="toy-card" appearance="outlined">
+            @if(getImageUrl(toy)) {
+                <img mat-card-image [src]="getImageUrl(toy)" [alt]="toy.naziv" class="toy-image">
             }
-        </mat-card-actions>
-    </mat-card>
+            <mat-card-content class="card-content">
+                <mat-card-title>
+                    <strong>{{toy.naziv || 'Bez naziva'}}</strong>
+                </mat-card-title>
+                <mat-card-subtitle>
+                    <span class="toy-type">{{toy.tip || 'N/A'}}</span> | 
+                    <span class="toy-age">{{toy.uzrast || 'N/A'}} godina</span> | 
+                    <span class="toy-group">{{toy.ciljnaGrupa || 'svi'}}</span>
+                </mat-card-subtitle>
+                <p class="toy-description">{{toy.opis || 'Nema opisa'}}</p>
+                <div class="toy-info">
+                    <div class="price">{{formatPrice(toy.cena)}}</div>
+                    @if(toy.recenzije && toy.recenzije.length > 0) {
+                        <div class="rating">
+                            <mat-icon>star</mat-icon>
+                            <span>{{getAverageRating(toy).toFixed(1)}} ({{toy.recenzije.length}})</span>
+                        </div>
+                    }
+                </div>
+            </mat-card-content>
+            <mat-card-actions>
+                <a [routerLink]="`/detalji/${toy.id}`" matButton>
+                    <mat-icon fontIcon="description" /> Detalji
+                </a>
+                @if (authService.getActiveUser()) {
+                <button mat-raised-button color="primary" (click)="reserveToy(toy)">
+                    <mat-icon fontIcon="shopping_cart" /> Rezerviši
+                </button>
+                }
+            </mat-card-actions>
+        </mat-card>
+        }
+        <div class="pagination-wrapper">
+            <div class="pagination-controls">
+                <button mat-icon-button [disabled]="pageIndex === 0" (click)="previousPage()" title="Prethodna stranica">
+                    <mat-icon>chevron_left</mat-icon>
+                </button>
+                <div class="page-numbers">
+                    @for(pageNum of getPageNumbers(); track pageNum) {
+                        <button 
+                            mat-button 
+                            [class.active-page]="pageIndex === pageNum - 1"
+                            (click)="goToPage(pageNum)"
+                            class="page-number-btn">
+                            {{pageNum}}
+                        </button>
+                    }
+                </div>
+                <button mat-icon-button [disabled]="pageIndex >= getTotalPages() - 1" (click)="nextPage()" title="Sledeća stranica">
+                    <mat-icon>chevron_right</mat-icon>
+                </button>
+            </div>
+        </div>
+    } @else {
+        <div class="no-results">
+            <p>Nema rezultata pretrage. Pokušajte sa drugim kriterijumima.</p>
+        </div>
     }
+</div>
 </div>
 }
 @else {

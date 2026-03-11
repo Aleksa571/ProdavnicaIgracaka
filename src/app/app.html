@@ -1,27 +1,27 @@
 <mat-toolbar color="primary">
   <span>
-    <strong>KVA2026</strong>
+    <strong>Prodavnica Igračaka</strong>
   </span>
   <span class="spacer"></span>
   <a routerLink="/" matButton>
-    <mat-icon fontIcon="home" /> Home
+    <mat-icon fontIcon="home" /> Početna
   </a>
   <a routerLink="/about" matButton>
-    <mat-icon fontIcon="info" /> About
+    <mat-icon fontIcon="info" /> O nama
   </a>
   @if(authService.getActiveUser()) {
-  <a routerLink="/cart" matButton>
-    <mat-icon fontIcon="shopping_cart" /> Cart
+  <a routerLink="/korpa" matButton>
+    <mat-icon fontIcon="shopping_cart" /> Korpa
   </a>
-  <a routerLink="/user" matButton>
-    <mat-icon fontIcon="admin_panel_settings" /> Account
+  <a routerLink="/profil" matButton>
+    <mat-icon fontIcon="admin_panel_settings" /> Profil
   </a>
   <button matButton (click)="doLogout()">
-    <mat-icon fontIcon="logout" /> Logout
+    <mat-icon fontIcon="logout" /> Odjavi se
   </button>
   } @else {
   <a routerLink="/login" matButton>
-    <mat-icon fontIcon="login" /> Login
+    <mat-icon fontIcon="login" /> Prijava
   </a>
   }
 </mat-toolbar>
