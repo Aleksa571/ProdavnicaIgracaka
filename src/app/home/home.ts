@@ -55,7 +55,7 @@ export class Home implements OnInit, AfterViewInit {
   ageGroups = signal<string[]>([])
   isLoading = signal(true)
   
-  pageSize = 8
+  pageSize = 8;
   pageIndex = 0
   paginatedToys = signal<ToyModel[]>([])
 

@@ -18,9 +18,9 @@ import { MatChipsModule } from '@angular/material/chips';
 @Component({
   selector: 'app-korpa',
   imports: [
-    MatCardModule, 
-    MatTableModule, 
-    MatButtonModule, 
+    MatCardModule,
+    MatTableModule,
+    MatButtonModule,
     MatIconModule,
     CommonModule,
     MatSelectModule,
@@ -41,16 +41,16 @@ export class Korpa implements OnInit, OnDestroy {
   ratingReservation: ReservationModel | null = null
   showRatingDialog: boolean = false
   selectedRating: number = 0
-  
+
   private reservationsSignal = signal<ReservationModel[]>([])
-  
-  rezervisano = computed(() => 
+
+  rezervisano = computed(() =>
     this.reservationsSignal().filter(r => r.status === 'rezervisano')
   )
-  pristiglo = computed(() => 
+  pristiglo = computed(() =>
     this.reservationsSignal().filter(r => r.status === 'pristiglo')
   )
-  otkazano = computed(() => 
+  otkazano = computed(() =>
     this.reservationsSignal().filter(r => r.status === 'otkazano')
   )
 
@@ -59,7 +59,7 @@ export class Korpa implements OnInit, OnDestroy {
       router.navigate(['/login'])
       return
     }
-    
+
     this.routerSubscription = this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe((event: any) => {
@@ -88,13 +88,17 @@ export class Korpa implements OnInit, OnDestroy {
   }
 
   animateTableRows() {
-    const rows = document.querySelectorAll('.reservations-table mat-row')
-    rows.forEach((row, index) => {
-      setTimeout(() => {
-        (row as HTMLElement).style.opacity = '1'
-      }, index * 100)
-    })
-  }
+  const rows = document.querySelectorAll('.reservations-table mat-row');
+  if (rows.length === 0) return;
+
+  rows.forEach((row, index) => {
+    setTimeout(() => {
+      (row as HTMLElement).style.opacity = '1';
+      (row as HTMLElement).style.transform = 'translateY(0)';
+    }, index * 50); 
+  });
+}
+
 
   setupScrollAnimations() {
     const observer = new IntersectionObserver((entries) => {
@@ -113,13 +117,20 @@ export class Korpa implements OnInit, OnDestroy {
   }
 
   loadReservations() {
-    const reservations = AuthService.getAllReservations()
-    console.log('Loading reservations:', reservations)
-    console.log('Rezervisano count:', reservations.filter(r => r.status === 'rezervisano').length)
-    this.reservationsSignal.set(reservations)
-    console.log('Signal updated. Rezervisano signal:', this.rezervisano().length)
-    // Force change detection to ensure UI updates
-    this.cdr.detectChanges()
+    const reservations = AuthService.getAllReservations();
+    this.reservationsSignal.set(reservations);
+
+    this.cdr.detectChanges();
+
+    setTimeout(() => {
+      this.cdr.detectChanges();
+      this.animateTableRows();
+      this.setupScrollAnimations();
+    }, 100);
+
+    setTimeout(() => {
+      this.cdr.detectChanges();
+    }, 300);
   }
 
   reloadComponent() {
@@ -185,18 +196,18 @@ export class Korpa implements OnInit, OnDestroy {
 
   submitRating() {
     if (!this.ratingReservation) return
-    
+
     if (this.selectedRating === 0) {
       Alerts.error('Molimo izaberite ocenu!');
       return
     }
-    
+
     AuthService.rateToy(this.ratingReservation.createdAt, this.selectedRating, this.ratingComment);
     this.showRatingDialog = false
     this.ratingReservation = null
     this.ratingComment = ''
     this.selectedRating = 0
-    
+
     setTimeout(() => {
       this.loadReservations();
       Alerts.success('Recenzija je uspešno dodata!');
@@ -227,7 +238,7 @@ export class Korpa implements OnInit, OnDestroy {
   }
 
   getStatusColor(status: string): string {
-    switch(status) {
+    switch (status) {
       case 'rezervisano': return 'primary';
       case 'pristiglo': return 'accent';
       case 'otkazano': return 'warn';
