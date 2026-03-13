@@ -243,28 +243,160 @@ export class Home implements OnInit, AfterViewInit {
     })
   }
 
-  onMinPriceChange(value: string) {
-    const numValue = parseFloat(value) || this.priceRange()[0]
+  // Mobile-specific handlers - allow free typing without immediate validation
+  onMobileMinPriceInput(value: string) {
+    // Just update the display value, don't validate or filter yet
+    this.searchCenaMin = value
+  }
+
+  onMobileMaxPriceInput(value: string) {
+    // Just update the display value, don't validate or filter yet
+    this.searchCenaMax = value
+  }
+
+  onMobileMinPriceBlur() {
+    // Validate and apply filter only when user finishes typing
+    if (!this.searchCenaMin || this.searchCenaMin.trim() === '') {
+      const minPrice = this.priceRange()[0]
+      this.searchCenaMin = minPrice.toString()
+      this.priceRangeMin.set(minPrice)
+      this.filter()
+      return
+    }
+
+    // Remove any non-numeric characters except decimal point
+    const cleanValue = this.searchCenaMin.replace(/[^\d.]/g, '')
+    const numValue = parseFloat(cleanValue)
+
+    if (isNaN(numValue) || numValue < 0) {
+      const minPrice = this.priceRange()[0]
+      this.searchCenaMin = minPrice.toString()
+      this.priceRangeMin.set(minPrice)
+      this.filter()
+      return
+    }
+
+    const [minRange] = this.priceRange()
     const maxValue = this.priceRangeMax()
-    if (numValue > maxValue) {
+
+    let finalValue = numValue
+    if (numValue < minRange) {
+      finalValue = minRange
+    } else if (numValue > maxValue) {
+      finalValue = maxValue
+    }
+
+    this.priceRangeMin.set(finalValue)
+    this.searchCenaMin = finalValue.toString()
+    this.filter()
+  }
+
+  onMobileMaxPriceBlur() {
+    // Validate and apply filter only when user finishes typing
+    if (!this.searchCenaMax || this.searchCenaMax.trim() === '') {
+      const maxPrice = this.priceRange()[1]
+      this.searchCenaMax = maxPrice.toString()
+      this.priceRangeMax.set(maxPrice)
+      this.filter()
+      return
+    }
+
+    // Remove any non-numeric characters except decimal point
+    const cleanValue = this.searchCenaMax.replace(/[^\d.]/g, '')
+    const numValue = parseFloat(cleanValue)
+
+    if (isNaN(numValue) || numValue < 0) {
+      const maxPrice = this.priceRange()[1]
+      this.searchCenaMax = maxPrice.toString()
+      this.priceRangeMax.set(maxPrice)
+      this.filter()
+      return
+    }
+
+    const [, maxRange] = this.priceRange()
+    const minValue = this.priceRangeMin()
+
+    let finalValue = numValue
+    if (numValue > maxRange) {
+      finalValue = maxRange
+    } else if (numValue < minValue) {
+      finalValue = minValue
+    }
+
+    this.priceRangeMax.set(finalValue)
+    this.searchCenaMax = finalValue.toString()
+    this.filter()
+  }
+
+  // Desktop handlers (for slider inputs)
+  onMinPriceChange(value: string) {
+    // Allow empty string for mobile typing
+    if (value === '' || value === null || value === undefined) {
+      this.searchCenaMin = ''
+      return
+    }
+    
+    // Remove any non-numeric characters except decimal point
+    const cleanValue = value.replace(/[^\d.]/g, '')
+    const numValue = parseFloat(cleanValue)
+    
+    if (isNaN(numValue) || numValue < 0) {
+      // If invalid or negative, keep the current value in the input but don't update filter
+      return
+    }
+    
+    const [minRange, maxRange] = this.priceRange()
+    const maxValue = this.priceRangeMax()
+    
+    // Ensure value is within valid range
+    if (numValue < minRange) {
+      this.priceRangeMin.set(minRange)
+      this.searchCenaMin = minRange.toString()
+    } else if (numValue > maxValue) {
       this.priceRangeMin.set(maxValue)
       this.searchCenaMin = maxValue.toString()
     } else {
       this.priceRangeMin.set(numValue)
-      this.searchCenaMin = numValue.toString()
+      // Only update searchCenaMin if it's different to avoid input issues
+      if (this.searchCenaMin !== cleanValue) {
+        this.searchCenaMin = cleanValue
+      }
     }
     this.filter()
   }
 
   onMaxPriceChange(value: string) {
-    const numValue = parseFloat(value) || this.priceRange()[1]
+    // Allow empty string for mobile typing
+    if (value === '' || value === null || value === undefined) {
+      this.searchCenaMax = ''
+      return
+    }
+    
+    // Remove any non-numeric characters except decimal point
+    const cleanValue = value.replace(/[^\d.]/g, '')
+    const numValue = parseFloat(cleanValue)
+    
+    if (isNaN(numValue) || numValue < 0) {
+      // If invalid or negative, keep the current value in the input but don't update filter
+      return
+    }
+    
+    const [minRange, maxRange] = this.priceRange()
     const minValue = this.priceRangeMin()
-    if (numValue < minValue) {
+    
+    // Ensure value is within valid range
+    if (numValue > maxRange) {
+      this.priceRangeMax.set(maxRange)
+      this.searchCenaMax = maxRange.toString()
+    } else if (numValue < minValue) {
       this.priceRangeMax.set(minValue)
       this.searchCenaMax = minValue.toString()
     } else {
       this.priceRangeMax.set(numValue)
-      this.searchCenaMax = numValue.toString()
+      // Only update searchCenaMax if it's different to avoid input issues
+      if (this.searchCenaMax !== cleanValue) {
+        this.searchCenaMax = cleanValue
+      }
     }
     this.filter()
   }

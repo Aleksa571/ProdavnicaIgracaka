@@ -832,6 +832,7 @@
         position: relative;
         top: 0;
         max-height: none;
+        overflow-y: visible;
     }
     
     .price-inputs {
@@ -850,5 +851,170 @@
     .content-header {
         justify-content: center;
         margin-bottom: 10px;
+    }
+}
+
+/* Mobile filters - compact, 3 columns, always visible */
+@media (max-width: 768px) {
+    .filters-sidebar {
+        max-height: none;
+        overflow-y: visible;
+        padding: 6px;
+        margin-bottom: 12px;
+    }
+    
+    .filters-header {
+        cursor: default;
+        margin-bottom: 6px;
+        padding-bottom: 6px;
+    }
+    
+    .filters-header h3 {
+        font-size: 0.85rem;
+    }
+    
+    .filters-content {
+        max-height: none !important;
+        opacity: 1 !important;
+        overflow: visible !important;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 6px;
+    }
+    
+    .mobile-toggle-icon {
+        display: none !important;
+    }
+    
+    .filters-content mat-form-field {
+        margin-bottom: 0;
+        width: 100%;
+    }
+    
+    .filters-content ::ng-deep .mat-mdc-form-field {
+        font-size: 0.7rem !important;
+        margin-bottom: 0;
+    }
+    
+    .filters-content ::ng-deep .mat-mdc-form-field-label {
+        font-size: 0.65rem !important;
+        white-space: normal !important;
+        word-wrap: break-word !important;
+        line-height: 1.1 !important;
+        max-width: 100% !important;
+        overflow: visible !important;
+        text-overflow: clip !important;
+    }
+    
+    .filters-content ::ng-deep .mat-mdc-floating-label {
+        font-size: 0.65rem !important;
+    }
+    
+    .filters-content ::ng-deep .mat-mdc-text-field-wrapper {
+        padding: 3px 6px !important;
+        min-height: 40px !important;
+    }
+    
+    .filters-content ::ng-deep .mat-mdc-form-field-input-control {
+        font-size: 0.7rem !important;
+    }
+    
+    .filters-content ::ng-deep input,
+    .filters-content ::ng-deep .mat-mdc-select-value-text {
+        font-size: 0.7rem !important;
+    }
+    
+    /* Osiguraj da labeli budu potpuno vidljivi - posebno za dugačke */
+    .filters-content mat-form-field:nth-child(5) ::ng-deep .mat-mdc-form-field-label,
+    .filters-content mat-form-field:nth-child(7) ::ng-deep .mat-mdc-form-field-label {
+        font-size: 0.6rem !important;
+        line-height: 1.0 !important;
+        white-space: normal !important;
+        word-wrap: break-word !important;
+        max-width: 100% !important;
+        overflow: visible !important;
+        text-overflow: clip !important;
+    }
+    
+    /* Osiguraj da se labeli ne skraćuju sa ... */
+    .filters-content mat-form-field ::ng-deep .mdc-floating-label {
+        text-overflow: clip !important;
+        overflow: visible !important;
+        white-space: normal !important;
+    }
+    
+    /* Popravi visinu form fielda da labeli stane */
+    .filters-content mat-form-field ::ng-deep .mat-mdc-text-field-wrapper {
+        min-height: 48px !important;
+    }
+    
+    .filters-content mat-form-field ::ng-deep .mat-mdc-form-field-infix {
+        min-height: auto !important;
+    }
+    
+    /* Min i Max cena u gridu - kolone 2 i 3 u 3. redu */
+    .mobile-price-min {
+        grid-column: 2;
+        grid-row: 3;
+    }
+    
+    .mobile-price-max {
+        grid-column: 3;
+        grid-row: 3;
+    }
+    
+    /* Sakrij Min i Max cena na desktop */
+    .mobile-price-min,
+    .mobile-price-max {
+        display: none;
+    }
+    
+    /* Osiguraj da svi filteri u gridu imaju istu visinu */
+    .filters-content {
+        grid-auto-rows: minmax(48px, auto);
+        align-items: stretch;
+    }
+    
+    .filters-content > * {
+        align-self: stretch;
+    }
+    
+    .clear-filters-btn {
+        grid-column: 1 / -1;
+        margin-top: 6px;
+        font-size: 0.7rem;
+        padding: 6px 10px;
+        min-height: 36px;
+    }
+    
+    /* Prikaži Min i Max cena samo na mobile */
+    .mobile-price-min,
+    .mobile-price-max {
+        display: block;
+    }
+    
+    /* Sakrij desktop cena filter na mobile */
+    .desktop-price-filter-section {
+        display: none;
+    }
+    
+    .main-content {
+        margin-top: 0;
+    }
+    
+    .card-wrapper {
+        margin-top: 0;
+    }
+}
+
+/* Desktop - prikaži cena filter sa sliderom, sakrij mobile input polja */
+@media (min-width: 769px) {
+    .desktop-price-filter-section {
+        display: block;
+    }
+    
+    .mobile-price-min,
+    .mobile-price-max {
+        display: none !important;
     }
 }

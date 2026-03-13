@@ -140,6 +140,24 @@
     border: 1px solid rgba(255, 255, 255, 0.2) !important;
 }
 
+.button-text-mobile {
+    display: none;
+}
+
+.button-text-desktop {
+    display: inline;
+}
+
+@media (max-width: 768px) {
+    .button-text-mobile {
+        display: inline;
+    }
+    
+    .button-text-desktop {
+        display: none;
+    }
+}
+
 .clear-all-btn:hover {
     background-color: #dc2626 !important;
     transform: translateY(-2px);

@@ -18,19 +18,19 @@ mat-toolbar * {
     color: #f1f5f9 !important;
 }
 
-.nav-left,
-.nav-right {
+.desktop-nav {
     display: flex;
     align-items: center;
     gap: 8px;
-    flex: 1;
 }
 
 .nav-left {
+    flex: 1;
     justify-content: flex-start;
 }
 
 .nav-right {
+    flex: 1;
     justify-content: flex-end;
 }
 
@@ -42,6 +42,11 @@ mat-toolbar * {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
+    pointer-events: none;
+}
+
+.nav-center .brand-title {
+    pointer-events: auto;
 }
 
 .brand-title {
@@ -116,271 +121,148 @@ mat-toolbar * {
 }
 
 .wrapper {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    padding: 0;
-    background: transparent;
-}
-
-.nav-right {
+    max-width: 90%;
     margin-left: auto;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    margin-right: auto;
+    margin-top: 5px;
 }
 
-.nav-link {
+.desktop-nav a,
+.desktop-nav button {
     display: inline-flex;
     align-items: center;
     gap: 6px;
     color: #f1f5f9 !important;
     text-decoration: none;
-    font-size: 0.85rem;
-    font-weight: 600;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    padding: 10px 16px;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
+    font-size: 0.9rem;
+    font-weight: 500;
+    padding: 8px 16px;
     border-radius: 4px;
+    transition: all 0.3s ease;
     background: transparent;
     border: none;
     cursor: pointer;
 }
 
-.nav-link span {
-    color: #f1f5f9 !important;
+.desktop-nav a:hover,
+.desktop-nav button:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff !important;
 }
 
-.nav-link mat-icon {
-    font-size: 18px;
-    width: 18px;
-    height: 18px;
-    color: rgba(255, 255, 255, 0.9);
-    transition: all 0.3s ease;
+.desktop-nav mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
 }
 
-.nav-link::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 0;
-    height: 2px;
-    background: #fbbf24;
-    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.nav-link:hover,
-.nav-link.active {
-    color: #ffffff;
-}
-
-.nav-link:hover::after,
-.nav-link.active::after {
-    width: calc(100% - 8px);
-}
-
-.nav-link:hover mat-icon {
-    color: #fbbf24;
-    transform: scale(1.1);
-}
-
-.nav-link:hover {
-    background: rgba(255, 255, 255, 0.05);
-}
-
-.nav-left .nav-link,
-.nav-right .nav-link {
-    margin: 0 4px;
-}
-
-.nav-right button.nav-link {
-    font-family: inherit;
-    font-size: inherit;
-    font-weight: inherit;
-    letter-spacing: inherit;
-    text-transform: inherit;
-    color: #f1f5f9 !important;
-    background: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
-}
-
-.nav-right button.nav-link span {
-    color: #f1f5f9 !important;
-}
-
-mat-toolbar a[matButton],
-mat-toolbar button[matButton] {
-    min-width: auto;
-    padding: 0;
-    line-height: normal;
-    color: #f1f5f9 !important;
-}
-
-mat-toolbar button[matButton] {
-    background: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
-}
-
-mat-toolbar button[matButton] .mat-mdc-button-persistent-ripple {
+.mobile-nav {
     display: none;
 }
 
-::ng-deep mat-toolbar button[matButton] .mdc-button__label {
+.mobile-nav button {
     color: #f1f5f9 !important;
 }
 
-::ng-deep mat-toolbar button[matButton] {
-    --mdc-text-button-label-text-color: #f1f5f9 !important;
-    color: #f1f5f9 !important;
+/* Dropdown menu styling - dark background matching page */
+::ng-deep .mat-mdc-menu-panel {
+    background-color: #0f172a !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
+    border-radius: 8px !important;
 }
 
-::ng-deep mat-toolbar button[matButton]:hover {
-    --mdc-text-button-hover-label-text-color: #ffffff !important;
+::ng-deep .mat-mdc-menu-panel .mat-mdc-menu-item {
+    color: #f1f5f9 !important;
+    background-color: #0f172a !important;
+}
+
+::ng-deep .mat-mdc-menu-panel .mat-mdc-menu-item:hover {
+    background-color: rgba(255, 255, 255, 0.1) !important;
     color: #ffffff !important;
 }
 
-::ng-deep mat-toolbar button[matButton] mat-icon {
-    color: rgba(241, 245, 249, 0.9) !important;
+::ng-deep .mat-mdc-menu-panel .mat-mdc-menu-item .mat-icon {
+    color: #f1f5f9 !important;
 }
 
-::ng-deep mat-toolbar button[matButton]:hover mat-icon {
+::ng-deep .mat-mdc-menu-panel .mat-mdc-menu-item:hover .mat-icon {
     color: #fbbf24 !important;
 }
 
-.logout-btn {
-    color: #f1f5f9 !important;
-    background: transparent !important;
-    border: none !important;
-    padding: 10px 16px !important;
-    font-family: inherit !important;
-    font-size: 0.85rem !important;
-    font-weight: 600 !important;
-    letter-spacing: 1px !important;
-    text-transform: uppercase !important;
-    cursor: pointer !important;
-    display: inline-flex !important;
-    align-items: center !important;
-    gap: 6px !important;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-    position: relative !important;
-    border-radius: 4px !important;
-    box-shadow: none !important;
-    margin: 0 !important;
-    min-width: auto !important;
-    line-height: normal !important;
-}
-
-.logout-btn span {
+::ng-deep .mat-mdc-menu-panel .mdc-list-item__primary-text {
     color: #f1f5f9 !important;
 }
 
-.logout-btn:hover {
-    color: #ffffff !important;
-    background: rgba(255, 255, 255, 0.05) !important;
-}
-
-.logout-btn:hover span {
+::ng-deep .mat-mdc-menu-panel .mat-mdc-menu-item:hover .mdc-list-item__primary-text {
     color: #ffffff !important;
 }
 
-.logout-btn mat-icon {
-    color: rgba(241, 245, 249, 0.9) !important;
-    font-size: 18px !important;
-    width: 18px !important;
-    height: 18px !important;
-    transition: all 0.3s ease !important;
+::ng-deep .cdk-overlay-pane .mat-mdc-menu-panel {
+    background-color: #0f172a !important;
 }
 
-.logout-btn:hover mat-icon {
-    color: #fbbf24 !important;
-    transform: scale(1.1) !important;
-}
-
-.logout-btn::after {
-    content: '' !important;
-    position: absolute !important;
-    bottom: 0 !important;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-    width: 0 !important;
-    height: 2px !important;
-    background: #fbbf24 !important;
-    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-}
-
-.logout-btn:hover::after {
-    width: calc(100% - 8px) !important;
-}
-
-@media (max-width: 1024px) {
-    .brand-title {
-        font-size: 1.5rem;
-        letter-spacing: 2px;
-    }
-    
-    .nav-link {
-        font-size: 0.75rem;
-        padding: 8px 12px;
-    }
-    
-    .nav-link mat-icon {
-        font-size: 16px;
-        width: 16px;
-        height: 16px;
-    }
-}
-
-@media (max-width: 768px) {
+@media screen and (max-width: 640px) {
     mat-toolbar {
         padding: 0 16px;
-        flex-wrap: wrap;
-        min-height: auto;
+        justify-content: space-between;
+    }
+    
+    .desktop-nav {
+        display: none !important;
+    }
+
+    .mobile-nav {
+        display: flex !important;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+    }
+    
+    .mobile-nav-title {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .brand-title-mobile {
+        font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+        font-size: 1rem;
+        font-weight: 900;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        background: linear-gradient(135deg, #ffffff 0%, #fbbf24 30%, #ffffff 60%, #fbbf24 100%);
+        background-size: 200% auto;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin: 0;
+        animation: shimmerText 4s ease-in-out infinite;
+        position: relative;
+        filter: drop-shadow(0 2px 8px rgba(251, 191, 36, 0.4));
     }
     
     .nav-center {
-        order: 1;
-        width: 100%;
-        position: relative;
-        left: auto;
-        transform: none;
-        margin: 8px 0;
-    }
-    
-    .nav-left,
-    .nav-right {
-        flex: 0 0 auto;
-        order: 2;
-    }
-    
-    .brand-title {
-        font-size: 1.3rem;
-        letter-spacing: 1.5px;
-    }
-    
-    .nav-link {
-        font-size: 0.7rem;
-        padding: 6px 10px;
-        gap: 4px;
-    }
-    
-    .nav-link span {
-        display: none;
-    }
-    
-    .nav-link mat-icon {
-        font-size: 18px;
-        width: 18px;
-        height: 18px;
+        display: none !important;
     }
 }
 
-main.app-main {
-    flex: 1 1 auto;
-    padding: 24px;
+footer {
+    text-align: center;
+    margin-top: 40px;
+    padding: 20px;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }

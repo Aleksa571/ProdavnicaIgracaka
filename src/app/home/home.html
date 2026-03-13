@@ -55,6 +55,19 @@
                     <mat-option [value]="5">5</mat-option>
                 </mat-select>
             </mat-form-field>
+            <!-- Min i Max cena - samo na mobile, u gridu -->
+            <mat-form-field class="mobile-price-min">
+                <mat-label>Min cena</mat-label>
+                <input matInput type="text" [ngModel]="searchCenaMin" (input)="onMobileMinPriceInput($any($event.target).value)" (blur)="onMobileMinPriceBlur()" [min]="priceRange()[0]" [max]="priceRange()[1]" placeholder="Min" inputmode="numeric">
+            </mat-form-field>
+            <mat-form-field class="mobile-price-max">
+                <mat-label>Max cena</mat-label>
+                <input matInput type="text" [ngModel]="searchCenaMax" (input)="onMobileMaxPriceInput($any($event.target).value)" (blur)="onMobileMaxPriceBlur()" [min]="priceRange()[0]" [max]="priceRange()[1]" placeholder="Max" inputmode="numeric">
+            </mat-form-field>
+            <button mat-raised-button color="primary" (click)="clearFilters()" class="clear-filters-btn">Obriši filtere</button>
+        </div>
+        <!-- Cena filter - desktop verzija sa sliderom -->
+        <div class="desktop-price-filter-section">
             <div class="price-filter-container">
                 <div class="price-filter-header" (click)="priceFilterExpanded.set(!priceFilterExpanded())">
                     <div class="price-filter-title">
@@ -108,7 +121,6 @@
                 </div>
                 }
             </div>
-            <button mat-raised-button color="primary" (click)="clearFilters()" class="clear-filters-btn">Obriši filtere</button>
         </div>
     </div>
     <div class="main-content">

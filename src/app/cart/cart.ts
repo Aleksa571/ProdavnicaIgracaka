@@ -244,6 +244,7 @@ export class Korpa implements OnInit, OnDestroy {
       case 'otkazano': return 'warn';
       default: return '';
     }
+
   }
 
   getStars(rating: number): string[] {

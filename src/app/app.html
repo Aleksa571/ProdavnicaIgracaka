@@ -1,31 +1,67 @@
 <mat-toolbar color="primary">
-  <div class="nav-left">
-    <a routerLink="/" class="nav-link" routerLinkActive="active">
-      <mat-icon fontIcon="home" /> <span>POČETNA</span>
+  <!-- Desktop Navigation -->
+  <div class="nav-left desktop-nav">
+    <a routerLink="/" matButton>
+      <mat-icon fontIcon="home" /> Početna
     </a>
-    <a routerLink="/about" class="nav-link" routerLinkActive="active">
-      <mat-icon fontIcon="info" /> <span>O NAMA</span>
+    <a routerLink="/about" matButton>
+      <mat-icon fontIcon="info" /> O nama
     </a>
   </div>
-  <div class="nav-center">
+  
+  <div class="nav-center desktop-nav">
     <h1 class="brand-title">Prodavnica Igracaka</h1>
   </div>
-  <div class="nav-right">
+  
+  <div class="nav-right desktop-nav">
     @if(authService.getActiveUser()) {
-    <a routerLink="/korpa" class="nav-link" routerLinkActive="active">
-      <mat-icon fontIcon="shopping_cart" /> <span>KORPA</span>
+    <a routerLink="/korpa" matButton>
+      <mat-icon fontIcon="shopping_cart" /> Korpa
     </a>
-    <a routerLink="/profil" class="nav-link" routerLinkActive="active">
-      <mat-icon fontIcon="person" /> <span>{{userDisplayName()}}</span>
+    <a routerLink="/profil" matButton>
+      <mat-icon fontIcon="person" /> Profil
     </a>
-    <button class="nav-link logout-btn" (click)="doLogout()">
-      <mat-icon fontIcon="logout" /> <span>ODJAVI SE</span>
+    <button matButton (click)="doLogout()">
+      <mat-icon fontIcon="logout" /> Odjavi se
     </button>
     } @else {
-    <a routerLink="/login" class="nav-link" routerLinkActive="active">
-      <mat-icon fontIcon="login" /> <span>PRIJAVA</span>
+    <a routerLink="/login" matButton>
+      <mat-icon fontIcon="login" /> Prijava
     </a>
     }
+  </div>
+
+  <!-- Mobile Navigation -->
+  <div class="mobile-nav">
+    <div class="mobile-nav-title">
+      <h1 class="brand-title-mobile">Prodavnica Igracaka</h1>
+    </div>
+    <button matIconButton [matMenuTriggerFor]="menu">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <a routerLink="/" mat-menu-item>
+        <mat-icon fontIcon="home" /> Početna
+      </a>
+      <a routerLink="/about" mat-menu-item>
+        <mat-icon fontIcon="info" /> O nama
+      </a>
+      @if(authService.getActiveUser()) {
+      <a routerLink="/korpa" mat-menu-item>
+        <mat-icon fontIcon="shopping_cart" /> Korpa
+      </a>
+      <a routerLink="/profil" mat-menu-item>
+        <mat-icon fontIcon="person" /> Profil
+      </a>
+      <button mat-menu-item (click)="doLogout()">
+        <mat-icon fontIcon="logout" /> Odjavi se
+      </button>
+      } @else {
+      <a routerLink="/login" mat-menu-item>
+        <mat-icon fontIcon="login" /> Prijava
+      </a>
+      }
+    </mat-menu>
   </div>
 </mat-toolbar>
 <div class="wrapper">

@@ -27,8 +27,8 @@ export class Alerts {
         })
     }
 
-    static confirm(text: string, callback: Function) {
-        Swal.fire({
+    static async confirm(text: string, callback: Function) {
+        const result = await Swal.fire({
             title: "Are you sure?",
             text,
             icon: "question",
@@ -37,10 +37,10 @@ export class Alerts {
             cancelButtonColor: "#d33",
             confirmButtonText: "Yes",
             customClass: matCustomClass
-        }).then((result) => {
-            if (result.isConfirmed) {
-                callback()
-            }
         })
+
+        if (result.isConfirmed) {
+            await callback()
+        }
     }
 }
