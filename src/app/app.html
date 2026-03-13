@@ -19,7 +19,7 @@
       <mat-icon fontIcon="shopping_cart" /> Korpa
     </a>
     <a routerLink="/profil" matButton>
-      <mat-icon fontIcon="person" /> Profil
+      <mat-icon fontIcon="person" /> {{getActiveUserName()}}
     </a>
     <button matButton (click)="doLogout()">
       <mat-icon fontIcon="logout" /> Odjavi se
@@ -51,7 +51,7 @@
         <mat-icon fontIcon="shopping_cart" /> Korpa
       </a>
       <a routerLink="/profil" mat-menu-item>
-        <mat-icon fontIcon="person" /> Profil
+        <mat-icon fontIcon="person" /> {{getActiveUserName()}}
       </a>
       <button mat-menu-item (click)="doLogout()">
         <mat-icon fontIcon="logout" /> Odjavi se
