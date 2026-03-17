@@ -268,7 +268,6 @@ export class AuthService {
         const activeUser = this.getActiveUser()
         let toyId: number | null = null
         
-        // Postavi ocenu na rezervaciju
         for (let u of users) {
             if (u.email === localStorage.getItem(ACTIVE)) {
                 for (let r of u.reservations) {
@@ -282,7 +281,6 @@ export class AuthService {
         
         localStorage.setItem(USERS, JSON.stringify(users))
         
-        // Dodaj recenziju na igračku
         if (toyId !== null && activeUser) {
             this.addReviewToToy(toyId, {
                 author: `${activeUser.firstName} ${activeUser.lastName}`,
@@ -302,7 +300,6 @@ export class AuthService {
         console.log('Adding review for toy:', toyId, review)
         console.log('Review comment value:', review.comment, 'Type:', typeof review.comment, 'Length:', review.comment ? review.comment.length : 0)
         
-        // Proveri da li korisnik već ima recenziju za ovu igračku
         const existingIndex = reviews[toyId].findIndex(r => r.author === review.author)
         if (existingIndex >= 0) {
             reviews[toyId][existingIndex] = { ...review }

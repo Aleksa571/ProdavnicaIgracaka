@@ -149,7 +149,6 @@ export class Korpa implements OnInit, OnDestroy {
     if (reservation.status === 'pristiglo') {
       Alerts.confirm(`Da li ste sigurni da želite da obrišete "${reservation.naziv}" iz korpe?`, () => {
         AuthService.deleteReservation(reservation.createdAt);
-        // Use setTimeout to ensure the deletion is complete before reloading
         setTimeout(() => {
           this.loadReservations();
         }, 100);
@@ -163,7 +162,6 @@ export class Korpa implements OnInit, OnDestroy {
     if (reservation.status === 'rezervisano') {
       Alerts.confirm(`Da li ste sigurni da želite da uklonite "${reservation.naziv}" iz korpe?`, () => {
         AuthService.cancelReservation(reservation.createdAt);
-        // Use setTimeout to ensure the cancellation is complete before reloading
         setTimeout(() => {
           this.loadReservations();
         }, 100);
@@ -173,7 +171,6 @@ export class Korpa implements OnInit, OnDestroy {
 
   updateReservationStatus(reservation: ReservationModel, newStatus: 'rezervisano' | 'pristiglo' | 'otkazano') {
     AuthService.updateReservationStatus(reservation.createdAt, newStatus);
-    // Use setTimeout to ensure the update is complete before reloading
     setTimeout(() => {
       this.loadReservations();
     }, 100);

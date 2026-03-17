@@ -928,7 +928,6 @@ mat-header-cell {
     letter-spacing: 0.5px;
 }
 
-/* Dodatni stilovi za spacing između status i action buttons */
 .reservations-table mat-cell.status-cell {
     padding-right: 16px !important;
     margin-right: 16px !important;

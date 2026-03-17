@@ -66,8 +66,6 @@ export class ToyService {
         
         console.log('Loading toy:', toyId, 'API reviews:', apiReviews, 'Local reviews:', localReviews)
         
-        // Kombinuj recenzije iz API-ja sa lokalnim recenzijama
-        // Lokalne recenzije imaju prioritet ako postoji duplikat po autoru
         const allReviews: Review[] = [...apiReviews]
         const authorSet = new Set(apiReviews.map(r => r.author))
         
@@ -75,7 +73,6 @@ export class ToyService {
             console.log('Processing local review:', localReview)
             console.log('Local review comment:', localReview.comment, 'Type:', typeof localReview.comment)
             
-            // Konvertuj u Review format ako je potrebno
             const review: Review = {
                 author: localReview.author,
                 rating: localReview.rating,
@@ -84,7 +81,6 @@ export class ToyService {
             }
             
             if (authorSet.has(review.author)) {
-                // Zameni API recenziju lokalnom ako postoji
                 const index = allReviews.findIndex(r => r.author === review.author)
                 if (index >= 0) {
                     allReviews[index] = review
@@ -92,7 +88,6 @@ export class ToyService {
                     console.log('Replaced review comment:', allReviews[index].comment)
                 }
             } else {
-                // Dodaj novu lokalnu recenziju
                 allReviews.push(review)
                 console.log('Added local review:', allReviews[allReviews.length - 1])
                 console.log('Added review comment:', allReviews[allReviews.length - 1].comment)

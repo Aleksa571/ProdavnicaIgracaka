@@ -164,7 +164,6 @@ mat-toolbar * {
     color: #f1f5f9 !important;
 }
 
-/* Dropdown menu styling - dark background matching page */
 ::ng-deep .mat-mdc-menu-panel {
     background-color: #0f172a !important;
     border: 1px solid rgba(255, 255, 255, 0.1) !important;

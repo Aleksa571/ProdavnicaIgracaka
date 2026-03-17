@@ -145,37 +145,26 @@ export class DetaljiIgracke implements AfterViewInit {
   }
 
   reserveToy() {
-    console.log('reserveToy() called')
     const toy = this.toy()
-    console.log('Current toy:', toy)
-    
     if (!toy) {
-      console.error('No toy data available')
       Alerts.error('Podaci o igrački nisu dostupni. Pokušajte ponovo.')
       return
     }
     
     if (!toy.id) {
-      console.error('Toy missing ID:', toy)
       Alerts.error('Igračka nema validan ID. Ne možete je rezervisati.')
       return
     }
     
     const activeUser = AuthService.getActiveUser()
-    console.log('Active user:', activeUser)
-    
     if (!activeUser) {
       Alerts.error('Morate se prijaviti da biste rezervisali igračku!')
       this.router.navigate(['/login'])
       return
     }
 
-    // Proveri da li je igračka već rezervisana od strane bilo kog korisnika
     const isReservedByAnyUser = AuthService.isToyReservedByAnyUser(toy.id)
-    console.log('Is toy reserved by any user?', isReservedByAnyUser)
-    
     if (isReservedByAnyUser) {
-      // Proveri da li je rezervisana od strane trenutnog korisnika
       const existingReservations = AuthService.getAllReservations()
       const alreadyReservedByMe = existingReservations.some(
         r => r.toyId === toy.id && r.status !== 'otkazano'
@@ -191,16 +180,9 @@ export class DetaljiIgracke implements AfterViewInit {
     }
 
     try {
-      console.log('Calling createReservation...')
       AuthService.createReservation(toy)
-      console.log('createReservation completed successfully')
-      
-      const afterReservations = AuthService.getAllReservations()
-      console.log('Reservations after adding:', afterReservations)
-      
       Alerts.success(`Igračka "${toy.naziv}" je dodata u korpu rezervacija!`)
       setTimeout(() => {
-        console.log('Navigating to cart...')
         this.router.navigate(['/korpa'])
       }, 500)
     } catch (error: any) {

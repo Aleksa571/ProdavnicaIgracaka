@@ -649,7 +649,6 @@ a, button, mat-button, mat-icon-button {
     color: #ffffff !important;
 }
 
-/* Ensure text in dropdown options is white and readable */
 ::ng-deep .mat-mdc-select-panel .mdc-list-item__primary-text,
 ::ng-deep .mat-mdc-select-panel .mat-mdc-option-text,
 ::ng-deep .mat-mdc-select-panel .mdc-list-item {
@@ -680,7 +679,6 @@ a, button, mat-button, mat-icon-button {
     color: var(--accent) !important;
 }
 
-/* More specific selectors for dropdown text */
 ::ng-deep .mat-mdc-select-panel .mdc-list-item__primary-text {
     color: #ffffff !important;
     font-weight: 400 !important;

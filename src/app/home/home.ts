@@ -119,7 +119,6 @@ export class Home implements OnInit, AfterViewInit {
       this.toyTypes.set(types)
       this.ageGroups.set(ageGroups)
       
-      // Initialize price range
       const prices = allToys.map(t => t.cena || 0).filter(p => p > 0)
       if (prices.length > 0) {
         const minPrice = Math.min(...prices)
@@ -135,16 +134,13 @@ export class Home implements OnInit, AfterViewInit {
       this.updatePaginatedToys()
       this.isLoading.set(false)
       
-      // Force change detection multiple times to ensure UI updates
       this.cdr.detectChanges()
       
-      // Additional change detection after a short delay to ensure rendering
       setTimeout(() => {
         this.cdr.detectChanges()
         this.animateCards()
       }, 100)
       
-      // Final change detection to ensure everything is rendered
       setTimeout(() => {
         this.cdr.detectChanges()
       }, 300)
@@ -163,7 +159,6 @@ export class Home implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     this.setupScrollAnimations()
-    // Additional change detection after view init
     setTimeout(() => {
       this.cdr.detectChanges()
     }, 0)
@@ -243,19 +238,15 @@ export class Home implements OnInit, AfterViewInit {
     })
   }
 
-  // Mobile-specific handlers - allow free typing without immediate validation
   onMobileMinPriceInput(value: string) {
-    // Just update the display value, don't validate or filter yet
     this.searchCenaMin = value
   }
 
   onMobileMaxPriceInput(value: string) {
-    // Just update the display value, don't validate or filter yet
     this.searchCenaMax = value
   }
 
   onMobileMinPriceBlur() {
-    // Validate and apply filter only when user finishes typing
     if (!this.searchCenaMin || this.searchCenaMin.trim() === '') {
       const minPrice = this.priceRange()[0]
       this.searchCenaMin = minPrice.toString()
@@ -264,7 +255,6 @@ export class Home implements OnInit, AfterViewInit {
       return
     }
 
-    // Remove any non-numeric characters except decimal point
     const cleanValue = this.searchCenaMin.replace(/[^\d.]/g, '')
     const numValue = parseFloat(cleanValue)
 
@@ -292,7 +282,6 @@ export class Home implements OnInit, AfterViewInit {
   }
 
   onMobileMaxPriceBlur() {
-    // Validate and apply filter only when user finishes typing
     if (!this.searchCenaMax || this.searchCenaMax.trim() === '') {
       const maxPrice = this.priceRange()[1]
       this.searchCenaMax = maxPrice.toString()
@@ -301,7 +290,6 @@ export class Home implements OnInit, AfterViewInit {
       return
     }
 
-    // Remove any non-numeric characters except decimal point
     const cleanValue = this.searchCenaMax.replace(/[^\d.]/g, '')
     const numValue = parseFloat(cleanValue)
 
@@ -328,27 +316,22 @@ export class Home implements OnInit, AfterViewInit {
     this.filter()
   }
 
-  // Desktop handlers (for slider inputs)
   onMinPriceChange(value: string) {
-    // Allow empty string for mobile typing
     if (value === '' || value === null || value === undefined) {
       this.searchCenaMin = ''
       return
     }
     
-    // Remove any non-numeric characters except decimal point
     const cleanValue = value.replace(/[^\d.]/g, '')
     const numValue = parseFloat(cleanValue)
     
     if (isNaN(numValue) || numValue < 0) {
-      // If invalid or negative, keep the current value in the input but don't update filter
       return
     }
     
     const [minRange, maxRange] = this.priceRange()
     const maxValue = this.priceRangeMax()
     
-    // Ensure value is within valid range
     if (numValue < minRange) {
       this.priceRangeMin.set(minRange)
       this.searchCenaMin = minRange.toString()
@@ -357,7 +340,6 @@ export class Home implements OnInit, AfterViewInit {
       this.searchCenaMin = maxValue.toString()
     } else {
       this.priceRangeMin.set(numValue)
-      // Only update searchCenaMin if it's different to avoid input issues
       if (this.searchCenaMin !== cleanValue) {
         this.searchCenaMin = cleanValue
       }
@@ -366,25 +348,21 @@ export class Home implements OnInit, AfterViewInit {
   }
 
   onMaxPriceChange(value: string) {
-    // Allow empty string for mobile typing
     if (value === '' || value === null || value === undefined) {
       this.searchCenaMax = ''
       return
     }
     
-    // Remove any non-numeric characters except decimal point
     const cleanValue = value.replace(/[^\d.]/g, '')
     const numValue = parseFloat(cleanValue)
     
     if (isNaN(numValue) || numValue < 0) {
-      // If invalid or negative, keep the current value in the input but don't update filter
       return
     }
     
     const [minRange, maxRange] = this.priceRange()
     const minValue = this.priceRangeMin()
     
-    // Ensure value is within valid range
     if (numValue > maxRange) {
       this.priceRangeMax.set(maxRange)
       this.searchCenaMax = maxRange.toString()
@@ -393,7 +371,6 @@ export class Home implements OnInit, AfterViewInit {
       this.searchCenaMax = minValue.toString()
     } else {
       this.priceRangeMax.set(numValue)
-      // Only update searchCenaMax if it's different to avoid input issues
       if (this.searchCenaMax !== cleanValue) {
         this.searchCenaMax = cleanValue
       }
@@ -440,7 +417,6 @@ export class Home implements OnInit, AfterViewInit {
     const filtered = ToyService.searchToys(this.toys(), criteria)
     this.filteredToys.set(filtered)
     
-    // Update price distribution based on all toys (to show full range)
     const rangeMin = this.priceRange()[0]
     const rangeMax = this.priceRange()[1]
     this.calculatePriceDistribution(this.toys(), rangeMin, rangeMax)
@@ -511,11 +487,9 @@ export class Home implements OnInit, AfterViewInit {
       return
     }
 
-    // Proveri da li je igračka već rezervisana od strane bilo kog korisnika
     const isReservedByAnyUser = AuthService.isToyReservedByAnyUser(toy.id)
     
     if (isReservedByAnyUser) {
-      // Proveri da li je rezervisana od strane trenutnog korisnika
       const existingReservations = AuthService.getAllReservations()
       const alreadyReservedByMe = existingReservations.some(
         r => r.toyId === toy.id && r.status !== 'otkazano'

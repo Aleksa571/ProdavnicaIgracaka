@@ -303,7 +303,6 @@
     font-size: 0.9rem;
 }
 
-/* Stilizovanje dugmeta Rezerviši da bude boje pozadine */
 .details-card ::ng-deep button[mat-raised-button][color="primary"] {
     background-color: var(--card) !important;
     color: #ffffff !important;
