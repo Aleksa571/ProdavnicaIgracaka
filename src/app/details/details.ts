@@ -11,7 +11,6 @@ import { Loading } from '../loading/loading';
 import { CommonModule } from '@angular/common';
 import { MatChipsModule } from '@angular/material/chips';
 import { Alerts } from '../alerts';
-import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-detalji-igracke',
@@ -22,9 +21,8 @@ import { RouterLink } from '@angular/router';
     MatButtonModule,
     Loading,
     CommonModule,
-    MatChipsModule,
-    RouterLink
-  ],
+    MatChipsModule
+],
   templateUrl: './details.html',
   styleUrl: './details.css',
 })
