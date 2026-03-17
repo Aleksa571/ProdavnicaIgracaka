@@ -29,12 +29,4 @@ export class App {
     AuthService.logout()
     this.router.navigate(['/login'])
   }
-
-  getActiveUserName(): string {
-    const user = AuthService.getActiveUser()
-    if (user) {
-      return `${user.firstName} ${user.lastName}`
-    }
-    return 'Profil'
-  }
 }

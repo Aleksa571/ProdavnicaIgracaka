@@ -74,6 +74,13 @@ export class AuthService {
 
         return null
     }
+    static getActiveUserName(): string {
+        const user = this.getActiveUser()
+        if (user) {
+            return `${user.firstName} ${user.lastName}`
+        }
+        return 'Profil'
+    }
 
     static updateActiveUser(newUserData: UserModel) {
         const users = this.getUsers()
