@@ -472,7 +472,8 @@ export class Home implements OnInit, AfterViewInit {
 
   isToyReserved(toy: ToyModel): boolean {
     if (!toy.id) return false
-    return AuthService.isToyReservedByAnyUser(toy.id)
+    const reservations = AuthService.getAllReservations()
+    return reservations.some(r => r.toyId === toy.id && r.status === 'rezervisano')
   }
 
   reserveToy(toy: ToyModel) {
@@ -487,23 +488,6 @@ export class Home implements OnInit, AfterViewInit {
       return
     }
 
-    const isReservedByAnyUser = AuthService.isToyReservedByAnyUser(toy.id)
-    
-    if (isReservedByAnyUser) {
-      const existingReservations = AuthService.getAllReservations()
-      const alreadyReservedByMe = existingReservations.some(
-        r => r.toyId === toy.id && r.status !== 'otkazano'
-      )
-      
-      if (alreadyReservedByMe) {
-        Alerts.error('Ova igračka je već u vašoj korpi!')
-        this.router.navigate(['/korpa'])
-      } else {
-        Alerts.error('Ova igračka je već rezervisana od strane drugog korisnika!')
-      }
-      return
-    }
-
     try {
       AuthService.createReservation(toy)
       Alerts.success(`Igračka "${toy.naziv}" je dodata u korpu rezervacija!`)
@@ -512,7 +496,12 @@ export class Home implements OnInit, AfterViewInit {
       }, 500)
     } catch (error: any) {
       console.error('Error creating reservation:', error)
-      Alerts.error('Greška pri rezervaciji igračke. Pokušajte ponovo.')
+      if (error?.message === 'MAX_KOLICINA') {
+        Alerts.error('Možete rezervisati najviše 3 komada ove igračke.')
+        this.router.navigate(['/korpa'])
+      } else {
+        Alerts.error('Greška pri rezervaciji igračke. Pokušajte ponovo.')
+      }
     }
   }
 }

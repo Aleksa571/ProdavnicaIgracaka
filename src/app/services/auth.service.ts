@@ -120,21 +120,6 @@ export class AuthService {
             throw new Error('Nema aktivnog korisnika!')
         }
         
-        const reservation: ReservationModel = {
-            toyId: toy.id,
-            naziv: toy.naziv,
-            opis: toy.opis,
-            tip: toy.tip,
-            uzrast: toy.uzrast,
-            ciljnaGrupa: toy.ciljnaGrupa,
-            datumProizvodnje: toy.datumProizvodnje,
-            cena: toy.cena,
-            status: 'rezervisano',
-            createdAt: new Date().toISOString()
-        }
-        
-        console.log('Created reservation object:', reservation)
-
         const users = this.getUsers()
         console.log('All users:', users)
         
@@ -145,7 +130,36 @@ export class AuthService {
                 if (!u.reservations) {
                     u.reservations = []
                 }
-                u.reservations.push(reservation)
+                
+                const existing = u.reservations.find(
+                    r => r.toyId === toy.id && r.status === 'rezervisano'
+                )
+
+                if (existing) {
+                    const currentQty = existing.kolicina ?? 1
+                    if (currentQty >= 3) {
+                        throw new Error('MAX_KOLICINA')
+                    }
+                    existing.kolicina = currentQty + 1
+                    console.log('Incremented quantity for existing reservation:', existing)
+                } else {
+                    const reservation: ReservationModel = {
+                        toyId: toy.id!,
+                        naziv: toy.naziv,
+                        opis: toy.opis,
+                        tip: toy.tip,
+                        uzrast: toy.uzrast,
+                        ciljnaGrupa: toy.ciljnaGrupa,
+                        datumProizvodnje: toy.datumProizvodnje,
+                        cena: toy.cena,
+                        status: 'rezervisano',
+                        createdAt: new Date().toISOString(),
+                        kolicina: 1
+                    }
+                    
+                    console.log('Created reservation object:', reservation)
+                    u.reservations.push(reservation)
+                }
                 found = true
                 console.log('Reservation added. User reservations:', u.reservations)
                 break
@@ -223,8 +237,13 @@ export class AuthService {
         const users = this.getUsers()
         for (let u of users) {
             if (u.email === localStorage.getItem(ACTIVE)) {
+                const target = u.reservations.find(r => r.createdAt === createdAt)
+                if (!target) {
+                    continue
+                }
+                const toyId = target.toyId
                 for (let r of u.reservations) {
-                    if (r.status === 'rezervisano' && r.createdAt === createdAt) {
+                    if (r.status === 'rezervisano' && r.toyId === toyId) {
                         r.status = 'otkazano'
                     }
                 }

@@ -9,6 +9,7 @@ export interface ReservationModel {
     ciljnaGrupa: string;
     datumProizvodnje: string;
     cena: number;
+    kolicina?: number;
     status: ReservationStatus;
     ocena?: number; 
     createdAt: string;

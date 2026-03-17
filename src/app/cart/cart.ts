@@ -221,7 +221,8 @@ export class Korpa implements OnInit, OnDestroy {
   calculateTotal(): number {
     let total = 0;
     for (let reservation of this.rezervisano()) {
-      total += reservation.cena;
+      const qty = reservation.kolicina ?? 1
+      total += reservation.cena * qty;
     }
     return total;
   }

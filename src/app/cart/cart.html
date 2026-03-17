@@ -32,7 +32,10 @@
                     </ng-container>
                     <ng-container matColumnDef="cena">
                         <mat-header-cell *matHeaderCellDef>Cena</mat-header-cell>
-                        <mat-cell *matCellDef="let reservation">{{formatPrice(reservation.cena)}}</mat-cell>
+                        <mat-cell *matCellDef="let reservation">
+                            {{reservation.kolicina ?? 1}} x {{formatPrice(reservation.cena)}} =
+                            <strong>{{formatPrice(reservation.cena * (reservation.kolicina ?? 1))}}</strong>
+                        </mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="status">
                         <mat-header-cell *matHeaderCellDef>Status</mat-header-cell>
@@ -85,7 +88,10 @@
                     </ng-container>
                     <ng-container matColumnDef="cena">
                         <mat-header-cell *matHeaderCellDef>Cena</mat-header-cell>
-                        <mat-cell *matCellDef="let reservation">{{formatPrice(reservation.cena)}}</mat-cell>
+                        <mat-cell *matCellDef="let reservation">
+                            {{reservation.kolicina ?? 1}} x {{formatPrice(reservation.cena)}} =
+                            <strong>{{formatPrice(reservation.cena * (reservation.kolicina ?? 1))}}</strong>
+                        </mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="status">
                         <mat-header-cell *matHeaderCellDef>Status</mat-header-cell>
@@ -162,7 +168,10 @@
                     </ng-container>
                     <ng-container matColumnDef="cena">
                         <mat-header-cell *matHeaderCellDef>Cena</mat-header-cell>
-                        <mat-cell *matCellDef="let reservation">{{formatPrice(reservation.cena)}}</mat-cell>
+                        <mat-cell *matCellDef="let reservation">
+                            {{reservation.kolicina ?? 1}} x {{formatPrice(reservation.cena)}} =
+                            <strong>{{formatPrice(reservation.cena * (reservation.kolicina ?? 1))}}</strong>
+                        </mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="status">
                         <mat-header-cell *matHeaderCellDef>Status</mat-header-cell>
