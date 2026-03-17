@@ -163,22 +163,6 @@ export class DetaljiIgracke implements AfterViewInit {
       return
     }
 
-    const isReservedByAnyUser = AuthService.isToyReservedByAnyUser(toy.id)
-    if (isReservedByAnyUser) {
-      const existingReservations = AuthService.getAllReservations()
-      const alreadyReservedByMe = existingReservations.some(
-        r => r.toyId === toy.id && r.status !== 'otkazano'
-      )
-      
-      if (alreadyReservedByMe) {
-        Alerts.error('Ova igračka je već u vašoj korpi!')
-        this.router.navigate(['/korpa'])
-      } else {
-        Alerts.error('Ova igračka je već rezervisana od strane drugog korisnika!')
-      }
-      return
-    }
-
     try {
       AuthService.createReservation(toy)
       Alerts.success(`Igračka "${toy.naziv}" je dodata u korpu rezervacija!`)
@@ -187,7 +171,12 @@ export class DetaljiIgracke implements AfterViewInit {
       }, 500)
     } catch (error: any) {
       console.error('Error creating reservation:', error)
-      Alerts.error(`Greška pri rezervaciji igračke: ${error.message || error}`)
+      if (error?.message === 'MAX_KOLICINA') {
+        Alerts.error('Možete rezervisati najviše 3 komada ove igračke.')
+        this.router.navigate(['/korpa'])
+      } else {
+        Alerts.error(`Greška pri rezervaciji igračke: ${error.message || error}`)
+      }
     }
   }
 
